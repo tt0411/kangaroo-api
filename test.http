@@ -1,0 +1,164 @@
+@url= http://localhost:3001
+
+### 定时任务(清空活跃度)
+### get {{url}}/user/resetActive
+
+### 总用户
+get {{url}}/user/totalUser
+
+### 用户性别比例
+get {{url}}/user/genderRate
+
+### 今日新增用户
+get {{url}}/user/todayAddUser
+
+### 在线离线比例(管理员)
+get {{url}}/user/liveRate
+
+### 获取当日用户活跃排行榜(前10位)
+get {{url}}/user/activeUsers
+
+### 获取近七天增长用户(管理员)
+get {{url}}/user/sevenDaysAddUser
+
+### 获取今日新增内容(管理员)
+get {{url}}/content/todayContent
+
+### 获取今日新增内容增长率(管理员)
+get {{url}}/content/todayContentRate
+
+### 获取所有内容(管理员)
+get {{url}}/content/allContentsRoot
+
+### 获取今日新增主题(管理员)
+get {{url}}/contentType/todayContentType
+
+### 启用禁用用户(管理员)
+get {{url}}/user/isStopUser?id=15&flag=0
+
+### 封禁 0 解禁 1 内容(管理员)
+get {{url}}/content/isStopContent?id=2&flag=2
+
+### 管理员登录
+post {{url}}/user/rootLogin
+Content-Type: application/json
+
+{
+   "phone": "1234561",
+   "password": "123456"
+}
+
+### 管理员注册
+post {{url}}/user/rootRegister
+Content-Type: application/json
+
+{
+   "phone": "123456",
+   "password": "123456",
+   "name": "我是管理员"
+}
+
+
+### 用户重置密码
+put {{url}}/user/updateUserPwd?phone=111
+
+
+### 用户获取个人信息
+get {{url}}/user/getInfo
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.MTA.ZlWTaouJ8-kpAjtWMXCDK7alaCpkWtEAjvtgyBRnJl8
+
+### 用户登录
+post {{url}}/user/login
+Content-Type: application/json
+
+{
+   "phone": "159270113821",
+   "password": "123456"
+}
+
+### 用户注册
+post {{url}}/user/register
+Content-Type: application/json
+
+{
+   "phone": "15927011382",
+   "password": "123456"
+}
+
+
+### 补全(更新)信息
+put {{url}}/user/updateUserInfo
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.MTY.BBV8qBuDkZitBAwzbN8HObU2qWC0qN-AZnKMG7Cl94k
+
+{
+  "nickName": "老四",
+  "gender": "1",
+  "age": 47,
+  "imgUrl": "https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=1897589137,2261370756&fm=26&gp=0.jpg"
+}
+
+
+### 创建主题
+post {{url}}/contentType/createContentType
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.MTU.dppZzUZLcDlW4rnAzW9MCeOu7KytUK3-oNLN90BNEio
+
+{
+    "name": "老王的空间",
+    "bgcolor": "#12ew34",
+    "icon": "Icon-my"
+}
+
+### 管理员获取所有主题
+### get {{url}}/contentType/allContentType
+get {{url}}/contentType/allContentType?status=1&nickName=李
+
+### 用户获取创建主题
+get {{url}}/contentType/getContentTypeByUid
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.MTA.ZlWTaouJ8-kpAjtWMXCDK7alaCpkWtEAjvtgyBRnJl8
+
+### 修改某一主题
+post {{url}}/contentType/updateContentType?id=1
+Content-Type: application/json
+
+{
+   "name": "测试name1",
+   "bgcolor": "red",
+   "icon": "type名称"
+}
+
+### 删除(恢复)主题 status 0(删除) 1(恢复) 2(名称违规 管理员封禁)
+get {{url}}/contentType/isdeleteContentType?id=2&status=0
+
+### 创建内容
+post {{url}}/content/createContent
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.MTU.dppZzUZLcDlW4rnAzW9MCeOu7KytUK3-oNLN90BNEio
+
+{
+   "tid": "10",
+   "title": "test文章标题",
+   "context": "测试文章内容，测试文章内容，测试文章内容，测试文章内容，测试文章内容，测试文章内容，",
+   "mood": "2",
+   "img": "http://pyku15h15.bkt.clouddn.com/FndvW9ju6TO5RrTCe_ayXWNkuJWS",
+   "status": "0"
+}
+
+
+
+### 用户获取某一主题所有内容
+get {{url}}/content/getContentByTid?tid=1
+
+### 获取某条内容
+get {{url}}/content/getContentById?id=1
+
+### 获取所有公开内容
+get {{url}}/content/getAllContents
+
+
+### 获取所有评论 (管理员)
+get {{url}}/comment/allComment
+
+### 获取所有收藏 ((管理员)
+get {{url}}/save/allSave
