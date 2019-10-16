@@ -8,5 +8,8 @@ router.get('/allComment', async (req, res) => {
 router.get('/isStopcomment', async (req, res) => {
     await commentData.isStopComment(req, res);
 })
+router.get('/commentByCid', async (req, res) => {
+    await commentData.getCommentByCid(req, res);
+})
 
 module.exports = router;

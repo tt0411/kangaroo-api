@@ -10,6 +10,7 @@ let { user } = require("../modules/sql");
 let json = require("../modules/json");
 // 使用连接池，提升性能
 let pool = mysql.createPool(poolextend({}, mysqlconfig));
+const excel = require('node-excel-export');
 let moment = require("moment");
 
 const { getId, createToken, ACTIVE } = require("../utils/utils")
@@ -238,7 +239,7 @@ let userData = {
 },
 totalUser: (req, res) => {  // 获取所有用户(管理员)
   let {per, page, nickName, flag, status, gender, phone} = req.query;
-  //  nickName == undefined ? '%%' : `%${nickName}%`
+  //  nickName === undefined ? '%%' : `%${nickName}%`
   if(nickName === undefined){nickName = '%%'} else{nickName = `%${nickName}%`}
    flag = flag || '%%'
    status = status || '%%'
@@ -546,6 +547,112 @@ totalUser: (req, res) => {  // 获取所有用户(管理员)
             }
          }
       })
+    })
+  },
+  userExcel : (req, res) => { // 导出用户信息excel(管理员)
+    let {nickName, flag, status, gender, phone} = req.query;
+    if(nickName === undefined){nickName = '%%'} else{nickName = `%${nickName}%`}
+      flag = flag || '%%'
+      status = status || '%%'
+      gender = gender || '%%'
+      phone = phone || '%%'
+    pool.getConnection((err, connection) => {
+      connection.query(user.totalUser,[nickName, flag, status, gender, phone], (err, result) => {
+          if(err){
+            res.send({
+              code: 101,
+              msg: '导出Excel失败'
+            })
+            throw err;
+          }else{
+            let dataset = []
+            result.forEach(item => {
+              dataset.push({ 
+                name: item.name,
+                imgUrl: item.imgUrl,
+                phone: item.phone,
+                age: item.age,
+                create_time: moment(item.create_time).format('YYYY-MM-DD HH:mm:ss'),
+                status: item.status,
+                flag: item.flag,
+              })
+            })
+            const styles = {
+              headerDark: {
+                fill: {
+                  fgColor: {
+                    rgb: 'ffffff'
+                  }
+                },
+                font: {
+                  color: {
+                    rgb: '000000'
+                  },
+                  sz: 14,
+                  bold: true,
+                  underline: true
+                }
+              },
+            };
+            const heading = [['', '', ''] ];
+            const specification = {
+              name: { 
+                displayName: '姓名', 
+                headerStyle: styles.headerDark,
+                width: 120 
+              },
+              imgUrl: {
+                displayName: '头像地址',
+                headerStyle: styles.headerDark,
+                width: 300
+              },
+              phone: {
+                displayName: '手机号',
+                headerStyle: styles.headerDark,
+                width: 100 
+              },
+              age: {
+                displayName: '年龄',
+                headerStyle: styles.headerDark,
+                width: 50 
+              },
+              create_time: {
+                displayName: '注册时间',
+                headerStyle: styles.headerDark,
+                width: 220 
+              },
+              status: {
+                displayName: '在线状态',
+                headerStyle: styles.headerDark,
+                cellFormat: function(value, row) { 
+                    return (value == 1) ? '在线' : '离线';
+                  },
+                width: 100 
+              },
+              flag: {
+                displayName: '状态',
+                headerStyle: styles.headerDark,
+                cellFormat: function(value, row) { 
+                    return (value == 1) ? '正常' : '禁用';
+                  },
+                width: 100 
+              }
+            }
+            const report = excel.buildExport(
+              [ 
+                {
+                  name: 'Report',
+                  heading: heading, 
+                  specification: specification, 
+                  data: dataset
+                }
+              ]
+            );
+            
+            res.attachment('用户信息表.xlsx'); 
+            return res.send(report);
+          }
+       })
     })
   }
 }

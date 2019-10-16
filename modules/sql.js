@@ -81,12 +81,21 @@ const comment = {
     getAllCommentsRoot: `SELECT a.*, b.context, c.nickName as comment_name, c.imgUrl as comment_imgUrl from 
     comment a, content b, user c WHERE  c.id = a.from_uid AND a.cid = b.id  AND a.content LIKE ? AND c.id LIKE ? 
     AND a.status like ? AND a.create_time >= ? AND a.create_time <= ?  `,
-    isStopComment: 'UPDATE comment SET status = ? WHERE id = ?'
+    isStopComment: 'UPDATE comment SET status = ? WHERE id = ?',
+    getCommentByCid: `SELECT a.*, b.context,c.nickName as comment_name,c.imgUrl from comment a ,content b, user c WHERE 
+    a.cid = b.id AND a.from_uid = c.id AND a.status = 1 AND b.id = ?`
 }
 
 const save = {
     getAllSavesRoot:`SELECT a.*,b.context,c.nickName as saver_name,c.imgUrl from save a, content b, user c 
-    WHERE a.cid = b.id AND a.uid = c.id AND b.context LIKE ? AND a.uid LIKE ? AND a.status LIKE ?`
+    WHERE a.cid = b.id AND a.uid = c.id AND b.context LIKE ? AND a.uid LIKE ? AND a.status LIKE ?`,
+    getSaveByCid: `SELECT a.*, b.context, c.nickName as saver_name,c.imgUrl from save a, content b, 
+    user c WHERE a.cid = b.id AND a.uid = c.id AND b.id = ?`
 }
 
-module.exports = { user, contentType, content, comment, save }
+const mark ={
+    getMarkByCid: `SELECT a.*, b.context, c.nickName as saver_name,c.imgUrl from mark a, content b, 
+    user c WHERE a.mark_id = b.id AND a.uid = c.id AND a.status = 1 AND b.id = ?`
+}
+
+module.exports = { user, contentType, content, comment, save, mark }

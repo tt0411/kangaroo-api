@@ -13,12 +13,14 @@ const contentType = require('./routes/contentType')
 const content = require('./routes/content')
 const comment = require('./routes/comment')
 const save = require('./routes/save')
+const mark = require('./routes/mark')
 
 app.use('/user', user)
 app.use('/contentType', contentType)
 app.use('/content', content)
 app.use('/comment', comment)
 app.use('/save', save)
+app.use('/mark', mark)
 
 app.listen(3001, () =>{
       // 6个占位符从左到右分别代表：秒、分、时、日、月、周几

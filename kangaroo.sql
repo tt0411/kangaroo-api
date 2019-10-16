@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50726
 File Encoding         : 65001
 
-Date: 2019-10-15 18:20:16
+Date: 2019-10-16 17:58:58
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -65,8 +65,8 @@ CREATE TABLE `content` (
 -- ----------------------------
 -- Records of content
 -- ----------------------------
-INSERT INTO `content` VALUES ('1', '1', '测试文章标题', '我们城里九十平的房子，如果可以重新装修，我希望改造的有，可以说几乎全部。 从玄关开始，玄关那里，鞋柜不要到顶，柜子可以全屋定制，质量好点，选择原木色。和白色。混合。 鞋柜做半截。上面可以买挂钩，挂东西，比较实用。半截柜，还可以放小盆栽装点，也很美貌。 厨房，上面柜子除了包住油烟机和水表箱的，其他不做...', '1', 'http://pyku15h15.bkt.clouddn.com/1.jpg,http://pyku15h15.bkt.clouddn.com/0.jpg,http://pyku15h15.bkt.clouddn.com/1.jpg,http://pyku15h15.bkt.clouddn.com/0.jpg', 'http://pyku15h15.bkt.clouddn.com/movie.mp4', null, '1', '1', '2019-09-30 11:59:12', '2019-10-15 15:00:52');
-INSERT INTO `content` VALUES ('2', '1', 'test文章标题', '我们城里九十平的房子，如果可以重新装修，我希望改造的有，可以说几乎全部。 从玄关开始，玄关那里，鞋柜不要到顶，柜子可以全屋定制，质量好点，选择原木色。和白色。混合。 鞋柜做半截。上面可以买挂钩，挂东西，比较实用。半截柜，还可以放小盆栽装点，也很美貌。 厨房，上面柜子除了包住油烟机和水表箱的，其他不做...', '2', 'http://pyku15h15.bkt.clouddn.com/0.jpg,http://pyku15h15.bkt.clouddn.com/1.jpg', null, null, '2', '1', '2019-09-30 12:29:27', '2019-10-15 15:04:13');
+INSERT INTO `content` VALUES ('1', '1', '测试文章标题', '我们城里九十平的房子，如果可以重新装修，我希望改造的有，可以说几乎全部。 从玄关开始，玄关那里，鞋柜不要到顶，柜子可以全屋定制，质量好点，选择原木色。和白色。混合。 鞋柜做半截。上面可以买挂钩，挂东西，比较实用。半截柜，还可以放小盆栽装点，也很美貌。 厨房，上面柜子除了包住油烟机和水表箱的，其他不做...', '1', 'http://pyku15h15.bkt.clouddn.com/1.jpg,http://pyku15h15.bkt.clouddn.com/0.jpg,http://pyku15h15.bkt.clouddn.com/1.jpg,http://pyku15h15.bkt.clouddn.com/0.jpg', '', null, '2', '1', '2019-09-30 11:59:12', '2019-10-16 16:36:37');
+INSERT INTO `content` VALUES ('2', '1', 'test文章标题', '测试我们城里九十平的房子，如果可以重新装修，我希望改造的有，可以说几乎全部。 从玄关开始，玄关那里，鞋柜不要到顶，柜子可以全屋定制，质量好点，选择原木色。和白色。混合。 鞋柜做半截。上面可以买挂钩，挂东西，比较实用。半截柜，还可以放小盆栽装点，也很美貌。 厨房，上面柜子除了包住油烟机和水表箱的，其他不做...', '2', 'http://pyku15h15.bkt.clouddn.com/0.jpg,http://pyku15h15.bkt.clouddn.com/1.jpg', null, null, '2', '1', '2019-09-30 12:29:27', '2019-10-16 15:41:14');
 INSERT INTO `content` VALUES ('3', '2', 'test文章标题', '一个非英语专业的人的自述：用一年时间考上欧盟口译司 今天看到一篇文章，说是一个猛人用一年时间考上欧盟口译司，看完之后，只有一个感觉，就是意志力决定你的成功，就象我在昨天的文章中说到的，能有坚强意志力的人少之又少，但这个人绝对是其中之一。 我的网名叫做jacky，大学在青岛市念书，4年，中国海洋大学的计算...', '2', '', 'http://pyku15h15.bkt.clouddn.com/movie.mp4', null, '0', '1', '2019-10-08 14:07:53', '2019-10-15 15:04:50');
 INSERT INTO `content` VALUES ('4', '2', 'test文章标题', '春天来了，我们要去郊外踏春，还要在餐桌上“咬春”。作为一个热爱生活的吃货，那就以春天之名来一道家常随意卷饼吧！ 春天终于来了！虽然冬天的寒意还没有完全褪去，但万物复苏，总是给人欣欣向荣的好心情呀！该上班的上班，该上学的上学，该做的工作还是要继续，该...', '2', '', null, 'http://pyku15h15.bkt.clouddn.com/%E5%AD%99%E8%89%BA%E7%90%AA%20-%20%E6%83%85%E7%81%AB.mp3', '0', '1', '2019-10-08 16:31:13', '2019-10-15 15:17:33');
 INSERT INTO `content` VALUES ('5', '2', 'test文章标题', '这几天晚上趁baby睡觉了，我看了几集最新一季的《向往的生活》。片子里黄磊老师做了好几次葱油拌面，不同的嘉宾都非常喜欢，吃得心满意足。啧啧啧，这下子，葱油拌面的草算是在我心里牢牢种下了。这个葱油拌面，说实话在以前我是有点不屑一顾的。总觉得，葱油嘛，确..', '2', 'http://pyku15h15.bkt.clouddn.com/1.jpg', null, null, '0', '1', '2019-10-09 14:56:28', '2019-10-14 17:40:29');
@@ -94,7 +94,7 @@ CREATE TABLE `content_type` (
 -- ----------------------------
 -- Records of content_type
 -- ----------------------------
-INSERT INTO `content_type` VALUES ('1', '4', '测试name1', '#40a9ff', 'Icon-my', '1', '2019-09-30 11:12:05', '2019-10-14 14:04:14');
+INSERT INTO `content_type` VALUES ('1', '4', '测试name1', '#40a9ff', 'Icon-my', '2', '2019-09-30 11:12:05', '2019-10-16 08:48:22');
 INSERT INTO `content_type` VALUES ('2', '4', '2018', '#40a9ff', 'Icon-my', '0', '2019-09-30 11:34:21', '2019-10-14 11:22:40');
 INSERT INTO `content_type` VALUES ('3', '4', '666', '#40a9ff', 'Icon-my', '1', '2019-10-08 16:29:07', '2019-10-14 11:22:42');
 INSERT INTO `content_type` VALUES ('4', '4', '777', '#40a9ff', 'Icon-my', '1', '2019-10-08 16:32:41', '2019-10-14 11:22:45');
@@ -113,18 +113,22 @@ CREATE TABLE `mark` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '点赞 id',
   `mark_id` int(11) DEFAULT NULL COMMENT '点赞内容 id',
   `uid` int(11) DEFAULT NULL COMMENT '点赞用户 id',
+  `status` int(11) DEFAULT '1' COMMENT '是否点赞 0 取消点赞 1 点赞',
   `updatetime` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `mark_count` int(11) DEFAULT NULL COMMENT '点赞数',
   PRIMARY KEY (`id`),
   KEY `mark_id` (`mark_id`),
   KEY `uid` (`uid`),
   CONSTRAINT `mark_ibfk_1` FOREIGN KEY (`mark_id`) REFERENCES `content` (`id`),
   CONSTRAINT `mark_ibfk_2` FOREIGN KEY (`uid`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of mark
 -- ----------------------------
+INSERT INTO `mark` VALUES ('1', '1', '4', '1', '2019-10-16 17:37:22');
+INSERT INTO `mark` VALUES ('2', '1', '5', '1', '2019-10-16 17:37:41');
+INSERT INTO `mark` VALUES ('3', '1', '7', '1', '2019-10-16 17:37:53');
+INSERT INTO `mark` VALUES ('4', '2', '4', '1', '2019-10-16 17:38:13');
 
 -- ----------------------------
 -- Table structure for reply
@@ -223,4 +227,4 @@ INSERT INTO `user` VALUES ('12', '技术胖', 'http://blogimages.jspang.com/blog
 INSERT INTO `user` VALUES ('13', '小海豚', 'http://blogimages.jspang.com/blogtouxiang1.jpg', '12345678', '$2a$10$KDwTEVRi11B1hC1FAbqSJuaXGmvs4dkAnIK9umB0v0DcYe.h/eaYm', '22', '1', '0', '0', '0', '2019-10-10 14:05:58', '2019-10-14 13:26:53');
 INSERT INTO `user` VALUES ('14', '袋鼠空间', 'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3399929080,474843673&fm=26&gp=0.jpg', '15188211507', '$2a$10$gcAjRWoHI/oQAsv6H7.P5O6Oautmk8yrRbYSoVdfNDLxuVQwTwz.e', '22', '1', '0', '1', '1', '2019-10-11 09:04:17', '2019-10-14 09:02:24');
 INSERT INTO `user` VALUES ('15', '老王', 'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=2724886373,3500404552&fm=26&gp=0.jpg', '13986147522', '$2a$10$qQ2FU2QK7CISu26ue6R32.l2CQafroEKjRgkKa1lA.o6lamFM13DG', '46', '1', '0', '1', '1', '2019-10-12 11:55:44', '2019-10-15 08:36:08');
-INSERT INTO `user` VALUES ('16', '老四', 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=1897589137,2261370756&fm=26&gp=0.jpg', '15927011382', '$2a$10$KsWoTqrWwd6lfNwAXrMGUOQBTAkeh3CNc1526S0xU38uIrC8PF8P2', '47', '1', '5', '0', '1', '2019-10-15 08:57:59', '2019-10-15 09:00:46');
+INSERT INTO `user` VALUES ('16', '老四', 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=1897589137,2261370756&fm=26&gp=0.jpg', '15927011382', '$2a$10$KsWoTqrWwd6lfNwAXrMGUOQBTAkeh3CNc1526S0xU38uIrC8PF8P2', '47', '1', '0', '1', '1', '2019-10-15 08:57:59', '2019-10-16 16:11:10');

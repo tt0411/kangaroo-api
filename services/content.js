@@ -10,7 +10,7 @@ const { getId, ACTIVE } = require("../utils/utils");
 let contentData = {
   createContent: (req, res) => { // 用户发布内容
     const params = req.body;
-    const id = getId(req, res);
+    const id = getId(req);
     pool.getConnection((err, connection) => {
       connection.query(
         content.createContent,
@@ -83,7 +83,6 @@ let contentData = {
         let offset=parseInt(page || 1)
         let limit=parseInt(per || 10)
         let newArry=result.slice((offset-1)*limit, offset*limit)
-        // console.log(newArry[0].img)
         let _newArry = [];
         newArry.forEach(item => {
            _newArry.push({

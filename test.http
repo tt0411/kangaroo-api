@@ -39,6 +39,9 @@ get {{url}}/user/isStopUser?id=15&flag=0
 ### 封禁 0 解禁 1 内容(管理员)
 get {{url}}/content/isStopContent?id=2&flag=2
 
+### 导出用户信息excel
+get {{url}}/user/userExcel
+
 ### 管理员登录
 post {{url}}/user/rootLogin
 Content-Type: application/json
@@ -162,3 +165,12 @@ get {{url}}/comment/allComment
 
 ### 获取所有收藏 ((管理员)
 get {{url}}/save/allSave
+
+### 获取文章评论
+get {{url}}/comment/commentByCid?id=1
+
+### 获取文章收藏数
+get {{url}}/save/saveCountByCid?id=1
+
+### 获取文章点赞数
+get {{url}}/mark/markCountByCid?id=2

@@ -63,5 +63,8 @@ router.get('/liveRate',async (req, res) => {
 router.get('/isStopUser',async (req, res) => {
    await userData.isStopUser(req, res);
 })
+router.get('/userExcel',async (req, res) => {
+   await userData.userExcel(req, res);
+})
 
 module.exports = router;

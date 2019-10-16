@@ -36,6 +36,27 @@ let saveData = {
       })
     })
   },
+  getSaveByCid : (req, res) => { // 获取文章的收藏数
+    let {id} = req.query
+    pool.getConnection((err, connection) => {
+      connection.query(save.getSaveByCid, id, (err, result) => {
+        if(err){
+          result = undefined;
+          json(res, result);
+          throw err;
+        }else{
+          const _result = {
+            count: result.length,
+            code: 200,
+            list: result
+          }
+          json(res, _result);
+        }
+        connection.release();
+      })
+    })
+  
+  }
 }
 
 module.exports =  saveData 
