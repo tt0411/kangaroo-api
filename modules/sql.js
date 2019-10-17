@@ -11,9 +11,9 @@ const user = {
     changePhone: 'UPDATE user SET phone = ? WHERE id = ?',
     isStopUser: 'UPDATE user SET flag = ? WHERE id = ?',
     changeUserStatus: 'UPDATE user SET status = ? WHERE id = ?',
-    totalUser: 'SELECT *, nickName as name FROM user where nickName like ? AND flag like ? AND status like ? AND gender like ? AND phone like ? ORDER BY create_time DESC',
+    totalUser: 'SELECT *, nickName as name FROM user where nickName like ? AND flag like ? AND status like ? AND gender like ? AND phone like ? AND type like ? ORDER BY create_time DESC',
     todayAddUser: 'SELECT * FROM user WHERE create_time >= ?',
-    addTestUser: 'INSERT INTO user (phone, password, imgUrl, age, gender) VALUES (?, ?, ?, ?, ?)',
+    addTestUser: 'INSERT INTO user (nickName, phone, password, imgUrl, age, gender, type) VALUES (?, ?, ?, ?, ?, ?, ?)',
     resetActive: 'UPDATE user SET active = 0 ',
     resetPwd: 'UPDATE user SET password = ? WHERE phone = ?',
     changeActive: 'UPDATE user SET active = active + ? WHERE id = ?',
@@ -94,8 +94,10 @@ const save = {
 }
 
 const mark ={
-    getMarkByCid: `SELECT a.*, b.context, c.nickName as saver_name,c.imgUrl from mark a, content b, 
-    user c WHERE a.mark_id = b.id AND a.uid = c.id AND a.status = 1 AND b.id = ?`
+    getMarkByCid: `SELECT a.*, b.context, c.nickName as marker_name,c.imgUrl from mark a, content b, 
+    user c WHERE a.mark_id = b.id AND a.uid = c.id AND a.status = 1 AND b.id = ?`,
+    getAllMarksRoot: `SELECT a.*,b.context,c.nickName as marker_name,c.imgUrl from mark a, content b, user c 
+    WHERE a.mark_id = b.id AND a.uid = c.id AND b.context LIKE ? AND a.uid LIKE ? AND a.status LIKE ?`
 }
 
 module.exports = { user, contentType, content, comment, save, mark }

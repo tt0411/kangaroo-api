@@ -163,8 +163,11 @@ get {{url}}/content/getAllContents
 ### 获取所有评论 (管理员)
 get {{url}}/comment/allComment
 
-### 获取所有收藏 ((管理员)
+### 获取所有收藏 (管理员)
 get {{url}}/save/allSave
+
+### 获取所有点赞 (管理员)
+get {{url}}/mark/allMark
 
 ### 获取文章评论
 get {{url}}/comment/commentByCid?id=1
@@ -174,3 +177,6 @@ get {{url}}/save/saveCountByCid?id=1
 
 ### 获取文章点赞数
 get {{url}}/mark/markCountByCid?id=2
+
+### 重置密码
+get {{url}}/user/resetPwd?phone=123456

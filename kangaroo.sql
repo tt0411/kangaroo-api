@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50726
 File Encoding         : 65001
 
-Date: 2019-10-16 17:58:58
+Date: 2019-10-17 17:37:22
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -114,13 +114,13 @@ CREATE TABLE `mark` (
   `mark_id` int(11) DEFAULT NULL COMMENT '点赞内容 id',
   `uid` int(11) DEFAULT NULL COMMENT '点赞用户 id',
   `status` int(11) DEFAULT '1' COMMENT '是否点赞 0 取消点赞 1 点赞',
-  `updatetime` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `updatetime` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '点赞时间',
   PRIMARY KEY (`id`),
   KEY `mark_id` (`mark_id`),
   KEY `uid` (`uid`),
   CONSTRAINT `mark_ibfk_1` FOREIGN KEY (`mark_id`) REFERENCES `content` (`id`),
   CONSTRAINT `mark_ibfk_2` FOREIGN KEY (`uid`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of mark
@@ -129,6 +129,7 @@ INSERT INTO `mark` VALUES ('1', '1', '4', '1', '2019-10-16 17:37:22');
 INSERT INTO `mark` VALUES ('2', '1', '5', '1', '2019-10-16 17:37:41');
 INSERT INTO `mark` VALUES ('3', '1', '7', '1', '2019-10-16 17:37:53');
 INSERT INTO `mark` VALUES ('4', '2', '4', '1', '2019-10-16 17:38:13');
+INSERT INTO `mark` VALUES ('5', '3', '8', '1', '2019-10-17 09:37:45');
 
 -- ----------------------------
 -- Table structure for reply
@@ -208,23 +209,27 @@ CREATE TABLE `user` (
   `status` int(11) DEFAULT '0' COMMENT '是否在线 0 - 不在线，1 - 在线',
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `type` int(11) DEFAULT '1' COMMENT '用户类型  1 - 正常注册用户  2 - 管理员添加测试用户',
   PRIMARY KEY (`id`),
   UNIQUE KEY `phone` (`phone`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES ('4', '李怼怼', 'http://pyku15h15.bkt.clouddn.com/FndvW9ju6TO5RrTCe_ayXWNkuJWS ', '123456', '$2a$10$2OfGCZtjuvyGti7HIUroDOOzfnIdNGRuStqDRmlAkV11WyTXs0AEe', '32', '1', '0', '0', '0', '2019-09-30 10:23:57', '2019-10-14 10:29:14');
-INSERT INTO `user` VALUES ('5', '张三丰', 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=320178652,790985626&fm=26&gp=0.jpg', '111', '$2a$10$w31xNFKYqjL53vpNwZEWr.8hP5UAIEd3JHynQoLzcPdVvQL4pnBcO', '32', '1', '0', '0', '0', '2019-09-30 15:09:50', '2019-10-14 10:25:25');
-INSERT INTO `user` VALUES ('6', '赵小雷', 'https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=1820523987,3798556096&fm=26&gp=0.jpg', '222', '$2a$10$K2wR4RBFUg7xOccEPSnnEe49I2/FrTUQmPd5praXIs.r1VFWoz6ja', '28', '1', '0', '1', '0', '2019-09-30 15:10:38', '2019-10-10 15:08:19');
-INSERT INTO `user` VALUES ('7', '李梅', 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=1321463267,128419202&fm=26&gp=0.jpg', '333', '$2a$10$K2wR4RBFUg7xOccEPSnnEe49I2/FrTUQmPd5praXIs.r1VFWoz6ja', '26', '2', '0', '1', '0', '2019-09-30 15:11:55', '2019-10-10 15:08:53');
-INSERT INTO `user` VALUES ('8', '韩一波', 'https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=3276179142,1686381254&fm=26&gp=0.jpg', '555', '$2a$10$K2wR4RBFUg7xOccEPSnnEe49I2/FrTUQmPd5praXIs.r1VFWoz6ja', '37', '1', '0', '1', '0', '2019-09-30 15:12:58', '2019-10-12 11:58:57');
-INSERT INTO `user` VALUES ('9', '王太利', 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=1897589137,2261370756&fm=26&gp=0.jpg', '666', '$2a$10$K2wR4RBFUg7xOccEPSnnEe49I2/FrTUQmPd5praXIs.r1VFWoz6ja', '42', '1', '0', '1', '0', '2019-09-30 15:13:54', '2019-10-10 15:10:36');
-INSERT INTO `user` VALUES ('10', '王大大', 'http://img3.imgtn.bdimg.com/it/u=3864086826,2415830551&fm=26&gp=0.jpg', '777', '$2a$10$U5thkJvtKP8wA//yOcT/xuYoZKZLBfwbCmnf0MY37SPx1sMTpWPAm', '18', '1', '0', '1', '1', '2019-10-09 09:59:18', '2019-10-14 13:31:24');
-INSERT INTO `user` VALUES ('11', '李国英', 'http://img5.imgtn.bdimg.com/it/u=2331676194,2426100219&fm=26&gp=0.jpg', '888', '$2a$10$ym85YlsibAT2WyvnyQAfc.13advTObqTnTX97vALD5OQyiYMmvmk6', '18', '2', '0', '0', '0', '2019-10-10 10:37:14', '2019-10-14 10:33:37');
-INSERT INTO `user` VALUES ('12', '技术胖', 'http://blogimages.jspang.com/blogtouxiang1.jpg', '999', '$2a$10$ym85YlsibAT2WyvnyQAfc.13advTObqTnTX97vALD5OQyiYMmvmk6', '48', '1', '0', '1', '1', '2019-10-10 11:38:12', '2019-10-14 13:33:55');
-INSERT INTO `user` VALUES ('13', '小海豚', 'http://blogimages.jspang.com/blogtouxiang1.jpg', '12345678', '$2a$10$KDwTEVRi11B1hC1FAbqSJuaXGmvs4dkAnIK9umB0v0DcYe.h/eaYm', '22', '1', '0', '0', '0', '2019-10-10 14:05:58', '2019-10-14 13:26:53');
-INSERT INTO `user` VALUES ('14', '袋鼠空间', 'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3399929080,474843673&fm=26&gp=0.jpg', '15188211507', '$2a$10$gcAjRWoHI/oQAsv6H7.P5O6Oautmk8yrRbYSoVdfNDLxuVQwTwz.e', '22', '1', '0', '1', '1', '2019-10-11 09:04:17', '2019-10-14 09:02:24');
-INSERT INTO `user` VALUES ('15', '老王', 'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=2724886373,3500404552&fm=26&gp=0.jpg', '13986147522', '$2a$10$qQ2FU2QK7CISu26ue6R32.l2CQafroEKjRgkKa1lA.o6lamFM13DG', '46', '1', '0', '1', '1', '2019-10-12 11:55:44', '2019-10-15 08:36:08');
-INSERT INTO `user` VALUES ('16', '老四', 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=1897589137,2261370756&fm=26&gp=0.jpg', '15927011382', '$2a$10$KsWoTqrWwd6lfNwAXrMGUOQBTAkeh3CNc1526S0xU38uIrC8PF8P2', '47', '1', '0', '1', '1', '2019-10-15 08:57:59', '2019-10-16 16:11:10');
+INSERT INTO `user` VALUES ('4', '李怼怼', 'http://pyku15h15.bkt.clouddn.com/FndvW9ju6TO5RrTCe_ayXWNkuJWS ', '123456', '$2a$10$1T4kUo8nBqUA5dG4pQ23iuF1S.osSjmE7J2xZEpBg/YURVeYXe0LG', '32', '1', '0', '0', '0', '2019-09-30 10:23:57', '2019-10-17 15:13:46', '1');
+INSERT INTO `user` VALUES ('5', '张三丰', 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=320178652,790985626&fm=26&gp=0.jpg', '111', '$2a$10$w31xNFKYqjL53vpNwZEWr.8hP5UAIEd3JHynQoLzcPdVvQL4pnBcO', '32', '1', '0', '0', '0', '2019-09-30 15:09:50', '2019-10-14 10:25:25', '1');
+INSERT INTO `user` VALUES ('6', '赵小雷', 'https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=1820523987,3798556096&fm=26&gp=0.jpg', '222', '$2a$10$K2wR4RBFUg7xOccEPSnnEe49I2/FrTUQmPd5praXIs.r1VFWoz6ja', '28', '1', '0', '1', '0', '2019-09-30 15:10:38', '2019-10-10 15:08:19', '1');
+INSERT INTO `user` VALUES ('7', '李梅', 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=1321463267,128419202&fm=26&gp=0.jpg', '333', '$2a$10$K2wR4RBFUg7xOccEPSnnEe49I2/FrTUQmPd5praXIs.r1VFWoz6ja', '26', '2', '0', '1', '0', '2019-09-30 15:11:55', '2019-10-10 15:08:53', '1');
+INSERT INTO `user` VALUES ('8', '韩一波', 'https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=3276179142,1686381254&fm=26&gp=0.jpg', '555', '$2a$10$K2wR4RBFUg7xOccEPSnnEe49I2/FrTUQmPd5praXIs.r1VFWoz6ja', '37', '1', '0', '1', '0', '2019-09-30 15:12:58', '2019-10-12 11:58:57', '1');
+INSERT INTO `user` VALUES ('9', '王太利', 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=1897589137,2261370756&fm=26&gp=0.jpg', '666', '$2a$10$K2wR4RBFUg7xOccEPSnnEe49I2/FrTUQmPd5praXIs.r1VFWoz6ja', '42', '1', '0', '1', '0', '2019-09-30 15:13:54', '2019-10-10 15:10:36', '1');
+INSERT INTO `user` VALUES ('10', '王大大', 'http://img3.imgtn.bdimg.com/it/u=3864086826,2415830551&fm=26&gp=0.jpg', '777', '$2a$10$U5thkJvtKP8wA//yOcT/xuYoZKZLBfwbCmnf0MY37SPx1sMTpWPAm', '18', '1', '0', '1', '1', '2019-10-09 09:59:18', '2019-10-14 13:31:24', '1');
+INSERT INTO `user` VALUES ('11', '李国英', 'http://img5.imgtn.bdimg.com/it/u=2331676194,2426100219&fm=26&gp=0.jpg', '888', '$2a$10$ym85YlsibAT2WyvnyQAfc.13advTObqTnTX97vALD5OQyiYMmvmk6', '18', '2', '0', '0', '0', '2019-10-10 10:37:14', '2019-10-14 10:33:37', '1');
+INSERT INTO `user` VALUES ('12', '技术胖', 'http://blogimages.jspang.com/blogtouxiang1.jpg', '999', '$2a$10$ym85YlsibAT2WyvnyQAfc.13advTObqTnTX97vALD5OQyiYMmvmk6', '48', '1', '0', '1', '1', '2019-10-10 11:38:12', '2019-10-14 13:33:55', '1');
+INSERT INTO `user` VALUES ('13', '小海豚', 'http://blogimages.jspang.com/blogtouxiang1.jpg', '12345678', '$2a$10$KDwTEVRi11B1hC1FAbqSJuaXGmvs4dkAnIK9umB0v0DcYe.h/eaYm', '22', '1', '0', '0', '0', '2019-10-10 14:05:58', '2019-10-14 13:26:53', '1');
+INSERT INTO `user` VALUES ('14', '袋鼠空间', 'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3399929080,474843673&fm=26&gp=0.jpg', '15188211507', '$2a$10$gcAjRWoHI/oQAsv6H7.P5O6Oautmk8yrRbYSoVdfNDLxuVQwTwz.e', '22', '1', '0', '1', '1', '2019-10-11 09:04:17', '2019-10-14 09:02:24', '1');
+INSERT INTO `user` VALUES ('15', '老王', 'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=2724886373,3500404552&fm=26&gp=0.jpg', '13986147522', '$2a$10$qQ2FU2QK7CISu26ue6R32.l2CQafroEKjRgkKa1lA.o6lamFM13DG', '46', '1', '0', '1', '1', '2019-10-12 11:55:44', '2019-10-15 08:36:08', '1');
+INSERT INTO `user` VALUES ('16', '老四', 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=1897589137,2261370756&fm=26&gp=0.jpg', '15927011382', '$2a$10$iH1EnZPQcEcWHSK8xTImGua9.41/v.h4HFMcWLRqoQooUtPm1paIy', '47', '1', '0', '1', '1', '2019-10-15 08:57:59', '2019-10-17 15:13:48', '1');
+INSERT INTO `user` VALUES ('19', 'test用户1', 'http://pyku15h15.bkt.clouddn.com/testuser.png', '0123456789', '$2a$10$HZrpolP6r3H8gOPvJjQy0e3WDqE7U.H5ud6/JomfKrs6B237pufZu', '18', '1', '0', '1', '0', '2019-10-17 15:12:54', '2019-10-17 15:34:37', '2');
+INSERT INTO `user` VALUES ('20', 'test用户2', 'http://pyku15h15.bkt.clouddn.com/testuser.png', '18139867512', '$2a$10$gFQUs9DtI5sGKBZ23/D4FOXCG.k4TA0sg1t37Jywyu56xZdmDb3Tm', '19', '2', '0', '1', '0', '2019-10-17 15:36:56', '2019-10-17 15:36:56', '2');
+INSERT INTO `user` VALUES ('21', 'test用户3', 'http://pyku15h15.bkt.clouddn.com/testuser.png', '17178952365', '$2a$10$gFQUs9DtI5sGKBZ23/D4FOXCG.k4TA0sg1t37Jywyu56xZdmDb3Tm', '20', '2', '0', '1', '0', '2019-10-17 15:37:57', '2019-10-17 15:37:57', '2');

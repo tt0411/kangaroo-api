@@ -82,7 +82,8 @@ let userData = {
               res.send({
                 code: 200,
                 msg: '登录成功',
-                name: result[0].name
+                name: result[0].name,
+                id: result[0].id
               })
           } else {
             res.send({
@@ -238,15 +239,16 @@ let userData = {
     })
 },
 totalUser: (req, res) => {  // 获取所有用户(管理员)
-  let {per, page, nickName, flag, status, gender, phone} = req.query;
+  let {per, page, nickName, flag, status, gender, phone, type} = req.query;
   //  nickName === undefined ? '%%' : `%${nickName}%`
   if(nickName === undefined){nickName = '%%'} else{nickName = `%${nickName}%`}
    flag = flag || '%%'
    status = status || '%%'
    gender = gender || '%%'
    phone = phone || '%%'
+   type = type || '%%'
   pool.getConnection((err, connection) => {
-    connection.query(user.totalUser,[nickName, flag, status, gender, phone], (err, result) => {
+    connection.query(user.totalUser,[nickName, flag, status, gender, phone, type], (err, result) => {
       if(err){
         result = undefined;
         json(res, result);
@@ -297,7 +299,7 @@ totalUser: (req, res) => {  // 获取所有用户(管理员)
     })
   },
   getInfo: (req, res) => { // 用户获取个人信息
-    const id = getId(req) || req.query.id;
+    const id = getId(req);
     pool.getConnection((err, connection) => {
       connection.query(user.getUserInfo, id, (err, result) => {
         if (err) {
@@ -366,26 +368,41 @@ totalUser: (req, res) => {  // 获取所有用户(管理员)
     })
   },
   addTestUser: (req, res) => { // 添加测试账号(管理员)
-    const { phone, password, imgUrl, age, gender } = req.body
+    const { phone, password, imgUrl, age, gender, nickName } = req.body
+    const type = 2;
     pool.getConnection((err, connection) => {
-      connection.query(user.addTestUser, [phone, password, imgUrl, age, gender], (err, result) => {
+      connection.query(user.login, phone, (err, result) => {
         if(err){
-          result = undefined;
-          json(res, result);
-        }else{
-          if(result){
-            res.send({
-              code: 200,
-              msg: '添加成功'
+          res.send({
+            code: 101,
+            msg: '操作失败'
+          })
+          throw err
+        }else {
+        if(result.length === 0){
+           const pwd = bcrypt.hashSync(password,salt)
+            connection.query(user.addTestUser, [nickName, phone, pwd, imgUrl, age, gender, type], (err, result)=>{
+              if(err){
+                res.send({
+                  code: 101,
+                  msg: '添加失败'
+                })
+              }else if(result){
+                res.send({
+                  code: 200,
+                  msg: '添加成功'
+                })
+              }
             })
-          }else{
-            result = undefined;
-            json(res, result);
-          }
+         } else{
+          res.send({
+            code: 102,
+            msg: '此账号已被注册'
+          })
+         }
         }
-     
-        connection.release();
-      })
+       }) 
+       connection.release();
     })
   },
   resetActive: (req, res) => { // 重置用户活跃度(定时任务)
@@ -511,7 +528,7 @@ totalUser: (req, res) => {  // 获取所有用户(管理员)
     })
   },
   resetPwd: (req, res) => { // 用户重置密码
-    const {phone} = req.query;
+    const {phone} = req.body;
     const password = '123456';
     const pwd = bcrypt.hashSync(password,salt)
     pool.getConnection((err, connection) => {
@@ -550,14 +567,15 @@ totalUser: (req, res) => {  // 获取所有用户(管理员)
     })
   },
   userExcel : (req, res) => { // 导出用户信息excel(管理员)
-    let {nickName, flag, status, gender, phone} = req.query;
+    let {nickName, flag, status, gender, phone, type} = req.query;
     if(nickName === undefined){nickName = '%%'} else{nickName = `%${nickName}%`}
       flag = flag || '%%'
       status = status || '%%'
       gender = gender || '%%'
       phone = phone || '%%'
+      type = type || '%%'
     pool.getConnection((err, connection) => {
-      connection.query(user.totalUser,[nickName, flag, status, gender, phone], (err, result) => {
+      connection.query(user.totalUser,[nickName, flag, status, gender, phone, type], (err, result) => {
           if(err){
             res.send({
               code: 101,
@@ -575,6 +593,7 @@ totalUser: (req, res) => {  // 获取所有用户(管理员)
                 create_time: moment(item.create_time).format('YYYY-MM-DD HH:mm:ss'),
                 status: item.status,
                 flag: item.flag,
+                type: item.type
               })
             })
             const styles = {
@@ -636,6 +655,14 @@ totalUser: (req, res) => {  // 获取所有用户(管理员)
                     return (value == 1) ? '正常' : '禁用';
                   },
                 width: 100 
+              },
+              type: {
+                displayName: '用户类型',
+                headerStyle: styles.headerDark,
+                cellFormat: function(value, row) { 
+                    return (value == 1) ? '正常注册用户' : '测试用户';
+                  },
+                width: 180 
               }
             }
             const report = excel.buildExport(

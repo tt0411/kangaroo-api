@@ -27,7 +27,7 @@ router.put('/updateUserAvter',async (req, res) => {
 router.put('/updateUserPhone',async (req, res) => {
    await userData.updateUser(req, res);
 })
-router.get('/logout',async (req, res) => {
+router.post('/logout',async (req, res) => {
    await userData.logout(req, res);
 })
 router.post('/addTestUser',async (req, res) => {
@@ -65,6 +65,9 @@ router.get('/isStopUser',async (req, res) => {
 })
 router.get('/userExcel',async (req, res) => {
    await userData.userExcel(req, res);
+})
+router.put('/resetPwd', async (req, res) => {
+   await userData.resetPwd(req, res);
 })
 
 module.exports = router;
