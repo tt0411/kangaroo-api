@@ -65,7 +65,7 @@ const contentType = {
     
 const content = {
     getcontentByTid: 'SELECT * FROM content WHERE tid = ? AND flag = 1 OR flag = 0 ORDER BY create_time DESC',
-    createContent: 'INSERT INTO content (title, context, mood, img, status, tid) VALUES (?, ?, ?, ?, ?, ?)',
+    createContent: 'INSERT INTO content (context, mood, img, status, tid, address) VALUES (?, ?, ?, ?, ?, ?)',
     getAllContents: 'SELECT * FROM content WHERE status = 1 AND flag = 1  ORDER BY create_time DESC',
     getAllContentsRoot: `SELECT a.*,b.name,c.nickName,c.imgUrl, c.id AS uid from content a, content_type b, user c WHERE a.tid = b.id AND b.uid = c.id AND a.mood LIKE ? AND a.flag LIKE ? AND a.status LIKE ? AND a.context LIKE ? AND c.nickName LIKE ? AND a.id LIKE ?`,
     getcontentByUid: 'SELECT * from content WHERE uid = ? AND flag = 1 OR flag = 0  ORDER BY create_time DESC',
@@ -90,14 +90,24 @@ const save = {
     getAllSavesRoot:`SELECT a.*,b.context,c.nickName as saver_name,c.imgUrl from save a, content b, user c 
     WHERE a.cid = b.id AND a.uid = c.id AND b.context LIKE ? AND a.uid LIKE ? AND a.status LIKE ?`,
     getSaveByCid: `SELECT a.*, b.context, c.nickName as saver_name,c.imgUrl from save a, content b, 
-    user c WHERE a.cid = b.id AND a.uid = c.id AND b.id = ?`
+    user c WHERE a.cid = b.id AND a.uid = c.id AND b.id = ?`,
+    /** 我的收藏 */
+    toSaveByUid: ` SELECT a.*,b.context,c.nickName as saver_name,c.imgUrl from save a, content b, user c 
+    WHERE a.cid = b.id AND a.uid = c.id AND a.status = 1  AND a.uid = ?`,
+    /** 获得的收藏 */
+    getSaveByUid: `SELECT a.* FROM save a, content b, content_type c WHERE a.cid = b.id  AND a.status = 1 AND b.tid = c.id AND c.uid = ?`
 }
 
 const mark ={
     getMarkByCid: `SELECT a.*, b.context, c.nickName as marker_name,c.imgUrl from mark a, content b, 
     user c WHERE a.mark_id = b.id AND a.uid = c.id AND a.status = 1 AND b.id = ?`,
     getAllMarksRoot: `SELECT a.*,b.context,c.nickName as marker_name,c.imgUrl from mark a, content b, user c 
-    WHERE a.mark_id = b.id AND a.uid = c.id AND b.context LIKE ? AND a.uid LIKE ? AND a.status LIKE ?`
+    WHERE a.mark_id = b.id AND a.uid = c.id AND b.context LIKE ? AND a.uid LIKE ? AND a.status LIKE ?`,
+    /* 获取的点赞 */
+    getMarkByUid: `SELECT a.* FROM mark a, content b, content_type c WHERE AND a.status = 1 AND a.mark_id = b.id AND b.tid = c.id AND c.uid = ?`,
+    /** 我的点赞 */
+    toMarkByUid: `SELECT a.*,b.context,c.nickName as saver_name,c.imgUrl from mark a, content b, user c 
+    WHERE a.mark_id = b.id AND a.uid = c.id  AND a.status = 1 AND a.uid = ?`
 }
 
 module.exports = { user, contentType, content, comment, save, mark }

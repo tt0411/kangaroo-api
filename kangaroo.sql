@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50726
 File Encoding         : 65001
 
-Date: 2019-10-17 17:37:22
+Date: 2019-10-18 18:31:27
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -47,7 +47,6 @@ DROP TABLE IF EXISTS `content`;
 CREATE TABLE `content` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '内容 id',
   `tid` int(11) DEFAULT NULL COMMENT '主题 id',
-  `title` varchar(255) DEFAULT NULL COMMENT '标题',
   `context` text COMMENT '内容',
   `mood` int(11) DEFAULT NULL COMMENT '心情 0 - 难过，1 - 一般，2 - 开心',
   `img` varchar(255) DEFAULT NULL COMMENT '图片',
@@ -57,6 +56,7 @@ CREATE TABLE `content` (
   `status` int(11) DEFAULT '0' COMMENT '是否公开 0 - 不公开，1 - 公开',
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `updatetime` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `address` varchar(255) DEFAULT '' COMMENT '内容发表的地址',
   PRIMARY KEY (`id`),
   KEY `tid` (`tid`),
   CONSTRAINT `content_ibfk_1` FOREIGN KEY (`tid`) REFERENCES `content_type` (`id`)
@@ -65,13 +65,13 @@ CREATE TABLE `content` (
 -- ----------------------------
 -- Records of content
 -- ----------------------------
-INSERT INTO `content` VALUES ('1', '1', '测试文章标题', '我们城里九十平的房子，如果可以重新装修，我希望改造的有，可以说几乎全部。 从玄关开始，玄关那里，鞋柜不要到顶，柜子可以全屋定制，质量好点，选择原木色。和白色。混合。 鞋柜做半截。上面可以买挂钩，挂东西，比较实用。半截柜，还可以放小盆栽装点，也很美貌。 厨房，上面柜子除了包住油烟机和水表箱的，其他不做...', '1', 'http://pyku15h15.bkt.clouddn.com/1.jpg,http://pyku15h15.bkt.clouddn.com/0.jpg,http://pyku15h15.bkt.clouddn.com/1.jpg,http://pyku15h15.bkt.clouddn.com/0.jpg', '', null, '2', '1', '2019-09-30 11:59:12', '2019-10-16 16:36:37');
-INSERT INTO `content` VALUES ('2', '1', 'test文章标题', '测试我们城里九十平的房子，如果可以重新装修，我希望改造的有，可以说几乎全部。 从玄关开始，玄关那里，鞋柜不要到顶，柜子可以全屋定制，质量好点，选择原木色。和白色。混合。 鞋柜做半截。上面可以买挂钩，挂东西，比较实用。半截柜，还可以放小盆栽装点，也很美貌。 厨房，上面柜子除了包住油烟机和水表箱的，其他不做...', '2', 'http://pyku15h15.bkt.clouddn.com/0.jpg,http://pyku15h15.bkt.clouddn.com/1.jpg', null, null, '2', '1', '2019-09-30 12:29:27', '2019-10-16 15:41:14');
-INSERT INTO `content` VALUES ('3', '2', 'test文章标题', '一个非英语专业的人的自述：用一年时间考上欧盟口译司 今天看到一篇文章，说是一个猛人用一年时间考上欧盟口译司，看完之后，只有一个感觉，就是意志力决定你的成功，就象我在昨天的文章中说到的，能有坚强意志力的人少之又少，但这个人绝对是其中之一。 我的网名叫做jacky，大学在青岛市念书，4年，中国海洋大学的计算...', '2', '', 'http://pyku15h15.bkt.clouddn.com/movie.mp4', null, '0', '1', '2019-10-08 14:07:53', '2019-10-15 15:04:50');
-INSERT INTO `content` VALUES ('4', '2', 'test文章标题', '春天来了，我们要去郊外踏春，还要在餐桌上“咬春”。作为一个热爱生活的吃货，那就以春天之名来一道家常随意卷饼吧！ 春天终于来了！虽然冬天的寒意还没有完全褪去，但万物复苏，总是给人欣欣向荣的好心情呀！该上班的上班，该上学的上学，该做的工作还是要继续，该...', '2', '', null, 'http://pyku15h15.bkt.clouddn.com/%E5%AD%99%E8%89%BA%E7%90%AA%20-%20%E6%83%85%E7%81%AB.mp3', '0', '1', '2019-10-08 16:31:13', '2019-10-15 15:17:33');
-INSERT INTO `content` VALUES ('5', '2', 'test文章标题', '这几天晚上趁baby睡觉了，我看了几集最新一季的《向往的生活》。片子里黄磊老师做了好几次葱油拌面，不同的嘉宾都非常喜欢，吃得心满意足。啧啧啧，这下子，葱油拌面的草算是在我心里牢牢种下了。这个葱油拌面，说实话在以前我是有点不屑一顾的。总觉得，葱油嘛，确..', '2', 'http://pyku15h15.bkt.clouddn.com/1.jpg', null, null, '0', '1', '2019-10-09 14:56:28', '2019-10-14 17:40:29');
-INSERT INTO `content` VALUES ('6', '2', 'test文章标题', '希望你见到爸爸时第一句话是：爸爸我爱你，谢谢你！ 亲爱的花生： 当你能读懂妈妈写给你的这封信时我想也应该是可以带你去看爸爸的时候了，你现在肯定已经变成一个阳光帅气的少年了爸爸见到你一定会很开心很欣慰的，你应该不会在相信爸爸去忽忽星球这样的话了对吧，...', '2', 'http://pyku15h15.bkt.clouddn.com/1.jpg', null, null, '0', '0', '2019-10-12 10:54:03', '2019-10-14 17:40:31');
-INSERT INTO `content` VALUES ('7', '10', 'test文章标题', '独自生活，家务变成了一件不可逃避的事。那么，把家务变得更具便利性，更有仪式感，使得它成为一种享受的愉悦方法，便成为我的心之所念。 天陡然冷了下来，是时候整理衣柜，把毛衣和地毯都拿出来，自己保暖的同时，也让家里换个样子。 独自生活，家务变成了一件不可...', '2', 'http://pyku15h15.bkt.clouddn.com/1.jpg', null, null, '1', '0', '2019-10-14 14:12:11', '2019-10-14 17:40:33');
+INSERT INTO `content` VALUES ('1', '1', '我们城里九十平的房子，如果可以重新装修，我希望改造的有，可以说几乎全部。 从玄关开始，玄关那里，鞋柜不要到顶，柜子可以全屋定制，质量好点，选择原木色。和白色。混合。 鞋柜做半截。上面可以买挂钩，挂东西，比较实用。半截柜，还可以放小盆栽装点，也很美貌。 厨房，上面柜子除了包住油烟机和水表箱的，其他不做...', '1', 'http://pyku15h15.bkt.clouddn.com/1.jpg,http://pyku15h15.bkt.clouddn.com/0.jpg,http://pyku15h15.bkt.clouddn.com/1.jpg,http://pyku15h15.bkt.clouddn.com/0.jpg', '', null, '2', '1', '2019-09-30 11:59:12', '2019-10-16 16:36:37', '');
+INSERT INTO `content` VALUES ('2', '1', '测试我们城里九十平的房子，如果可以重新装修，我希望改造的有，可以说几乎全部。 从玄关开始，玄关那里，鞋柜不要到顶，柜子可以全屋定制，质量好点，选择原木色。和白色。混合。 鞋柜做半截。上面可以买挂钩，挂东西，比较实用。半截柜，还可以放小盆栽装点，也很美貌。 厨房，上面柜子除了包住油烟机和水表箱的，其他不做...', '2', 'http://pyku15h15.bkt.clouddn.com/0.jpg,http://pyku15h15.bkt.clouddn.com/1.jpg', null, null, '2', '1', '2019-09-30 12:29:27', '2019-10-16 15:41:14', '');
+INSERT INTO `content` VALUES ('3', '2', '一个非英语专业的人的自述：用一年时间考上欧盟口译司 今天看到一篇文章，说是一个猛人用一年时间考上欧盟口译司，看完之后，只有一个感觉，就是意志力决定你的成功，就象我在昨天的文章中说到的，能有坚强意志力的人少之又少，但这个人绝对是其中之一。 我的网名叫做jacky，大学在青岛市念书，4年，中国海洋大学的计算...', '2', '', 'http://pyku15h15.bkt.clouddn.com/movie.mp4', null, '0', '1', '2019-10-08 14:07:53', '2019-10-15 15:04:50', '');
+INSERT INTO `content` VALUES ('4', '2', '春天来了，我们要去郊外踏春，还要在餐桌上“咬春”。作为一个热爱生活的吃货，那就以春天之名来一道家常随意卷饼吧！ 春天终于来了！虽然冬天的寒意还没有完全褪去，但万物复苏，总是给人欣欣向荣的好心情呀！该上班的上班，该上学的上学，该做的工作还是要继续，该...', '2', '', null, 'http://pyku15h15.bkt.clouddn.com/%E5%AD%99%E8%89%BA%E7%90%AA%20-%20%E6%83%85%E7%81%AB.mp3', '0', '1', '2019-10-08 16:31:13', '2019-10-15 15:17:33', '');
+INSERT INTO `content` VALUES ('5', '2', '这几天晚上趁baby睡觉了，我看了几集最新一季的《向往的生活》。片子里黄磊老师做了好几次葱油拌面，不同的嘉宾都非常喜欢，吃得心满意足。啧啧啧，这下子，葱油拌面的草算是在我心里牢牢种下了。这个葱油拌面，说实话在以前我是有点不屑一顾的。总觉得，葱油嘛，确..', '2', 'http://pyku15h15.bkt.clouddn.com/1.jpg', null, null, '0', '1', '2019-10-09 14:56:28', '2019-10-14 17:40:29', '');
+INSERT INTO `content` VALUES ('6', '2', '希望你见到爸爸时第一句话是：爸爸我爱你，谢谢你！ 亲爱的花生： 当你能读懂妈妈写给你的这封信时我想也应该是可以带你去看爸爸的时候了，你现在肯定已经变成一个阳光帅气的少年了爸爸见到你一定会很开心很欣慰的，你应该不会在相信爸爸去忽忽星球这样的话了对吧，...', '2', 'http://pyku15h15.bkt.clouddn.com/1.jpg', null, null, '0', '0', '2019-10-12 10:54:03', '2019-10-14 17:40:31', '');
+INSERT INTO `content` VALUES ('7', '10', '独自生活，家务变成了一件不可逃避的事。那么，把家务变得更具便利性，更有仪式感，使得它成为一种享受的愉悦方法，便成为我的心之所念。 天陡然冷了下来，是时候整理衣柜，把毛衣和地毯都拿出来，自己保暖的同时，也让家里换个样子。 独自生活，家务变成了一件不可...', '2', 'http://pyku15h15.bkt.clouddn.com/1.jpg', null, null, '1', '0', '2019-10-14 14:12:11', '2019-10-14 17:40:33', '');
 
 -- ----------------------------
 -- Table structure for content_type

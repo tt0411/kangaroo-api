@@ -18,7 +18,7 @@ const bcrypt = require('bcryptjs');
 const salt = bcrypt.genSaltSync(10);
 
 let userData = {
-  login: (req, res) => {  // 登录
+  login: (req, res) => {  // 用户登录
     pool.getConnection((err, connection) => {
       const { phone, password } = req.body;
       connection.query(user.login, phone, (err, result) => {
@@ -681,7 +681,7 @@ totalUser: (req, res) => {  // 获取所有用户(管理员)
           }
        })
     })
-  }
+  },
 }
 
 

@@ -9,12 +9,12 @@ const { getId, ACTIVE } = require("../utils/utils");
 
 let contentData = {
   createContent: (req, res) => { // 用户发布内容
-    const params = req.body;
+    const { context, status, mood, img, address, tid} = req.body;
     const id = getId(req);
     pool.getConnection((err, connection) => {
       connection.query(
         content.createContent,
-        [params.title, params.context, params.mood, params.img, params.status, +params.tid],
+        [context, mood, img, status, address, +tid],
         (err, result) => {
           if (err) {
             result = undefined; 

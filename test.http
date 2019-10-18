@@ -180,3 +180,6 @@ get {{url}}/mark/markCountByCid?id=2
 
 ### 重置密码
 get {{url}}/user/resetPwd?phone=123456
+
+### 用户获取个人收藏内容
+get {{url}}/save/saveByUid

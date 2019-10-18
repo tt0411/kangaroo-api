@@ -4,7 +4,7 @@ let poolextend = require("../modules/poolextend");
 let { save } = require("../modules/sql");
 let json = require("../modules/json");
 let pool = mysql.createPool(poolextend({}, mysqlconfig));
-// const { getId } = require("../utils/utils");
+const { getId } = require("../utils/utils");
 
 let saveData = {
 
@@ -55,7 +55,31 @@ let saveData = {
         connection.release();
       })
     })
-  
+  },
+  toSaveByUid: (req, res) => { // 获取用户的收藏作品
+    const id = getId(req);
+    const {per, page} = req.query;
+    pool.getConnection((err, connection) => {
+      connection.query(save.toSaveByUid, id, (err, result) => {
+        if(err){
+          result = undefined;
+          throw err;
+        }else{
+          let offset=parseInt(page || 1)
+          let limit=parseInt(per || 8)
+          let newArry=result.slice((offset-1)*limit, offset*limit)
+          let hasmore=offset+limit > result.length ? false : true
+          const _result = {
+              hasmore,
+              list: newArry,
+              count: result.length,
+              code: 200
+          }
+          json(res, _result);
+        }
+         connection.release();
+      })
+    })
   }
 }
 
