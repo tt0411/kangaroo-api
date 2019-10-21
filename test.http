@@ -183,3 +183,6 @@ get {{url}}/user/resetPwd?phone=123456
 
 ### 用户获取个人收藏内容
 get {{url}}/save/saveByUid
+
+### 获取七牛云上传token
+get {{url}}/qiniu/uploadToken

@@ -1,43 +1,52 @@
 let mysql = require("mysql");
 let mysqlconfig = require("../config/mysql");
 let poolextend = require("../modules/poolextend");
-let { content, user } = require("../modules/sql");
+let { content } = require("../modules/sql");
 let json = require("../modules/json");
+let multiparty = require('multiparty');
 let pool = mysql.createPool(poolextend({}, mysqlconfig));
 let moment = require("moment");
 const { getId, ACTIVE } = require("../utils/utils");
 
 let contentData = {
   createContent: (req, res) => { // 用户发布内容
-    const { context, status, mood, img, address, tid} = req.body;
-    const id = getId(req);
-    pool.getConnection((err, connection) => {
-      connection.query(
-        content.createContent,
-        [context, mood, img, status, address, +tid],
-        (err, result) => {
-          if (err) {
-            result = undefined; 
-            json(res, result);
-          } else {
-            if (result) {
-              connection.query(user.changeActive, [ACTIVE.CONTEXT_ACTIVE, id], (err, result) => {
-                if(err){
-                  result = undefined
-                }else{
-                  res.send({
-                    code: 200,
-                    msg: '内容发表成功,活跃度 +'+ACTIVE.CONTEXT_ACTIVE,
-                  })
-                }
+    // const { context, status, mood, img, address, tid} = req.body;
+    // const id = getId(req);
+    // console.log(id)
+    let form = new multiparty.Form();
+    form.parse(req, function(err,fields,file){
+      console.log(fields);
+      console.log(file)
+      console.log(file.file[0].path)
+    });
+  
+    // pool.getConnection((err, connection) => {
+    //   connection.query(
+    //     content.createContent,
+    //     [context, mood, img, status, address, +tid],
+    //     (err, result) => {
+    //       if (err) {
+    //         result = undefined; 
+    //         json(res, result);
+    //       } else {
+    //         if (result) {
+    //           connection.query(user.changeActive, [ACTIVE.CONTEXT_ACTIVE, id], (err, result) => {
+    //             if(err){
+    //               result = undefined
+    //             }else{
+    //               res.send({
+    //                 code: 200,
+    //                 msg: '内容发表成功,活跃度 +'+ACTIVE.CONTEXT_ACTIVE,
+    //               })
+    //             }
 
-              })  
-            } 
-          }
-          connection.release();
-        }
-      )
-    })
+    //           })  
+    //         } 
+    //       }
+    //       connection.release();
+    //     }
+    //   )
+    // })
   },
   getAllContents: (req, res) => { // 用户查看所有公开内容
     const {per, page} = req.query
