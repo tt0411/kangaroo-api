@@ -1,52 +1,45 @@
 let mysql = require("mysql");
 let mysqlconfig = require("../config/mysql");
 let poolextend = require("../modules/poolextend");
-let { content } = require("../modules/sql");
+let { content, user } = require("../modules/sql");
 let json = require("../modules/json");
 let multiparty = require('multiparty');
+let axios = require('axios')
 let pool = mysql.createPool(poolextend({}, mysqlconfig));
 let moment = require("moment");
 const { getId, ACTIVE } = require("../utils/utils");
 
 let contentData = {
   createContent: (req, res) => { // 用户发布内容
-    // const { context, status, mood, img, address, tid} = req.body;
-    // const id = getId(req);
-    // console.log(id)
-    let form = new multiparty.Form();
-    form.parse(req, function(err,fields,file){
-      console.log(fields);
-      console.log(file)
-      console.log(file.file[0].path)
-    });
-  
-    // pool.getConnection((err, connection) => {
-    //   connection.query(
-    //     content.createContent,
-    //     [context, mood, img, status, address, +tid],
-    //     (err, result) => {
-    //       if (err) {
-    //         result = undefined; 
-    //         json(res, result);
-    //       } else {
-    //         if (result) {
-    //           connection.query(user.changeActive, [ACTIVE.CONTEXT_ACTIVE, id], (err, result) => {
-    //             if(err){
-    //               result = undefined
-    //             }else{
-    //               res.send({
-    //                 code: 200,
-    //                 msg: '内容发表成功,活跃度 +'+ACTIVE.CONTEXT_ACTIVE,
-    //               })
-    //             }
+    const { context, status, mood, img, address, tid} = req.body;
+    const id = getId(req);
+    pool.getConnection((err, connection) => {
+      connection.query(
+        content.createContent,
+        [context, mood, img, status, address, +tid],
+        (err, result) => {
+          if (err) {
+            result = undefined; 
+            json(res, result);
+          } else {
+            if (result) {
+              connection.query(user.changeActive, [ACTIVE.CONTEXT_ACTIVE, id], (err, result) => {
+                if(err){
+                  result = undefined
+                }else{
+                  res.send({
+                    code: 200,
+                    msg: '内容发表成功,活跃度 +'+ACTIVE.CONTEXT_ACTIVE,
+                  })
+                }
 
-    //           })  
-    //         } 
-    //       }
-    //       connection.release();
-    //     }
-    //   )
-    // })
+              })  
+            } 
+          }
+          connection.release();
+        }
+      )
+    })
   },
   getAllContents: (req, res) => { // 用户查看所有公开内容
     const {per, page} = req.query
@@ -55,16 +48,37 @@ let contentData = {
         if (err) {
           result = undefined; 
           json(res, result);
+          throw err;
         }
        else {
         let offset=parseInt(page || 1)
         let limit=parseInt(per || 10)
         let newArry=result.slice((offset-1)*limit, offset*limit)
+        let _newArry = [];
+        newArry.forEach(item => {
+           _newArry.push({
+             img: item.img.split(','),
+             id: item.id,
+             tid: item.tid,
+             context: item.context, 
+             mood: item.mood,
+             flag: item.flag,
+             status: item.status,
+             create_time: item.create_time,
+             updatetime: item.updatetime,
+             name: item.name,
+             nickName: item.nickName,
+             imgUrl: item.imgUrl,
+             video: item.video,
+             audio: item.audio,
+             uid: item.uid
+           })
+        })   
         let hasmore=offset+limit > result.length ? false : true
         const _result = {
             hasmore,
             count: result.length,
-            list: newArry,
+            list: _newArry,
             code: 200
         }
         json(res, _result);
@@ -149,21 +163,45 @@ let contentData = {
   },
   getContentByUid: (req, res) => { // 用户获取所有发表的内容
     const uid = getId(req)
+    console.log(uid)
     pool.getConnection((err, connection) => {
       connection.query(content.getcontentByUid, uid, (err, result) => {
         if (err) {
           result = undefined;
+          throw err;
         } else {
-          if (result) {
-            let _result = result;
-            result = {
-              result: "select",
-              data: _result,
+          let offset=parseInt(1)
+          let limit=parseInt(10)
+          let newArry=result.slice((offset-1)*limit, offset*limit)
+          let _newArry = [];
+          newArry.forEach(item => {
+             _newArry.push({
+               img: item.img.split(','),
+               id: item.id,
+               tid: item.tid,
+               context: item.context, 
+               mood: item.mood,
+               flag: item.flag,
+               status: item.status,
+               create_time: item.create_time,
+               updatetime: item.updatetime,
+               name: item.name,
+               nickName: item.nickName,
+               imgUrl: item.imgUrl,
+               video: item.video,
+               audio: item.audio,
+               uid: item.uid
+             })
+          })   
+          let hasmore=offset+limit > result.length ? false : true
+          const _result = {
+              hasmore,
+              count: result.length,
+              list: _newArry,
               code: 200
-            }
-          } 
+          }
+          json(res, _result);
         }
-        json(res, result);
         connection.release();
       })
     })
@@ -174,9 +212,26 @@ let contentData = {
       connection.query(content.getcontentById, id, (err, result) => {
         if (err) {
           result = undefined;
+          throw err;
         } else {
           if (result) {
-            let _result = result;
+            let _result = {
+              img: result[0].img.split(','),
+              id: result[0].id,
+              tid: result[0].tid,
+              context: result[0].context, 
+              mood: result[0].mood,
+              flag: result[0].flag,
+              status: result[0].status,
+              create_time: result[0].create_time,
+              updatetime: result[0].updatetime,
+              name: result[0].name,
+              nickName: result[0].nickName,
+              imgUrl: result[0].imgUrl,
+              video: result[0].video,
+              audio: result[0].audio,
+              uid: result[0].uid
+            };
             result = {
               result: "select",
               data: _result,
@@ -208,7 +263,6 @@ let contentData = {
             json(res, result);
           }
         }
-       
         connection.release();
       })
     })

@@ -57,7 +57,7 @@ Content-Type: application/json
 
 {
    "phone": "123456",
-   "password": "123456",
+   "password": "123456",  
    "name": "我是管理员"
 }
 
@@ -141,10 +141,9 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.MTU.dppZzUZLcDlW4rnAzW9MCeOu7KytUK3-o
 
 {
    "tid": "10",
-   "title": "test文章标题",
-   "context": "测试文章内容，测试文章内容，测试文章内容，测试文章内容，测试文章内容，测试文章内容，",
+   "context": "天气晴朗，微风轻拂，心情刚好。。。",
    "mood": "2",
-   "img": "http://pyku15h15.bkt.clouddn.com/FndvW9ju6TO5RrTCe_ayXWNkuJWS",
+   "img": "http://pyku15h15.bkt.clouddn.com/1571732562056.png,http://pyku15h15.bkt.clouddn.com/157173256208.png",
    "status": "0"
 }
 
@@ -152,6 +151,10 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.MTU.dppZzUZLcDlW4rnAzW9MCeOu7KytUK3-o
 
 ### 用户获取某一主题所有内容
 get {{url}}/content/getContentByTid?tid=1
+
+### 用户获取所有发表内容
+get {{url}}/content/getContentByUid
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.MTU.dppZzUZLcDlW4rnAzW9MCeOu7KytUK3-oNLN90BNEio
 
 ### 获取某条内容
 get {{url}}/content/getContentById?id=1
@@ -186,3 +189,6 @@ get {{url}}/save/saveByUid
 
 ### 获取七牛云上传token
 get {{url}}/qiniu/uploadToken
+
+### 上传阿里云oss
+post {{url}}/alioss/uploadOss

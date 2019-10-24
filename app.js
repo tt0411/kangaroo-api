@@ -3,10 +3,12 @@ const app = express()
 const cors = require('cors')
 const axios = require('axios')
 const schedule = require('node-schedule')
+const formidableMiddleware = require('express-formidable');
 app.use(express.json())
 
 //允许跨域
 app.use(cors());
+app.use(formidableMiddleware());
 
 const user = require('./routes/user')
 const contentType = require('./routes/contentType')
@@ -15,6 +17,7 @@ const comment = require('./routes/comment')
 const save = require('./routes/save')
 const mark = require('./routes/mark')
 const qiniu = require('./routes/qiniu')
+const alioss = require('./routes/ali-oss')
 
 app.use('/user', user)
 app.use('/contentType', contentType)
@@ -23,6 +26,7 @@ app.use('/comment', comment)
 app.use('/save', save)
 app.use('/mark', mark)
 app.use('/qiniu', qiniu)
+app.use('/alioss', alioss)
 
 app.listen(3001, () =>{
       // 6个占位符从左到右分别代表：秒、分、时、日、月、周几

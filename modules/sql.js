@@ -65,10 +65,10 @@ const contentType = {
     
 const content = {
     getcontentByTid: 'SELECT * FROM content WHERE tid = ? AND flag = 1 OR flag = 0 ORDER BY create_time DESC',
-    createContent: 'INSERT INTO content (context, mood, img, status, tid, address) VALUES (?, ?, ?, ?, ?, ?)',
+    createContent: 'INSERT INTO content (context, mood, img, status,address, tid) VALUES (?, ?, ?, ?, ?, ?)',
     getAllContents: 'SELECT * FROM content WHERE status = 1 AND flag = 1  ORDER BY create_time DESC',
     getAllContentsRoot: `SELECT a.*,b.name,c.nickName,c.imgUrl, c.id AS uid from content a, content_type b, user c WHERE a.tid = b.id AND b.uid = c.id AND a.mood LIKE ? AND a.flag LIKE ? AND a.status LIKE ? AND a.context LIKE ? AND c.nickName LIKE ? AND a.id LIKE ?`,
-    getcontentByUid: 'SELECT * from content WHERE uid = ? AND flag = 1 OR flag = 0  ORDER BY create_time DESC',
+    getcontentByUid: 'SELECT a.*, b.name, c.imgUrl, c.id as uid, c.nickName from content a, content_type b, user c WHERE a.tid = b.id AND b.uid = c.id AND c.id = ?',
     getcontentById: 'SELECT * from content WHERE id = ? ',
     isStopContent: 'UPDATE content SET flag = ? WHERE id = ?',
     isStopContentByTid: 'UPDATE content SET flag = ? WHERE tid = ? ',
