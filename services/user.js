@@ -20,7 +20,8 @@ const salt = bcrypt.genSaltSync(10);
 let userData = {
   login: (req, res) => {  // 用户登录
     pool.getConnection((err, connection) => {
-      const { phone, password } = req.body;
+      const { phone, password } = req.query;
+      console.log(req.query)
       connection.query(user.login, phone, (err, result) => {
         if (err) {
           result = undefined;
@@ -71,7 +72,7 @@ let userData = {
   },
   rootLogin: (req, res) => {  // 管理员登录
     pool.getConnection((err, connection) => {
-      const { phone, password } = req.body;
+      const { phone, password } = req.query;
       connection.query(user.rootLogin, phone, (err, result) => {
         if (err) {
           result = undefined;

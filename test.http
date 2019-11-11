@@ -43,13 +43,8 @@ get {{url}}/content/isStopContent?id=2&flag=2
 get {{url}}/user/userExcel
 
 ### 管理员登录
-post {{url}}/user/rootLogin
-Content-Type: application/json
+post {{url}}/user/rootLogin?phone=123456&password=123456
 
-{
-   "phone": "1234561",
-   "password": "123456"
-}
 
 ### 管理员注册
 post {{url}}/user/rootRegister
@@ -71,13 +66,8 @@ get {{url}}/user/getInfo
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.MTA.ZlWTaouJ8-kpAjtWMXCDK7alaCpkWtEAjvtgyBRnJl8
 
 ### 用户登录
-post {{url}}/user/login
-Content-Type: application/json
+post {{url}}/user/login?phone=15927011382&password=123456
 
-{
-   "phone": "159270113821",
-   "password": "123456"
-}
 
 ### 用户注册
 post {{url}}/user/register
