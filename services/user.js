@@ -21,7 +21,6 @@ let userData = {
   login: (req, res) => {  // 用户登录
     pool.getConnection((err, connection) => {
       const { phone, password } = req.query;
-      console.log(req.query)
       connection.query(user.login, phone, (err, result) => {
         if (err) {
           result = undefined;
@@ -69,6 +68,44 @@ let userData = {
       });
       connection.release();
     });
+  },
+  register: (req, res) => { // 用户注册
+    let { phone, password, nickName, age, gender,imgUrl } = req.query;
+    imgUrl = imgUrl || 'https://i.loli.net/2019/11/04/PJSrydQFn3tN42p.png'
+    pool.getConnection((err, connection) => {
+       connection.query(user.login, phone, (err, result) => {
+        if(err){
+          res.send({
+            code: 101,
+            msg: '操作失败'
+          })
+          throw err
+        }else {
+        if(result.length === 0){
+          const pwd = bcrypt.hashSync(password,salt)
+            connection.query(user.register, [phone, pwd, nickName, age, gender, imgUrl], (err, result)=>{
+              if(err){
+                res.send({
+                  code: 101,
+                  msg: '注册失败'
+                })
+              }else if(result){
+                res.send({
+                  code: 200,
+                  msg: '注册成功'
+                })
+              }
+            })
+         } else{
+          res.send({
+            code: 102,
+            msg: '此账号已被注册'
+          })
+         }  
+        }      
+      })
+       connection.release();
+    })     
   },
   rootLogin: (req, res) => {  // 管理员登录
     pool.getConnection((err, connection) => {
@@ -122,43 +159,6 @@ let userData = {
                   msg: '注册失败'
                 })
                 throw err;
-              }else if(result){
-                res.send({
-                  code: 200,
-                  msg: '注册成功'
-                })
-              }
-            })
-         } else{
-          res.send({
-            code: 102,
-            msg: '此账号已被注册'
-          })
-         }  
-        }      
-      })
-       connection.release();
-    })     
-  },
-  register: (req, res) => { // 用户注册
-    const { phone, password } = req.body;
-    pool.getConnection((err, connection) => {
-       connection.query(user.login, phone, (err, result) => {
-        if(err){
-          res.send({
-            code: 101,
-            msg: '操作失败'
-          })
-          throw err
-        }else {
-        if(result.length === 0){
-          const pwd = bcrypt.hashSync(password,salt)
-            connection.query(user.register, [phone, pwd], (err, result)=>{
-              if(err){
-                res.send({
-                  code: 101,
-                  msg: '注册失败'
-                })
               }else if(result){
                 res.send({
                   code: 200,
@@ -307,7 +307,7 @@ totalUser: (req, res) => {  // 获取所有用户(管理员)
           result = undefined;
         } else {
           if (result.length !== 0) {
-            let _result = result;
+            let _result = result[0];
             result = {
               result: "select",
               data: _result,
@@ -529,7 +529,7 @@ totalUser: (req, res) => {  // 获取所有用户(管理员)
     })
   },
   resetPwd: (req, res) => { // 用户重置密码
-    const {phone} = req.body;
+    const {phone} = req.query;
     const password = '123456';
     const pwd = bcrypt.hashSync(password,salt)
     pool.getConnection((err, connection) => {
@@ -537,6 +537,7 @@ totalUser: (req, res) => {  // 获取所有用户(管理员)
             if(err){
                result = undefined;
                json(res, result);
+               throw err;
             }else{
               if(result.length === 0){
                 res.send({
@@ -553,7 +554,7 @@ totalUser: (req, res) => {  // 获取所有用户(管理员)
                     if(result){
                       res.send({
                         code: 200,
-                        msg: '重置成功,新密码为123456'
+                        msg: '重置成功,新密码为 123456'
                       })
                     }else{
                       result = undefined;

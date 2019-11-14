@@ -1,7 +1,7 @@
 // SQL语句封裝
 const user = {
     login: 'SELECT * FROM user WHERE phone = ?',
-    register: 'INSERT INTO user (phone, password) VALUES (?, ?)',
+    register: 'INSERT INTO user (phone, password, nickName, age, gender, imgUrl) VALUES (?, ?, ?, ?, ?, ?)',
     rootLogin: 'SELECT * FROM rootuser WHERE phone = ?',
     rootRegister: 'INSERT INTO rootuser (phone, password, name) VALUES (?, ?, ?)',
     getRootName: 'SELECT name FROM rootuser WHERE id = ?',

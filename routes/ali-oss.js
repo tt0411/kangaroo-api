@@ -9,14 +9,15 @@ let client = new OSS({
 client.useBucket('kangaroo-app')//使用的存储桶名
 
 router.post('/uploadOss', async (req, res) => {
-    console.log(req.files)
     try {
         var fileName = ''
         if(req.fields.type === 'video'){
              fileName =`${req.fields.type}/`+ Date.now() + '.mp4';
         }else if(req.fields.type === 'img'){
             fileName =`${req.fields.type}/`+ Date.now() + '.png';
-        }else{
+        }else if(req.fields.type === 'avater'){
+            fileName =`${req.fields.type}/`+ Date.now() + '.png';
+        }else if(req.fields.type === 'mp3'){
             fileName =`${req.fields.type}/`+ Date.now() + '.mp3';
         }
         let result = await client.put(fileName, req.files.file.path)
