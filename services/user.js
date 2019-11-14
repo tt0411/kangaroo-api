@@ -177,13 +177,13 @@ let userData = {
        connection.release();
     })     
   },
-  updateUserInfo: (req, res) => { // 用户修改个人信息
-    let param = req.body;
+  updateNickname: (req, res) => { // 用户修改昵称
+    let {nickName} = req.query;
     const uid = getId(req);
     pool.getConnection((err, connection) => {
       connection.query(
-        user.updateUserInfo,
-        [param.nickName, param.imgUrl, param.age, param.gender, +uid],
+        user.updateUserNickname,
+        [nickName, +uid],
         (err, result) => {
           if (err) {
             result = undefined;
@@ -200,11 +200,57 @@ let userData = {
       );
     });
   },
-  updateUserAvter: (req, res) => { // 用户修改头像
-      const { imgUrl } = req.body
+  updateGender: (req, res) => { // 用户修改性别
+    let {gender} = req.query;
+    const uid = getId(req);
+    pool.getConnection((err, connection) => {
+      connection.query(
+        user.updateUserGender,
+        [gender, +uid],
+        (err, result) => {
+          if (err) {
+            result = undefined;
+          } else {
+            if (result.affectedRows > 0) {
+              result = "update";
+            } else {
+              result = undefined;
+            }
+          }
+          json(res, result);
+          connection.release();
+        }
+      );
+    });
+  },
+  updateAge: (req, res) => { // 用户修改年龄
+    let { age } = req.query;
+    const uid = getId(req);
+    pool.getConnection((err, connection) => {
+      connection.query(
+        user.updateUserAge,
+        [age, +uid],
+        (err, result) => {
+          if (err) {
+            result = undefined;
+          } else {
+            if (result.affectedRows > 0) {
+              result = "update";
+            } else {
+              result = undefined;
+            }
+          }
+          json(res, result);
+          connection.release();
+        }
+      );
+    });
+  },
+  updateAvater: (req, res) => { // 用户修改头像
+      const { imgUrl } = req.query
       const id = getId(req);
       pool.getConnection((err, connection) => {
-        connection.query(user.changeAvter,[ imgUrl,id ], (err, result) =>{
+        connection.query(user.changeAvater,[ imgUrl,id ], (err, result) =>{
           if(err){
             result = undefined;
           }else{
@@ -238,6 +284,43 @@ let userData = {
         connection.release();
       })
     })
+},
+updateUserPwd: (req, res) => { // 用户修改密码
+       const id = getId(req);
+       let { oldPassword, newPassword } = req.query
+       pool.getConnection((err, connection) => {
+         connection.query(user.getPwd, id, (err, result) => {
+           if(err){
+            res.send({ 
+              code: 101,
+              msg: '操作失败'
+            })
+             throw err;
+           }else{
+             if(result.length > 0 && bcrypt.compareSync(oldPassword,result[0].password)){
+               const newPwd = bcrypt.hashSync(newPassword,salt)
+                connection.query(user.changePwd,[newPwd, id], (err, result) => {
+                  if(result.affectedRows > 0){
+                    res.send({ 
+                      code: 200,
+                      msg: '密码修改成功'
+                    })
+                  }else{
+                    res.send({ 
+                      code: 101,
+                      msg: '操作失败'
+                    })
+                  }
+                })
+             }else{
+              res.send({ 
+                code: 102,
+                msg: '旧密码错误'
+              })
+             }
+           }
+         })
+       }) 
 },
 totalUser: (req, res) => {  // 获取所有用户(管理员)
   let {per, page, nickName, flag, status, gender, phone, type} = req.query;

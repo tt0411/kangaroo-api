@@ -9,8 +9,20 @@ router.post('/login',async (req, res) => {
 router.post('/register',async (req, res) => {
    await userData.register(req, res);
 })
-router.put('/updateUserInfo',async (req, res) => {
-   await userData.updateUserInfo(req, res);
+router.put('/updateNickname',async (req, res) => {
+   await userData.updateNickname(req, res);
+})
+router.put('/updateGender',async (req, res) => {
+   await userData.updateGender(req, res);
+})
+router.put('/updateAge',async (req, res) => {
+   await userData.updateAge(req, res);
+})
+router.put('/updateAvater', async (req, res) => {
+   await userData.updateAvater(req, res);
+})
+router.put('/updatePwd', async (req, res) => {
+   await userData.updateUserPwd(req, res)
 })
 router.get('/getInfo',async (req, res)=> {
    await userData.getInfo(req,res);

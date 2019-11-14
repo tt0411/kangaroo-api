@@ -6,9 +6,13 @@ const user = {
     rootRegister: 'INSERT INTO rootuser (phone, password, name) VALUES (?, ?, ?)',
     getRootName: 'SELECT name FROM rootuser WHERE id = ?',
     getUserInfo: 'SELECT * FROM user WHERE id = ?',
-    updateUserInfo: 'UPDATE user SET nickName = ?, imgUrl = ?, age = ?, gender = ? WHERE id = ?',
-    changeAvter: 'UPDATE user SET imgUrl = ? WHERE id = ?',
+    updateUserNickname: 'UPDATE user SET nickName = ? WHERE id = ?',
+    updateUserGender: 'UPDATE user SET  gender = ? WHERE id = ?',
+    updateUserAge: 'UPDATE user SET  age = ? WHERE id = ?',
+    changeAvater: 'UPDATE user SET imgUrl = ? WHERE id = ?',
     changePhone: 'UPDATE user SET phone = ? WHERE id = ?',
+    getPwd: 'SELECT password from user WHERE id = ?',
+    changePwd: 'UPDATE user SET password = ? WHERE id = ?',
     isStopUser: 'UPDATE user SET flag = ? WHERE id = ?',
     changeUserStatus: 'UPDATE user SET status = ? WHERE id = ?',
     totalUser: 'SELECT *, nickName as name FROM user where nickName like ? AND flag like ? AND status like ? AND gender like ? AND phone like ? AND type like ? ORDER BY create_time DESC',
@@ -52,13 +56,14 @@ const user = {
     ) b on a.click_date = b.datetime ORDER BY date`,
 }
 
-const contentType = {
-    getAllcontentType: 'SELECT a.*, b.nickName, b.imgUrl FROM content_type a, user b WHERE a.uid = b.id AND a.status LIKE ? AND b.nickName LIKE ?',
-    createcontentType: 'INSERT INTO content_type (name, bgcolor, icon, uid) VALUES (?, ?, ?, ?)',
-    getcontentTypeByUid: 'SELECT * FROM content_type WHERE uid = ? ORDER BY create_time DESC',
-    updatecontentType: 'UPDATE content_type SET name = ?, bgcolor = ?, icon = ? WHERE id = ?',  
-    isdeletecontentType: 'UPDATE content_type SET status = ? WHERE id = ?',
-    todayAddContentType: `SELECT  (SELECT count(*) FROM content_type WHERE create_time >= ? ) 
+const theme = {
+    getAlltheme: 'SELECT a.*, b.nickName, b.imgUrl FROM content_type a, user b WHERE a.uid = b.id AND a.status LIKE ? AND b.nickName LIKE ?',
+    createtheme: 'INSERT INTO content_type (name, status, uid) VALUES (?, ?, ?)',
+    getthemeByUid: 'SELECT a.*, b.nickName,b.imgUrl FROM content_type a, user b WHERE uid = ? AND a.uid = b.id AND a.status != 2  ORDER BY a.create_time DESC',
+    getOpenTheme: 'SELECT a.*,b.nickName, b.imgUrl FROM content_type a, user b WHERE a.status = 1 AND a.flag = 1 AND a.uid = b.id',
+    updatetheme: 'UPDATE content_type SET name = ?, bgcolor = ?, icon = ? WHERE id = ?',  
+    isdeletetheme: 'UPDATE content_type SET status = ? WHERE id = ?',
+    todayAddtheme: `SELECT  (SELECT count(*) FROM content_type WHERE create_time >= ? ) 
     AS count, (SELECT count(*) FROM content_type) AS allCount, (SELECT count(*) FROM content_type WHERE create_time >= ? )/(SELECT count(*) from 
     content_type) AS rate `
 }
@@ -110,4 +115,4 @@ const mark ={
     WHERE a.mark_id = b.id AND a.uid = c.id  AND a.status = 1 AND a.uid = ?`
 }
 
-module.exports = { user, contentType, content, comment, save, mark }
+module.exports = { user, theme, content, comment, save, mark }

@@ -11,21 +11,19 @@ app.use(cors());
 app.use(formidableMiddleware());
 
 const user = require('./routes/user')
-const contentType = require('./routes/contentType')
+const theme = require('./routes/theme')
 const content = require('./routes/content')
 const comment = require('./routes/comment')
 const save = require('./routes/save')
 const mark = require('./routes/mark')
-const qiniu = require('./routes/qiniu')
 const alioss = require('./routes/ali-oss')
 
 app.use('/user', user)
-app.use('/contentType', contentType)
+app.use('/theme', theme)
 app.use('/content', content)
 app.use('/comment', comment)
 app.use('/save', save)
 app.use('/mark', mark)
-app.use('/qiniu', qiniu)
 app.use('/alioss', alioss)
 
 app.listen(3001, () =>{

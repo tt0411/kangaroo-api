@@ -2,19 +2,19 @@ let mysql = require("mysql");
 let mysqlconfig = require("../config/mysql");
 let poolextend = require("../modules/poolextend");
 let moment = require("moment");
-let { contentType, content, user } = require("../modules/sql");
+let { theme, content, user } = require("../modules/sql");
 let json = require("../modules/json");
 let pool = mysql.createPool(poolextend({}, mysqlconfig));
 const { getId, ACTIVE } = require("../utils/utils");
 
-let contentTypeData = {
-  createContentType: (req, res) => {
-    const params = req.body;
+let themeData = {
+  createTheme: (req, res) => { //用户创建主题
+    let {name, status} = req.query
     const uid = getId(req);
     pool.getConnection((err, connection) => {
       connection.query(
-        contentType.createcontentType,
-        [params.name, params.bgcolor, params.icon, +uid],
+        theme.createtheme,
+        [name, status, +uid],
         (err, result) => {
           if (err) {
             result = undefined;
@@ -43,10 +43,10 @@ let contentTypeData = {
       )
     })
   },
-  getcontentTypeByUid: (req, res) => { // 用户获取自己创建的主题
+  getThemeByUid: (req, res) => { // 用户获取自己创建的主题
     let uid = getId(req);
     pool.getConnection((err, connection) => {
-      connection.query(contentType.getcontentTypeByUid, uid, (err, result) => {
+      connection.query(theme.getthemeByUid, uid, (err, result) => {
         if (err) {
           result = undefined;
         } else {
@@ -66,11 +66,33 @@ let contentTypeData = {
       })
     })
   },
-  updatecontentType: (req, res) => { // 用户修改主题
+  getOpenTheme: (req, res) => { // 获取所有公开主题
+    pool.getConnection((err, connection) => {
+      connection.query(theme.getOpenTheme, (err, result) => {
+        if (err) {
+          result = undefined;
+        } else {
+          if (result) {
+            let _result = result;
+            result = {
+              result: "select",
+              data: _result,
+              code: 200
+            }
+          }else{
+            result = undefined; 
+          } 
+        }
+        json(res, result);
+        connection.release();
+      })
+    })
+  },
+  updateTheme: (req, res) => { // 用户修改主题
     let { id } = req.query
     let {name, bgcolor, icon} = req.body
     pool.getConnection((err, connection) => {
-      connection.query(contentType.updatecontentType,[name, bgcolor, icon, id],(err, result) => {
+      connection.query(theme.updatetheme,[name, bgcolor, icon, id],(err, result) => {
         if(err){
           result = undefined;
           json(res, result);
@@ -84,10 +106,10 @@ let contentTypeData = {
       })
     })
   },
-  isdeleteContentType: (req, res) => { // 删除(恢复)主题 (用户，管理员)
+  isdeleteTheme: (req, res) => { // 删除(恢复)主题 (用户，管理员)
     let { id, status } = req.query
     pool.getConnection((err, connection) => {
-      connection.query(contentType.isdeletecontentType, [status, id], (err, result) => {
+      connection.query(theme.isdeletetheme, [status, id], (err, result) => {
          if(err){
           result = undefined;
           json(res, result);
@@ -110,12 +132,12 @@ let contentTypeData = {
      })
     })
   },
-  allContentType: (req, res) => { // 查询所有主题 (管理员)
+  allTheme: (req, res) => { // 查询所有主题 (管理员)
     let {status, nickName, per, page} = req.query;
     status = status || '%%'
     if(nickName === undefined){nickName = '%%'} else{nickName = `%${nickName}%`}
     pool.getConnection((err, connection) => {
-      connection.query(contentType.getAllcontentType,[status, nickName], (err, result) => {
+      connection.query(theme.getAlltheme,[status, nickName], (err, result) => {
         if (err) {
           result = undefined;
            json(res, result);
@@ -136,10 +158,10 @@ let contentTypeData = {
       })
     })
   },
-  todayContentType: (req, res) => {
+  todayTheme: (req, res) => {
     const date = moment(Date.now()).format('YYYY-MM-DD')
     pool.getConnection((err, connection) => {
-      connection.query(contentType.todayAddContentType, [date, date],(err, result) => {
+      connection.query(theme.todayAddtheme, [date, date],(err, result) => {
         if (err) {
           result = undefined;
           json(res, result)
@@ -164,4 +186,4 @@ let contentTypeData = {
   }
 }
 
-module.exports =  contentTypeData 
+module.exports =  themeData 
