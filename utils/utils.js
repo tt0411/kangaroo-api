@@ -11,9 +11,13 @@ const encodeToken = (token, secretOrPrivateKey = Key) => {
     return encodedToken
 }
 
-const getId =(req)=>{
+const getId =(req) => {
     let raw = String(req.headers.authorization).split(' ').pop(); 
-    return  encodeToken(raw,secretOrPrivateKey = Key) 
+    if(raw === 'null') {
+        return null
+    }else{
+        return  encodeToken(raw,secretOrPrivateKey = Key) 
+    }
 }
 
 const ACTIVE = {

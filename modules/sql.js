@@ -61,7 +61,9 @@ const theme = {
     createtheme: 'INSERT INTO content_type (name, status, uid) VALUES (?, ?, ?)',
     getthemeByUid: 'SELECT a.*, b.nickName,b.imgUrl FROM content_type a, user b WHERE uid = ? AND a.uid = b.id AND a.status != 2  ORDER BY a.create_time DESC',
     getOpenTheme: 'SELECT a.*,b.nickName, b.imgUrl FROM content_type a, user b WHERE a.status = 1 AND a.flag = 1 AND a.uid = b.id',
-    updatetheme: 'UPDATE content_type SET name = ?, bgcolor = ?, icon = ? WHERE id = ?',  
+    getThemeById: 'SELECT a.*, b.nickName,b.imgUrl FROM content_type a, user b WHERE a.id = ? AND a.uid = b.id AND a.status != 2',
+    updatetheme: 'UPDATE content_type SET name = ? WHERE id = ?',  
+    getThemeList: 'SELECT a.id, a.name FROM content_type a, user b WHERE a.uid = ? AND a.uid = b.id AND a.status != 2 AND a.flag = 1',
     isdeletetheme: 'UPDATE content_type SET status = ? WHERE id = ?',
     todayAddtheme: `SELECT  (SELECT count(*) FROM content_type WHERE create_time >= ? ) 
     AS count, (SELECT count(*) FROM content_type) AS allCount, (SELECT count(*) FROM content_type WHERE create_time >= ? )/(SELECT count(*) from 
@@ -70,7 +72,7 @@ const theme = {
     
 const content = {
     getcontentByTid: 'SELECT * FROM content WHERE tid = ? AND flag = 1 OR flag = 0 ORDER BY create_time DESC',
-    createContent: 'INSERT INTO content (context, mood, img, status,address, tid) VALUES (?, ?, ?, ?, ?, ?)',
+    createContent: 'INSERT INTO content (context, img, video, audio, address,flag, status, is_comment, tid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
     getAllContents: 'SELECT * FROM content WHERE status = 1 AND flag = 1  ORDER BY create_time DESC',
     getAllContentsRoot: `SELECT a.*,b.name,c.nickName,c.imgUrl, c.id AS uid from content a, content_type b, user c WHERE a.tid = b.id AND b.uid = c.id AND a.mood LIKE ? AND a.flag LIKE ? AND a.status LIKE ? AND a.context LIKE ? AND c.nickName LIKE ? AND a.id LIKE ?`,
     getcontentByUid: 'SELECT a.*, b.name, c.imgUrl, c.id as uid, c.nickName from content a, content_type b, user c WHERE a.tid = b.id AND b.uid = c.id AND c.id = ?',

@@ -80,6 +80,12 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.MTQ.yFAAWaBeP7rq_XztWB2A4PHDG58SmQ4L2
 ### 获取所有公开主题
 get {{url}}/theme/getOpenTheme
 
+### 获取某个主题
+get {{url}}/theme/getThemeById?id=11
+
+### 获取主题列表
+get {{url}}/theme/getThemeList
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.MTQ.yFAAWaBeP7rq_XztWB2A4PHDG58SmQ4L2Z9DLdh0d7Y
 
 ### 管理员获取所有主题
 ### get {{url}}/contentType/allContentType
@@ -87,16 +93,16 @@ get {{url}}/theme/getOpenTheme
 
 
 ### 修改某一主题
-post {{url}}/contentType/updateContentType?id=1
+# post {{url}}/contentType/updateContentType?id=1
 
 
 
 ### 删除(恢复)主题 status 0(删除) 1(恢复) 2(名称违规 管理员封禁)
-get {{url}}/contentType/isdeleteContentType?id=2&status=0
+# get {{url}}/contentType/isdeleteContentType?id=2&status=0
 
 ### 创建内容
-post {{url}}/content/createContent
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.MTU.dppZzUZLcDlW4rnAzW9MCeOu7KytUK3-oNLN90BNEio
+post {{url}}/content/createContent?context=这是一个跨界打劫你，你却无力反击的时代&img=https://kangaroo-app.oss-cn-hangzhou.aliyuncs.com/1571905601259.png&status=0&flag=3&is_comment=1&tid=11&address=杭州市下城区跨贸小镇
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.MTQ.yFAAWaBeP7rq_XztWB2A4PHDG58SmQ4L2Z9DLdh0d7Y
 
 
 
@@ -138,8 +144,3 @@ get {{url}}/user/resetPwd?phone=123456
 ### 用户获取个人收藏内容
 get {{url}}/save/saveByUid
 
-### 获取七牛云上传token
-get {{url}}/qiniu/uploadToken
-
-### 上传阿里云oss
-post {{url}}/alioss/uploadOss

@@ -180,6 +180,14 @@ let userData = {
   updateNickname: (req, res) => { // 用户修改昵称
     let {nickName} = req.query;
     const uid = getId(req);
+    if(!uid){
+      res.send({
+        code: 301,
+        msg: 'token无效',
+        data: []
+      })
+      return 
+  }
     pool.getConnection((err, connection) => {
       connection.query(
         user.updateUserNickname,
@@ -203,6 +211,14 @@ let userData = {
   updateGender: (req, res) => { // 用户修改性别
     let {gender} = req.query;
     const uid = getId(req);
+    if(!uid){
+      res.send({
+        code: 301,
+        msg: 'token无效',
+        data: []
+      })
+      return 
+  }
     pool.getConnection((err, connection) => {
       connection.query(
         user.updateUserGender,
@@ -226,6 +242,14 @@ let userData = {
   updateAge: (req, res) => { // 用户修改年龄
     let { age } = req.query;
     const uid = getId(req);
+    if(!uid){
+      res.send({
+        code: 301,
+        msg: 'token无效',
+        data: []
+      })
+      return 
+  }
     pool.getConnection((err, connection) => {
       connection.query(
         user.updateUserAge,
@@ -249,6 +273,14 @@ let userData = {
   updateAvater: (req, res) => { // 用户修改头像
       const { imgUrl } = req.query
       const id = getId(req);
+      if(!id){
+        res.send({
+          code: 301,
+          msg: 'token无效',
+          data: []
+        })
+        return 
+    }
       pool.getConnection((err, connection) => {
         connection.query(user.changeAvater,[ imgUrl,id ], (err, result) =>{
           if(err){
@@ -268,6 +300,14 @@ let userData = {
   updateUserPhone: (req, res) => { // 用户修改手机(登录账号)
     const { phone } = req.body
     const id = getId(req);
+    if(!id){
+      res.send({
+        code: 301,
+        msg: 'token无效',
+        data: []
+      })
+      return 
+  }
     pool.getConnection((err, connection) => {
       connection.query(user.changePhone,[ phone, id ], (err, result) =>{
         if(err){
@@ -287,6 +327,14 @@ let userData = {
 },
 updateUserPwd: (req, res) => { // 用户修改密码
        const id = getId(req);
+       if(!id){
+        res.send({
+          code: 301,
+          msg: 'token无效',
+          data: []
+        })
+        return 
+    }
        let { oldPassword, newPassword } = req.query
        pool.getConnection((err, connection) => {
          connection.query(user.getPwd, id, (err, result) => {
@@ -384,6 +432,14 @@ totalUser: (req, res) => {  // 获取所有用户(管理员)
   },
   getInfo: (req, res) => { // 用户获取个人信息
     const id = getId(req);
+    if(!id){
+      res.send({
+        code: 301,
+        msg: 'token无效',
+        data: []
+      })
+      return 
+   }
     pool.getConnection((err, connection) => {
       connection.query(user.getUserInfo, id, (err, result) => {
         if (err) {
@@ -408,6 +464,13 @@ totalUser: (req, res) => {  // 获取所有用户(管理员)
   },
   logout: (req, res) => { // 用户退出登录
     const id = getId(req);
+    if(!id){
+      res.send({
+        code: 301,
+        msg: 'token无效',
+      })
+      return 
+  }
     pool.getConnection((err, connection) => {
       connection.query(user.changeUserStatus, [0, id], (err, result) => {
         if(err){

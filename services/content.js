@@ -9,12 +9,20 @@ const { getId, ACTIVE } = require("../utils/utils");
 
 let contentData = {
   createContent: (req, res) => { // 用户发布内容
-    const { context, status, mood, img, address, tid} = req.body;
+    const { context, status, img, address, video, audio, flag, is_comment, tid} = req.query;
     const id = getId(req);
+    if(!id){
+      res.send({
+        code: 301,
+        msg: 'token无效',
+        data: []
+      })
+      return 
+  }
     pool.getConnection((err, connection) => {
       connection.query(
         content.createContent,
-        [context, mood, img, status, address, +tid],
+        [context, img, video, audio, address,flag, status, is_comment, tid],
         (err, result) => {
           if (err) {
             result = undefined; 

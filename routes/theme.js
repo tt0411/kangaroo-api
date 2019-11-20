@@ -12,6 +12,12 @@ router.get('/getThemeByUid', async (req, res) => {
 router.get('/getOpenTheme', async (req, res) => {
     await ThemeData.getOpenTheme(req, res)
 })
+router.get('/getThemeById', async (req, res) => {
+    await ThemeData.getThemeById(req, res)
+})
+router.get('/getThemeList', async (req, res) => {
+    await ThemeData.getThemeList(req, res)
+})
 router.post('/updateTheme', async (req, res) => {
     await ThemeData.updateTheme(req, res);
 })
