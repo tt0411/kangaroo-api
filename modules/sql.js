@@ -63,7 +63,7 @@ const theme = {
     getOpenTheme: 'SELECT a.*,b.nickName, b.imgUrl FROM content_type a, user b WHERE a.status = 1 AND a.flag = 1 AND a.uid = b.id',
     getThemeById: 'SELECT a.*, b.nickName,b.imgUrl FROM content_type a, user b WHERE a.id = ? AND a.uid = b.id AND a.status != 2',
     updatetheme: 'UPDATE content_type SET name = ? WHERE id = ?',  
-    getThemeList: 'SELECT a.id, a.name FROM content_type a, user b WHERE a.uid = ? AND a.uid = b.id AND a.status != 2 AND a.flag = 1',
+    getThemeList: 'SELECT a.id, a.name, a.status FROM content_type a, user b WHERE a.uid = ? AND a.uid = b.id AND a.status != 2 AND a.flag = 1',
     isdeletetheme: 'UPDATE content_type SET status = ? WHERE id = ?',
     todayAddtheme: `SELECT  (SELECT count(*) FROM content_type WHERE create_time >= ? ) 
     AS count, (SELECT count(*) FROM content_type) AS allCount, (SELECT count(*) FROM content_type WHERE create_time >= ? )/(SELECT count(*) from 

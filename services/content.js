@@ -58,7 +58,7 @@ let contentData = {
         }
        else {
         let offset=parseInt(page || 1)
-        let limit=parseInt(per || 10)
+        let limit=parseInt(per || 5)
         let newArry=result.slice((offset-1)*limit, offset*limit)
         let _newArry = [];
         newArry.forEach(item => {
@@ -70,8 +70,7 @@ let contentData = {
              mood: item.mood,
              flag: item.flag,
              status: item.status,
-             create_time: item.create_time,
-             updatetime: item.updatetime,
+             create_time: moment(item.create_time).format('YYYY-MM-DD HH:mm:ss'),
              name: item.name,
              nickName: item.nickName,
              imgUrl: item.imgUrl,
@@ -122,8 +121,7 @@ let contentData = {
              mood: item.mood,
              flag: item.flag,
              status: item.status,
-             create_time: item.create_time,
-             updatetime: item.updatetime,
+             create_time: moment(item.create_time).format('YYYY-MM-DD HH:mm:ss'),
              name: item.name,
              nickName: item.nickName,
              imgUrl: item.imgUrl,
@@ -168,16 +166,24 @@ let contentData = {
     })
   },
   getContentByUid: (req, res) => { // 用户获取所有发表的内容
+    let {per, page} = req.query
     const uid = getId(req)
-    console.log(uid)
+    if(!uid){
+      res.send({
+        code: 301,
+        msg: 'token无效',
+        data: []
+      })
+      return 
+   }
     pool.getConnection((err, connection) => {
       connection.query(content.getcontentByUid, uid, (err, result) => {
         if (err) {
           result = undefined;
           throw err;
         } else {
-          let offset=parseInt(1)
-          let limit=parseInt(10)
+          let offset=parseInt(page || 1)
+          let limit=parseInt(per || 5)
           let newArry=result.slice((offset-1)*limit, offset*limit)
           let _newArry = [];
           newArry.forEach(item => {
@@ -189,8 +195,7 @@ let contentData = {
                mood: item.mood,
                flag: item.flag,
                status: item.status,
-               create_time: item.create_time,
-               updatetime: item.updatetime,
+               create_time: moment(item.create_time).format('YYYY-MM-DD HH:mm:ss'),
                name: item.name,
                nickName: item.nickName,
                imgUrl: item.imgUrl,
