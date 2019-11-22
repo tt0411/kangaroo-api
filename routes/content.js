@@ -6,11 +6,20 @@ let contentData = require('../services/content');
 router.post('/createContent',async (req, res) => {
     await contentData.createContent(req, res);
 });
-router.get('/getContentByTid', async (req, res) => {
-    await contentData.getContentByTid(req, res);
+router.get('/getOpencontentByTid', async (req, res) => {
+    await contentData.getOpencontentByTid(req, res)
+})
+router.get('/getMycontentByTid', async (req, res) => {
+    await contentData.getMycontentByTid(req, res)
 })
 router.get('/getAllContents', async (req, res) => {
     await contentData.getAllContents(req, res);
+})
+router.get('/getMyMarkContent', async (req, res) => {
+    await contentData.getMyMarkContent(req, res)
+})
+router.get('/getMySaveContent', async (req, res) => {
+    await contentData.getMySaveContent(req, res)
 })
 router.get('/allContentsRoot', async (req, res) => {
     await contentData.getAllContentsRoot(req, res);

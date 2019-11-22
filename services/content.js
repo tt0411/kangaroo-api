@@ -48,12 +48,12 @@ let contentData = {
     })
   },
   getAllContents: (req, res) => { // 用户查看所有公开内容
-    const {per, page} = req.query
+    let {per, page, limitCount} = req.query 
+    limitCount = limitCount || 1000;
     pool.getConnection((err, connection) => {
-      connection.query(content.getAllContents, (err, result) => {
+      connection.query(content.getAllContents, +limitCount, (err, result) => {
         if (err) {
           result = undefined; 
-          json(res, result);
           throw err;
         }
        else {
@@ -63,20 +63,24 @@ let contentData = {
         let _newArry = [];
         newArry.forEach(item => {
            _newArry.push({
-             img: item.img.split(','),
+             img: item.img ? item.img.split(',') : item.img,
              id: item.id,
              tid: item.tid,
              context: item.context, 
-             mood: item.mood,
              flag: item.flag,
              status: item.status,
              create_time: moment(item.create_time).format('YYYY-MM-DD HH:mm:ss'),
              name: item.name,
+             address: item.address,
              nickName: item.nickName,
+             is_comment: item.is_comment,
              imgUrl: item.imgUrl,
              video: item.video,
              audio: item.audio,
-             uid: item.uid
+             uid: item.uid,
+             comment: item.commentCount,
+             mark: item.markCount,
+             save: item.saveCount
            })
         })   
         let hasmore=offset+limit > result.length ? false : true
@@ -84,7 +88,122 @@ let contentData = {
             hasmore,
             count: result.length,
             list: _newArry,
-            code: 200
+            code: 200,
+        }
+        json(res, _result);
+       }
+       connection.release();
+      })
+    })
+  },
+  getMyMarkContent: (req, res) => { // 获取用户喜欢(点赞)内容
+    let {per, page } = req.query 
+    const id = getId(req);
+    if(!id){
+      res.send({
+        code: 301,
+        msg: 'token无效',
+        data: []
+      })
+      return 
+   }
+    pool.getConnection((err, connection) => {
+      connection.query(content.getMyMarkContent, +id, (err, result) => {
+        if (err) {
+          result = undefined; 
+          throw err;
+        }
+       else {
+        let offset=parseInt(page || 1)
+        let limit=parseInt(per || 5)
+        let newArry=result.slice((offset-1)*limit, offset*limit)
+        let _newArry = [];
+        newArry.forEach(item => {
+           _newArry.push({
+             img: item.img ? item.img.split(',') : item.img,
+             id: item.id,
+             tid: item.tid,
+             context: item.context, 
+             flag: item.flag,
+             status: item.status,
+             create_time: moment(item.create_time).format('YYYY-MM-DD HH:mm:ss'),
+             name: item.name,
+             address: item.address,
+             nickName: item.nickName,
+             is_comment: item.is_comment,
+             imgUrl: item.imgUrl,
+             video: item.video,
+             audio: item.audio,
+             uid: item.uid,
+             comment: item.commentCount,
+             mark: item.markCount,
+             save: item.saveCount
+           })
+        })   
+        let hasmore=offset+limit > result.length ? false : true
+        const _result = {
+            hasmore,
+            count: result.length,
+            list: _newArry,
+            code: 200,
+        }
+        json(res, _result);
+       }
+      
+       connection.release();
+      })
+    })
+  },
+  getMySaveContent: (req, res) => { // 获取用户收藏内容
+    let {per, page } = req.query 
+    const id = getId(req);
+    if(!id){
+      res.send({
+        code: 301,
+        msg: 'token无效',
+        data: []
+      })
+      return 
+   }
+    pool.getConnection((err, connection) => {
+      connection.query(content.getMySaveContent, +id, (err, result) => {
+        if (err) {
+          result = undefined; 
+          throw err;
+        }
+       else {
+        let offset=parseInt(page || 1)
+        let limit=parseInt(per || 5)
+        let newArry=result.slice((offset-1)*limit, offset*limit)
+        let _newArry = [];
+        newArry.forEach(item => {
+           _newArry.push({
+             img: item.img ? item.img.split(',') : item.img,
+             id: item.id,
+             tid: item.tid,
+             context: item.context, 
+             flag: item.flag,
+             status: item.status,
+             create_time: moment(item.create_time).format('YYYY-MM-DD HH:mm:ss'),
+             name: item.name,
+             address: item.address,
+             nickName: item.nickName,
+             is_comment: item.is_comment,
+             imgUrl: item.imgUrl,
+             video: item.video,
+             audio: item.audio,
+             uid: item.uid,
+             comment: item.commentCount,
+             mark: item.markCount,
+             save: item.saveCount
+           })
+        })   
+        let hasmore=offset+limit > result.length ? false : true
+        const _result = {
+            hasmore,
+            count: result.length,
+            list: _newArry,
+            code: 200,
         }
         json(res, _result);
        }
@@ -144,26 +263,99 @@ let contentData = {
       })
     })
   },
-  getContentByTid: (req, res) => { // 用户获取某一主题下的内容
-    let { tid } = req.query;
+  getOpencontentByTid: (req, res) => { // 用户获取某一公开主题下的内容
+    let { tid, page, per } = req.query;
     pool.getConnection((err, connection) => {
-      connection.query(content.getcontentByTid, tid, (err, result) => {
+      connection.query(content.getOpencontentByTid, tid, (err, result) => {
         if (err) {
           result = undefined;
+          throw err;
         } else {
-          if (result) {
-            let _result = result;
-            result = {
-              result: "select",
-              data: _result,
+          let offset=parseInt(page || 1)
+          let limit=parseInt(per || 5)
+          let newArry=result.slice((offset-1)*limit, offset*limit)
+          let _newArry = [];
+          newArry.forEach(item => {
+             _newArry.push({
+               img: item.img ? item.img.split(',') : item.img,
+               id: item.id,
+               tid: item.tid,
+               context: item.context, 
+               flag: item.flag,
+               status: item.status,
+               create_time: moment(item.create_time).format('YYYY-MM-DD HH:mm:ss'),
+               name: item.name,
+               nickName: item.nickName,
+               avatar: item.imgUrl,
+               video: item.video,
+               audio: item.audio,
+               address: item.address,
+               is_comment: item.is_comment,
+               uid: item.uid,
+               comment: item.commentCount,
+               mark: item.markCount,
+               save: item.saveCount
+             })
+          })   
+          let hasmore=offset+limit > result.length ? false : true
+          const _result = {
+              hasmore,
+              count: result.length,
+              list: _newArry,
               code: 200
-            }
-          } 
+          }
+          json(res, _result);
         }
-        json(res, result);
         connection.release();
-      })
     })
+  })
+  },
+  getMycontentByTid: (req, res) => { // 用户获取自己主题下的内容
+    let { tid, page, per } = req.query;
+    pool.getConnection((err, connection) => {
+      connection.query(content.getMycontentByTid, tid, (err, result) => {
+        if (err) {
+          result = undefined;
+          throw err;
+        } else {
+          let offset=parseInt(page || 1)
+          let limit=parseInt(per || 5)
+          let newArry=result.slice((offset-1)*limit, offset*limit)
+          let _newArry = [];
+          newArry.forEach(item => {
+             _newArry.push({
+               img: item.img ? item.img.split(',') : item.img,
+               id: item.id,
+               tid: item.tid,
+               context: item.context, 
+               flag: item.flag,
+               status: item.status,
+               create_time: moment(item.create_time).format('YYYY-MM-DD HH:mm:ss'),
+               name: item.name,
+               nickName: item.nickName,
+               avatar: item.imgUrl,
+               video: item.video,
+               audio: item.audio,
+               address: item.address,
+               is_comment: item.is_comment,
+               uid: item.uid,
+               comment: item.commentCount,
+               mark: item.markCount,
+               save: item.saveCount
+             })
+          })   
+          let hasmore=offset+limit > result.length ? false : true
+          const _result = {
+              hasmore,
+              count: result.length,
+              list: _newArry,
+              code: 200
+          }
+          json(res, _result);
+        }
+        connection.release();
+    })
+  })
   },
   getContentByUid: (req, res) => { // 用户获取所有发表的内容
     let {per, page} = req.query
@@ -192,13 +384,12 @@ let contentData = {
                id: item.id,
                tid: item.tid,
                context: item.context, 
-               mood: item.mood,
                flag: item.flag,
                status: item.status,
                create_time: moment(item.create_time).format('YYYY-MM-DD HH:mm:ss'),
                name: item.name,
                nickName: item.nickName,
-               imgUrl: item.imgUrl,
+               avatar: item.imgUrl,
                video: item.video,
                audio: item.audio,
                uid: item.uid

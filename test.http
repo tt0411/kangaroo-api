@@ -105,20 +105,15 @@ post {{url}}/content/createContent?context=这是一个跨界打劫你，你却�
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.MTQ.yFAAWaBeP7rq_XztWB2A4PHDG58SmQ4L2Z9DLdh0d7Y
 
 
-
-### 用户获取某一主题所有内容
-get {{url}}/content/getContentByTid?tid=1
-
 ### 用户获取所有发表内容
 get {{url}}/content/getContentByUid
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.MTU.dppZzUZLcDlW4rnAzW9MCeOu7KytUK3-oNLN90BNEio
 
-### 获取某条内容
-get {{url}}/content/getContentById?id=1
+### 获取公开主题下的内容
+get {{url}}/content/getOpencontentByTid?tid=18
 
 ### 获取所有公开内容
 get {{url}}/content/getAllContents
-
 
 ### 获取所有评论 (管理员)
 get {{url}}/comment/allComment
