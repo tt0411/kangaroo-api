@@ -418,21 +418,24 @@ let contentData = {
         } else {
           if (result) {
             let _result = {
-              img: result[0].img.split(','),
+              img: result[0].img ? result[0].img.split(',') : '',
               id: result[0].id,
               tid: result[0].tid,
               context: result[0].context, 
               mood: result[0].mood,
               flag: result[0].flag,
               status: result[0].status,
-              create_time: result[0].create_time,
-              updatetime: result[0].updatetime,
+              create_time: moment(result[0].create_time).format('YYYY-MM-DD HH:mm:ss'),
               name: result[0].name,
               nickName: result[0].nickName,
               imgUrl: result[0].imgUrl,
               video: result[0].video,
               audio: result[0].audio,
-              uid: result[0].uid
+              is_comment: result[0].is_comment,
+              uid: result[0].uid,
+              comment: result[0].commentCount,
+              mark: result[0].markCount,
+              save: result[0].saveCount
             };
             result = {
               result: "select",

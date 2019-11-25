@@ -109,7 +109,15 @@ const content = {
   getAllContentsRoot: `SELECT a.*,b.name,c.nickName,c.imgUrl, c.id AS uid from content a, content_type b, user c WHERE a.tid = b.id AND b.uid = c.id AND a.mood LIKE ? AND a.flag LIKE ? AND a.status LIKE ? AND a.context LIKE ? AND c.nickName LIKE ? AND a.id LIKE ?`,
   getcontentByUid:
     "SELECT a.*, b.name, c.imgUrl, c.id as uid, c.nickName from content a, content_type b, user c WHERE a.tid = b.id AND b.uid = c.id AND c.id = ?",
-  getcontentById: "SELECT * from content WHERE id = ? ",
+  getcontentById: `
+  SELECT 
+    a.*, b.name, c.imgUrl, c.id as uid, c.nickName, (SELECT count(*) FROM comment d WHERE d.cid = a.id) as commentCount, (SELECT count(*) FROM  mark  WHERE mark.mark_id = a.id) as markCount,
+    (SELECT count(*) FROM save e WHERE e.cid = a.id) as saveCount
+    from
+    content a, content_type b, user c
+    WHERE 
+    a.tid = b.id AND b.uid = c.id AND a.flag !=2 AND a.status !=2 AND a.id = ?
+  `,
   getMyMarkContent: `
   SELECT 
    a.*, b.name, c.imgUrl, c.id as uid, c.nickName, (SELECT count(*) FROM comment d WHERE d.cid = a.id) as commentCount, (SELECT count(*) FROM  mark  WHERE mark.mark_id = a.id) as markCount,
