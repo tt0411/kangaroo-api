@@ -125,13 +125,13 @@ get {{url}}/save/allSave
 get {{url}}/mark/allMark
 
 ### 获取文章评论
-get {{url}}/comment/commentByCid?id=1
+get {{url}}/comment/commentByCid?id=3
 
 ### 获取文章收藏数
-get {{url}}/save/saveCountByCid?id=1
+get {{url}}/save/saveCountByCid?id=3
 
 ### 获取文章点赞数
-get {{url}}/mark/markCountByCid?id=2
+get {{url}}/mark/markCountByCid?id=3
 
 ### 重置密码
 get {{url}}/user/resetPwd?phone=123456

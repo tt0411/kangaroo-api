@@ -148,25 +148,25 @@ const comment = {
     comment a, content b, user c WHERE  c.id = a.from_uid AND a.cid = b.id  AND a.content LIKE ? AND c.id LIKE ? 
     AND a.status like ? AND a.create_time >= ? AND a.create_time <= ?  `,
   isStopComment: "UPDATE comment SET status = ? WHERE id = ?",
-  getCommentByCid: `SELECT a.*, b.context,c.nickName as comment_name,c.imgUrl from comment a ,content b, user c WHERE 
-    a.cid = b.id AND a.from_uid = c.id AND a.status = 1 AND b.id = ?`
+  getCommentByCid: `SELECT a.*,d.nickName,d.imgUrl FROM comment a, content b, content_type c, user d WHERE a.from_uid = d.id 
+  AND b.tid = c.id AND a.cid = b.id  AND a.status = 1 AND a.cid = ?`
 };
 
 const save = {
   getAllSavesRoot: `SELECT a.*,b.context,c.nickName as saver_name,c.imgUrl from save a, content b, user c 
     WHERE a.cid = b.id AND a.uid = c.id AND b.context LIKE ? AND a.uid LIKE ? AND a.status LIKE ?`,
-  getSaveByCid: `SELECT a.*, b.context, c.nickName as saver_name,c.imgUrl from save a, content b, 
-    user c WHERE a.cid = b.id AND a.uid = c.id AND b.id = ?`,
+  getSaveByCid: `SELECT a.*,d.nickName,d.imgUrl FROM save a, content b, content_type c, user d WHERE a.uid = d.id AND b.tid = c.id AND a.cid = b.id  AND a.status = 1 AND a.cid = ?`,
   /** 我的收藏 */
   toSaveByUid: ` SELECT a.*,b.context,c.nickName as saver_name,c.imgUrl from save a, content b, user c 
     WHERE a.cid = b.id AND a.uid = c.id AND a.status = 1  AND a.uid = ?`,
   /** 获得的收藏 */
-  getSaveByUid: `SELECT a.* FROM save a, content b, content_type c WHERE a.cid = b.id  AND a.status = 1 AND b.tid = c.id AND c.uid = ?`
+  getSaveByUid: `SELECT a.* FROM save a, content b, content_type c WHERE a.cid = b.id  AND 
+  a.status = 1 AND b.tid = c.id AND c.uid = ?`
 };
 
 const mark = {
-  getMarkByCid: `SELECT a.*, b.context, c.nickName as marker_name,c.imgUrl from mark a, content b, 
-    user c WHERE a.mark_id = b.id AND a.uid = c.id AND a.status = 1 AND b.id = ?`,
+  getMarkByCid: `SELECT a.*,d.nickName,d.imgUrl FROM mark a, content b, content_type c, user d 
+  WHERE a.uid = d.id AND b.tid = c.id AND a.mark_id = b.id  AND a.status = 1 AND a.mark_id = ?`,
   getAllMarksRoot: `SELECT a.*,b.context,c.nickName as marker_name,c.imgUrl from mark a, content b, user c 
     WHERE a.mark_id = b.id AND a.uid = c.id AND b.context LIKE ? AND a.uid LIKE ? AND a.status LIKE ?`,
   /* 获取的点赞 */

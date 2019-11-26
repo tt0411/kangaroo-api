@@ -1,6 +1,7 @@
 let mysql = require("mysql");
 let mysqlconfig = require("../config/mysql");
 let poolextend = require("../modules/poolextend");
+let moment = require("moment");
 let { save } = require("../modules/sql");
 let json = require("../modules/json");
 let pool = mysql.createPool(poolextend({}, mysqlconfig));
@@ -37,7 +38,7 @@ let saveData = {
     })
   },
   getSaveByCid : (req, res) => { // 获取文章的收藏数
-    let {id} = req.query
+    let { id, per, page } = req.query
     pool.getConnection((err, connection) => {
       connection.query(save.getSaveByCid, id, (err, result) => {
         if(err){
@@ -45,12 +46,28 @@ let saveData = {
           json(res, result);
           throw err;
         }else{
-          const _result = {
-            count: result.length,
+          let offset=parseInt(page || 1)
+          let limit=parseInt(per || 5)
+          let newArry=result.slice((offset-1)*limit, offset*limit)
+          let _newArry = [];
+          newArry.forEach(item => {
+            _newArry.push({
+              id: item.id,
+              cid: item.cid,
+              uid: item.uid,
+              create_time: moment(item.create_time).format('YYYY-MM-DD HH:mm:ss'),
+              status: item.status,
+              nickName: item.nickName,
+              imgUrl: item.imgUrl,
+            })
+          })
+          let hasmore=offset+limit > result.length ? false : true
+          res.send({
             code: 200,
-            list: result
-          }
-          json(res, _result);
+            count: result.length,
+            list: _newArry,
+            hasmore
+          })
         }
         connection.release();
       })

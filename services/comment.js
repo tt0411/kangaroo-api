@@ -63,8 +63,7 @@ let commentData = {
     })
   },
   getCommentByCid: (req, res) => { // 根据文章id获取所有评论
-    let { id } = req.query;
-   if(id === undefined) {id = '1'} else{ id = id}
+    let { id, per, page } = req.query;
     pool.getConnection((err, connection) => {
       connection.query(comment.getCommentByCid, id, (err, result) => {
         if(err){
@@ -72,10 +71,28 @@ let commentData = {
           json(res, result);
           throw err; 
         }else{
+          let offset=parseInt(page || 1)
+          let limit=parseInt(per || 5)
+          let newArry=result.slice((offset-1)*limit, offset*limit)
+          let _newArry = [];
+          newArry.forEach(item => {
+            _newArry.push({
+              id: item.id,
+              cid: item.cid,
+              uid: item.from_uid,
+              create_time: moment(item.create_time).format('YYYY-MM-DD HH:mm:ss'),
+              content: item.content,
+              status: item.status,
+              nickName: item.nickName,
+              imgUrl: item.imgUrl,
+            })
+          })
+          let hasmore=offset+limit > result.length ? false : true
           res.send({
             code: 200,
             count: result.length,
-            list: result
+            list: _newArry,
+            hasmore
           })
         }
         connection.release();

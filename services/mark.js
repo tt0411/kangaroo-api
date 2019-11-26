@@ -1,6 +1,7 @@
 let mysql = require("mysql");
 let mysqlconfig = require("../config/mysql");
 let poolextend = require("../modules/poolextend");
+let moment = require("moment")
 let { mark } = require("../modules/sql");
 let json = require("../modules/json");
 let pool = mysql.createPool(poolextend({}, mysqlconfig));
@@ -45,13 +46,8 @@ let markData = {
     });
   },
   getMarkByCid: (req, res) => {
-    // 根据文章id获取所有评论
-    let { id } = req.query;
-    if (id === undefined) {
-      id = "1";
-    } else {
-      id = id;
-    }
+    // 根据文章id获取所有点赞
+    let { id, per, page } = req.query;
     pool.getConnection((err, connection) => {
       connection.query(mark.getMarkByCid, id, (err, result) => {
         if (err) {
@@ -59,11 +55,28 @@ let markData = {
           json(res, result);
           throw err;
         } else {
+          let offset=parseInt(page || 1)
+          let limit=parseInt(per || 5)
+          let newArry=result.slice((offset-1)*limit, offset*limit)
+          let _newArry = [];
+          newArry.forEach(item => {
+            _newArry.push({
+              id: item.id,
+              cid: item.mark_id,
+              uid: item.uid,
+              create_time: moment(item.create_time).format('YYYY-MM-DD HH:mm:ss'),
+              status: item.status,
+              nickName: item.nickName,
+              imgUrl: item.imgUrl,
+            })
+          })
+          let hasmore = offset+limit > result.length ? false : true
           res.send({
             code: 200,
             count: result.length,
-            list: result
-          });
+            list: _newArry,
+            hasmore
+          })
         }
         connection.release();
       });
