@@ -5,7 +5,7 @@ let moment = require("moment");
 let { comment } = require("../modules/sql");
 let json = require("../modules/json");
 let pool = mysql.createPool(poolextend({}, mysqlconfig));
-// const { getId } = require("../utils/utils");
+const { getId, ACTIVE } = require("../utils/utils");
 
 let commentData = {
 
@@ -72,7 +72,7 @@ let commentData = {
           throw err; 
         }else{
           let offset=parseInt(page || 1)
-          let limit=parseInt(per || 5)
+          let limit=parseInt(per || 100)
           let newArry=result.slice((offset-1)*limit, offset*limit)
           let _newArry = [];
           newArry.forEach(item => {
@@ -81,7 +81,7 @@ let commentData = {
               cid: item.cid,
               uid: item.from_uid,
               create_time: moment(item.create_time).format('YYYY-MM-DD HH:mm:ss'),
-              content: item.content,
+              comment: item.content,
               status: item.status,
               nickName: item.nickName,
               imgUrl: item.imgUrl,
@@ -98,6 +98,35 @@ let commentData = {
         connection.release();
       })
     })
+  },
+  addComment: (req, res) => { // 用户发表评论
+    let {cid, content} = req.query;
+    let id = getId(req)
+    if(!id){
+      res.send({
+        code: 301,
+        msg: 'token无效',
+        data: []
+      })
+      return 
+   }
+   pool.getConnection((err, connection) => {
+     connection.query(comment.addComment,[cid, id, content], (err, result) => {
+       if(err){
+        res.send({
+          code: 500,
+          msg: '服务器错误'
+        })
+        throw err
+       }else{
+          res.send({
+            code: 200,
+            msg: `评论成功，活跃度+${ACTIVE.COMMENT_ACTIVE}`
+          })
+       }
+       connection.release();
+     })
+   })
   }
 }
 

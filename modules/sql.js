@@ -90,8 +90,8 @@ const content = {
     `,
   getMycontentByTid:
    `  SELECT 
-   a.*, b.name, c.imgUrl, c.id as uid, c.nickName, (SELECT count(*) FROM comment d WHERE d.cid = a.id) as commentCount, (SELECT count(*) FROM  mark  WHERE mark.mark_id = a.id) as markCount,
-  (SELECT count(*) FROM save e WHERE e.cid = a.id) as saveCount
+   a.*, b.name, c.imgUrl, c.id as uid, c.nickName, (SELECT count(*) FROM comment d WHERE d.cid = a.id AND d.status = 1 ) as commentCount, (SELECT count(*) FROM  mark  WHERE mark.mark_id = a.id AND mark.status = 1) as markCount,
+  (SELECT count(*) FROM save e WHERE e.cid = a.id AND e.status = 1) as saveCount
  from
   content a, content_type b, user c
    WHERE a.tid = b.id AND b.uid = c.id AND a.flag !=2 AND a.flag !=0 AND a.status !=2 AND a.tid = ?`,
@@ -111,17 +111,17 @@ const content = {
     "SELECT a.*, b.name, c.imgUrl, c.id as uid, c.nickName from content a, content_type b, user c WHERE a.tid = b.id AND b.uid = c.id AND c.id = ?",
   getcontentById: `
   SELECT 
-    a.*, b.name, c.imgUrl, c.id as uid, c.nickName, (SELECT count(*) FROM comment d WHERE d.cid = a.id) as commentCount, (SELECT count(*) FROM  mark  WHERE mark.mark_id = a.id) as markCount,
-    (SELECT count(*) FROM save e WHERE e.cid = a.id) as saveCount
+    a.*, b.name, c.imgUrl, c.id as uid, c.nickName, (SELECT count(*) FROM comment d WHERE d.cid = a.id AND d.status = 1 ) as commentCount, (SELECT count(*) FROM  mark  WHERE mark.mark_id = a.id AND mark.status = 1) as markCount,
+    (SELECT count(*) FROM save e WHERE e.cid = a.id AND e.status = 1) as saveCount  
     from
-    content a, content_type b, user c
+    content a, content_type b, user c 
     WHERE 
-    a.tid = b.id AND b.uid = c.id AND a.flag !=2 AND a.status !=2 AND a.id = ?
+    a.tid = b.id AND b.uid = c.id AND a.flag !=2 AND a.status !=2 AND  a.id = ?
   `,
   getMyMarkContent: `
   SELECT 
-   a.*, b.name, c.imgUrl, c.id as uid, c.nickName, (SELECT count(*) FROM comment d WHERE d.cid = a.id) as commentCount, (SELECT count(*) FROM  mark  WHERE mark.mark_id = a.id) as markCount,
-    (SELECT count(*) FROM save e WHERE e.cid = a.id) as saveCount
+   a.*, b.name, c.imgUrl, c.id as uid, c.nickName, (SELECT count(*) FROM comment d WHERE d.cid = a.id AND d.status = 1 ) as commentCount, (SELECT count(*) FROM  mark  WHERE mark.mark_id = a.id AND mark.status = 1) as markCount,
+    (SELECT count(*) FROM save e WHERE e.cid = a.id AND e.status = 1) as saveCount
     from
     content a, content_type b, user c, mark 
     WHERE 
@@ -129,8 +129,8 @@ const content = {
   `,
   getMySaveContent: `
   SELECT 
-  a.*, b.name, c.imgUrl, c.id as uid, c.nickName, (SELECT count(*) FROM comment d WHERE d.cid = a.id) as commentCount, (SELECT count(*) FROM  mark  WHERE mark.mark_id = a.id) as markCount,
- (SELECT count(*) FROM save e WHERE e.cid = a.id) as saveCount
+  a.*, b.name, c.imgUrl, c.id as uid, c.nickName, (SELECT count(*) FROM comment d WHERE d.cid = a.id AND d.status = 1 ) as commentCount, (SELECT count(*) FROM  mark  WHERE mark.mark_id = a.id AND mark.status = 1) as markCount,
+ (SELECT count(*) FROM save e WHERE e.cid = a.id AND e.status = 1) as saveCount
     from
     content a, content_type b, user c, save 
     WHERE 
@@ -147,15 +147,19 @@ const comment = {
   getAllCommentsRoot: `SELECT a.*, b.context, c.nickName as comment_name, c.imgUrl as comment_imgUrl from 
     comment a, content b, user c WHERE  c.id = a.from_uid AND a.cid = b.id  AND a.content LIKE ? AND c.id LIKE ? 
     AND a.status like ? AND a.create_time >= ? AND a.create_time <= ?  `,
+  addComment: `INSERT INTO comment(cid, from_uid, content) VALUES (?, ?, ?)`,  
   isStopComment: "UPDATE comment SET status = ? WHERE id = ?",
   getCommentByCid: `SELECT a.*,d.nickName,d.imgUrl FROM comment a, content b, content_type c, user d WHERE a.from_uid = d.id 
-  AND b.tid = c.id AND a.cid = b.id  AND a.status = 1 AND a.cid = ?`
+  AND b.tid = c.id AND a.cid = b.id  AND a.status = 1 AND a.cid = ? ORDER BY a.create_time DESC`
 };
 
 const save = {
   getAllSavesRoot: `SELECT a.*,b.context,c.nickName as saver_name,c.imgUrl from save a, content b, user c 
     WHERE a.cid = b.id AND a.uid = c.id AND b.context LIKE ? AND a.uid LIKE ? AND a.status LIKE ?`,
   getSaveByCid: `SELECT a.*,d.nickName,d.imgUrl FROM save a, content b, content_type c, user d WHERE a.uid = d.id AND b.tid = c.id AND a.cid = b.id  AND a.status = 1 AND a.cid = ?`,
+  firstSaveContent: 'INSERT INTO save(uid, cid, status) VALUES (?, ?, ?)',
+  isSaveContent: 'UPDATE save SET status = ? WHERE uid = ? AND cid = ?',
+  isFirstSave: 'SELECT * FROM save WHERE uid = ? AND cid = ?',
   /** 我的收藏 */
   toSaveByUid: ` SELECT a.*,b.context,c.nickName as saver_name,c.imgUrl from save a, content b, user c 
     WHERE a.cid = b.id AND a.uid = c.id AND a.status = 1  AND a.uid = ?`,
@@ -169,6 +173,9 @@ const mark = {
   WHERE a.uid = d.id AND b.tid = c.id AND a.mark_id = b.id  AND a.status = 1 AND a.mark_id = ?`,
   getAllMarksRoot: `SELECT a.*,b.context,c.nickName as marker_name,c.imgUrl from mark a, content b, user c 
     WHERE a.mark_id = b.id AND a.uid = c.id AND b.context LIKE ? AND a.uid LIKE ? AND a.status LIKE ?`,
+  firstMarkContent: 'INSERT INTO mark(uid, mark_id, status) VALUES (?, ?, ?)',
+  isMarkContent: 'UPDATE mark SET status = ? WHERE uid = ? AND mark_id = ?',
+  isFirstMark: 'SELECT * FROM mark WHERE uid = ? AND mark_id = ?',
   /* 获取的点赞 */
   getMarkByUid: `SELECT a.* FROM mark a, content b, content_type c WHERE AND a.status = 1 AND a.mark_id = b.id AND b.tid = c.id AND c.uid = ?`,
   /** 我的点赞 */

@@ -8,5 +8,8 @@ router.get('/allMark', async (req, res) => {
 router.get('/markCountByCid', async (req, res) => {
     await markData.getMarkByCid(req, res);
 })
+router.post('/isMarkContent', async (req, res) => {
+    await markData.isMarkContent(req, res);
+})
 
 module.exports = router;

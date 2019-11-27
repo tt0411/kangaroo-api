@@ -47,7 +47,7 @@ let saveData = {
           throw err;
         }else{
           let offset=parseInt(page || 1)
-          let limit=parseInt(per || 5)
+          let limit=parseInt(per || 100)
           let newArry=result.slice((offset-1)*limit, offset*limit)
           let _newArry = [];
           newArry.forEach(item => {
@@ -97,6 +97,60 @@ let saveData = {
          connection.release();
       })
     })
+  },
+  isSaveContent: (req, res) => { //收藏与取消收藏
+    let { cid, status } = req.query
+    let id = getId(req)
+    if(!id){
+      res.send({
+        code: 301,
+        msg: 'token无效',
+      })
+      return 
+    }
+    pool.getConnection((err, connection) => {
+      connection.query(save.isFirstSave, [id, cid], (err, result) => {
+            if(err){
+              res.send({
+                code: 500,
+                msg: '服务器错误'
+              })
+              throw err
+            }else if(result.length > 0){
+              connection.query(save.isSaveContent,[status, id, cid], (err, result) => {
+                if(err){
+                  res.send({
+                    code: 500,
+                    msg: '服务器错误'
+                  })
+                  throw err
+                }else{
+                  res.send({
+                    code: 200,
+                    msg: status == 1 ? '收藏成功' : '取消收藏'
+                  })
+                }
+              })
+            }else{
+              connection.query(save.firstSaveContent,[id, cid, status], (err, result) => {
+                if(err){
+                  res.send({
+                    code: 500,
+                    msg: '服务器错误'
+                  })
+                  throw err
+                }else{
+                  res.send({
+                    code: 200,
+                    msg: '收藏成功 +5'
+                  })
+                }
+              })
+            }
+            connection.release();
+       })
+    })
+    
   }
 }
 

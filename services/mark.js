@@ -5,7 +5,7 @@ let moment = require("moment")
 let { mark } = require("../modules/sql");
 let json = require("../modules/json");
 let pool = mysql.createPool(poolextend({}, mysqlconfig));
-// const { getId } = require("../utils/utils");
+const { getId } = require("../utils/utils");
 
 let markData = {
   allMark: (req, res) => {
@@ -56,7 +56,7 @@ let markData = {
           throw err;
         } else {
           let offset=parseInt(page || 1)
-          let limit=parseInt(per || 5)
+          let limit=parseInt(per || 100)
           let newArry=result.slice((offset-1)*limit, offset*limit)
           let _newArry = [];
           newArry.forEach(item => {
@@ -64,7 +64,7 @@ let markData = {
               id: item.id,
               cid: item.mark_id,
               uid: item.uid,
-              create_time: moment(item.create_time).format('YYYY-MM-DD HH:mm:ss'),
+              create_time: moment(item.updatetime).format('YYYY-MM-DD HH:mm:ss'),
               status: item.status,
               nickName: item.nickName,
               imgUrl: item.imgUrl,
@@ -79,9 +79,63 @@ let markData = {
           })
         }
         connection.release();
-      });
-    });
+      })
+    })
+  },
+  isMarkContent: (req, res) => { //点赞与取消点赞
+    let {cid, status } = req.query
+    let id = getId(req)
+    if(!id){
+      res.send({
+        code: 301,
+        msg: 'token无效',
+      })
+      return 
+    }
+    pool.getConnection((err, connection) => {
+      connection.query(mark.isFirstMark, [id, cid], (err, result) => {
+            if(err){
+              res.send({
+                code: 500,
+                msg: '服务器错误'
+              })
+              throw err
+            }else if(result.length > 0){
+              connection.query(mark.isMarkContent,[status, id, cid], (err, result) => {
+                if(err){
+                  res.send({
+                    code: 500,
+                    msg: '服务器错误'
+                  })
+                  throw err
+                }else{
+                  res.send({
+                    code: 200,
+                    msg: status == 1 ? '点赞成功' : '取消点赞'
+                  })
+                }
+              })
+            }else{
+              connection.query(mark.firstMarkContent,[id, cid, status], (err, result) => {
+                if(err){
+                  res.send({
+                    code: 500,
+                    msg: '服务器错误'
+                  })
+                  throw err
+                }else{
+                  res.send({
+                    code: 200,
+                    msg: '点赞成功 +5'
+                  })
+                }
+              })
+            }
+            connection.release();
+       })
+    })
+    
   }
-};
+}
 
 module.exports = markData;
