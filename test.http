@@ -58,7 +58,7 @@ get {{url}}/user/getInfo
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.MTA.ZlWTaouJ8-kpAjtWMXCDK7alaCpkWtEAjvtgyBRnJl8
 
 ### 用户登录
-post {{url}}/user/login?phone=15188211507&password=123456
+post {{url}}/user/login?phone=13986147522&password=123456
 
 ### 修改密码
 put {{url}}/user/updatePwd?oldPassword=12345678&newPassword=123456
@@ -127,15 +127,17 @@ get {{url}}/mark/allMark
 ### 获取文章评论
 get {{url}}/comment/commentByCid?id=3
 
-### 获取文章收藏数
+### 获取某一内容收藏数
 get {{url}}/save/saveCountByCid?id=3
 
-### 获取文章点赞数
+### 获取某一内容点赞数
 get {{url}}/mark/markCountByCid?id=3
+
+### 用户获取某一内容是否点赞
+get {{url}}/mark/markSign?cid=6
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.MTU.dppZzUZLcDlW4rnAzW9MCeOu7KytUK3-oNLN90BNEio
 
 ### 重置密码
 get {{url}}/user/resetPwd?phone=123456
 
-### 用户获取个人收藏内容
-get {{url}}/save/saveByUid
 

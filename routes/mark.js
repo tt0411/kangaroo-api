@@ -11,5 +11,11 @@ router.get('/markCountByCid', async (req, res) => {
 router.post('/isMarkContent', async (req, res) => {
     await markData.isMarkContent(req, res);
 })
+router.get('/markSign', async (req, res) => {
+    await markData.markSign(req, res);
+})
+router.get('/getMarkByUid', async (req, res) => {
+    await markData.getMarkByUid(req, res);
+})
 
 module.exports = router;

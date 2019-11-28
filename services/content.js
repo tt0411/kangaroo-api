@@ -408,6 +408,32 @@ let contentData = {
       })
     })
   },
+  getcontentCountByUid: (req, res) => { // 用户获取发表内容数量
+    const uid = getId(req)
+    if(!uid){
+      res.send({
+        code: 301,
+        msg: 'token无效',
+        data: []
+      })
+      return 
+   }
+    pool.getConnection((err, connection) => {
+      connection.query(content.getcontentCountByUid, uid, (err, result) => {
+        if (err) {
+          result = undefined;
+          throw err;
+        } else {
+          const _result = {
+              count: result.length,
+              code: 200
+          }
+          json(res, _result);
+        }
+        connection.release();
+      })
+    })
+  },
   getContentById: (req, res) => { // 获取某一条内容
     const { id } = req.query
     pool.getConnection((err, connection) => {
@@ -445,6 +471,30 @@ let contentData = {
           } 
         }
         json(res, result);
+        connection.release();
+      })
+    })
+  },
+  isDelContent: (req, res) => { // 用户删除内容
+    let { id, status } = req.query;
+    status = status || 2
+    pool.getConnection((err, connection) => {
+      connection.query(content.isDelContent, [status, id], (err, result) => {
+        if(err){
+          result = undefined;
+          json(res, result);
+          throw err;
+        }else{
+          if(result){
+            res.send({
+              code: 200,
+              msg: '操作成功'
+            })
+          }else{
+            result = undefined; 
+            json(res, result);
+          }
+        }
         connection.release();
       })
     })

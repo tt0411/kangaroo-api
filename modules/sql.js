@@ -108,11 +108,11 @@ const content = {
   `,
   getAllContentsRoot: `SELECT a.*,b.name,c.nickName,c.imgUrl, c.id AS uid from content a, content_type b, user c WHERE a.tid = b.id AND b.uid = c.id AND a.mood LIKE ? AND a.flag LIKE ? AND a.status LIKE ? AND a.context LIKE ? AND c.nickName LIKE ? AND a.id LIKE ?`,
   getcontentByUid:
-    "SELECT a.*, b.name, c.imgUrl, c.id as uid, c.nickName from content a, content_type b, user c WHERE a.tid = b.id AND b.uid = c.id AND c.id = ?",
+    "SELECT a.*, b.name, c.imgUrl, c.id as uid, c.nickName from content a, content_type b, user c WHERE a.tid = b.id AND b.uid = c.id AND a.status !=2 AND c.id = ?",
+  getcontentCountByUid: 'SELECT a.id from content a, content_type b, user c WHERE a.tid = b.id AND b.uid = c.id  AND a.status !=2 AND c.id = ?',
   getcontentById: `
   SELECT 
-    a.*, b.name, c.imgUrl, c.id as uid, c.nickName, (SELECT count(*) FROM comment d WHERE d.cid = a.id AND d.status = 1 ) as commentCount, (SELECT count(*) FROM  mark  WHERE mark.mark_id = a.id AND mark.status = 1) as markCount,
-    (SELECT count(*) FROM save e WHERE e.cid = a.id AND e.status = 1) as saveCount  
+    a.*, b.name, c.imgUrl, c.id as uid, c.nickName
     from
     content a, content_type b, user c 
     WHERE 
@@ -120,8 +120,7 @@ const content = {
   `,
   getMyMarkContent: `
   SELECT 
-   a.*, b.name, c.imgUrl, c.id as uid, c.nickName, (SELECT count(*) FROM comment d WHERE d.cid = a.id AND d.status = 1 ) as commentCount, (SELECT count(*) FROM  mark  WHERE mark.mark_id = a.id AND mark.status = 1) as markCount,
-    (SELECT count(*) FROM save e WHERE e.cid = a.id AND e.status = 1) as saveCount
+   a.*, b.name, c.imgUrl, c.id as uid, c.nickName
     from
     content a, content_type b, user c, mark 
     WHERE 
@@ -129,13 +128,13 @@ const content = {
   `,
   getMySaveContent: `
   SELECT 
-  a.*, b.name, c.imgUrl, c.id as uid, c.nickName, (SELECT count(*) FROM comment d WHERE d.cid = a.id AND d.status = 1 ) as commentCount, (SELECT count(*) FROM  mark  WHERE mark.mark_id = a.id AND mark.status = 1) as markCount,
- (SELECT count(*) FROM save e WHERE e.cid = a.id AND e.status = 1) as saveCount
+  a.*, b.name, c.imgUrl, c.id as uid, c.nickName
     from
     content a, content_type b, user c, save 
     WHERE 
     a.tid = b.id AND b.uid = c.id AND a.status != 2 AND save.cid = a.id AND save.status = 1 AND save.uid = ?
   `,
+  isDelContent: 'UPDATE content SET status = ? WHERE id = ?',
   isStopContent: "UPDATE content SET flag = ? WHERE id = ?",
   isStopContentByTid: "UPDATE content SET flag = ? WHERE tid = ? ",
   todayAddContent: "SELECT * from content WHERE create_time >= ?",
@@ -177,7 +176,7 @@ const mark = {
   isMarkContent: 'UPDATE mark SET status = ? WHERE uid = ? AND mark_id = ?',
   isFirstMark: 'SELECT * FROM mark WHERE uid = ? AND mark_id = ?',
   /* 获取的点赞 */
-  getMarkByUid: `SELECT a.* FROM mark a, content b, content_type c WHERE AND a.status = 1 AND a.mark_id = b.id AND b.tid = c.id AND c.uid = ?`,
+  getMarkByUid: `SELECT a.* FROM mark a, content b, content_type c WHERE a.status = 1 AND a.mark_id = b.id AND b.tid = c.id AND c.uid = ?`,
   /** 我的点赞 */
   toMarkByUid: `SELECT a.*,b.context,c.nickName as saver_name,c.imgUrl from mark a, content b, user c 
     WHERE a.mark_id = b.id AND a.uid = c.id  AND a.status = 1 AND a.uid = ?`

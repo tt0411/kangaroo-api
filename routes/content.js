@@ -27,8 +27,14 @@ router.get('/allContentsRoot', async (req, res) => {
 router.get('/getContentByUid', async (req, res) => {
     await contentData.getContentByUid(req, res);
 })
+router.get('/getcontentCountByUid', async (req, res) => {
+    await contentData.getcontentCountByUid(req, res)
+})
 router.get('/getContentById', async (req, res) => {
     await contentData.getContentById(req, res);
+})
+router.post('/isDelContent', async (req, res) => {
+    await contentData.isDelContent(req, res);
 })
 router.get('/isStopContent', async (req, res) => {
     await contentData.isStopContent(req, res);

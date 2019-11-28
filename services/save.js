@@ -150,8 +150,77 @@ let saveData = {
             connection.release();
        })
     })
-    
-  }
+  },
+  saveSign: (req, res) => { // 判断某一内容是否收藏
+    let { cid } = req.query
+    let id = getId(req)
+    if(!id){
+      res.send({
+        code: 301,
+        msg: 'token无效',
+      })
+      return 
+    }
+    pool.getConnection((err, connection) => {
+      connection.query(save.isFirstSave, [id, cid], (err, result) => {
+            if(err){
+              res.send({
+                code: 500,
+                msg: '服务器错误'
+              })
+              throw err
+            }else if(result.length > 0){
+               if(result[0].status == 1){
+                 res.send({
+                   code: 200,
+                   sign: true,
+                   msg: '已收藏'
+                 })
+               }else{
+                res.send({
+                  code: 200,
+                  sign: false,
+                  msg: '未收藏'
+                })
+               }
+            }else{
+              res.send({
+              code: 200,
+              sign: false,
+              msg: '未标记喜欢'
+             })
+            }
+            connection.release();
+          })
+        })
+    },
+    getSaveByUid : (req, res) => { // 获得的收藏
+        let id = getId(req)
+        if(!id){
+          res.send({
+            code: 301,
+            msg: 'token无效',
+          })
+          return 
+        }
+        pool.getConnection((err, connection) => {
+          connection.query(save.getSaveByUid, id, (err, result) => {
+            if(err){
+              res.send({
+                code: 500,
+                msg: '服务器错误',
+              })
+              throw err
+            }else{
+              res.send({
+                code: 200,
+                count: result.length,
+              })
+            } 
+             connection.release();
+          })
+        })
+    }
 }
 
 module.exports =  saveData 
