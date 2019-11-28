@@ -81,8 +81,8 @@ const theme = {
 const content = {
   getOpencontentByTid: `
     SELECT 
-    a.*, b.name, c.imgUrl, c.id as uid, c.nickName, (SELECT count(*) FROM comment d WHERE d.cid = a.id) as commentCount, (SELECT count(*) FROM  mark  WHERE mark.mark_id = a.id) as markCount,
-    (SELECT count(*) FROM save e WHERE e.cid = a.id) as saveCount
+    a.*, b.name, c.imgUrl, c.id as uid, c.nickName,(SELECT count(*) FROM comment d WHERE d.cid = a.id AND d.status = 1 ) as commentCount, (SELECT count(*) FROM  mark  WHERE mark.mark_id = a.id AND mark.status = 1) as markCount,
+    (SELECT count(*) FROM save e WHERE e.cid = a.id AND e.status = 1) as saveCount
     from
     content a, content_type b, user c
     WHERE 
@@ -120,7 +120,8 @@ const content = {
   `,
   getMyMarkContent: `
   SELECT 
-   a.*, b.name, c.imgUrl, c.id as uid, c.nickName
+   a.*, b.name, c.imgUrl, c.id as uid, c.nickName,(SELECT count(*) FROM comment d WHERE d.cid = a.id AND d.status = 1 ) as commentCount, (SELECT count(*) FROM  mark  WHERE mark.mark_id = a.id AND mark.status = 1) as markCount,
+   (SELECT count(*) FROM save e WHERE e.cid = a.id AND e.status = 1) as saveCount
     from
     content a, content_type b, user c, mark 
     WHERE 
@@ -128,7 +129,8 @@ const content = {
   `,
   getMySaveContent: `
   SELECT 
-  a.*, b.name, c.imgUrl, c.id as uid, c.nickName
+  a.*, b.name, c.imgUrl, c.id as uid, c.nickName,(SELECT count(*) FROM comment d WHERE d.cid = a.id AND d.status = 1 ) as commentCount, (SELECT count(*) FROM  mark  WHERE mark.mark_id = a.id AND mark.status = 1) as markCount,
+  (SELECT count(*) FROM save e WHERE e.cid = a.id AND e.status = 1) as saveCount
     from
     content a, content_type b, user c, save 
     WHERE 
