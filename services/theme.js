@@ -9,7 +9,7 @@ const { getId, ACTIVE } = require("../utils/utils");
 
 let themeData = {
   createTheme: (req, res) => { //用户创建主题
-    let {name, status} = req.query
+    let {name, status, flag} = req.query
     const uid = getId(req);
     if(!uid){
       res.send({
@@ -22,7 +22,7 @@ let themeData = {
     pool.getConnection((err, connection) => {
       connection.query(
         theme.createtheme,
-        [name, status, +uid],
+        [name, status,flag, +uid],
         (err, result) => {
           if (err) {
             result = undefined;

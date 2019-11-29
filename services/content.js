@@ -358,8 +358,9 @@ let contentData = {
   })
   },
   getContentByUid: (req, res) => { // 用户获取所有发表的内容
-    let {per, page} = req.query
-    const uid = getId(req)
+    let {per, page, status} = req.query
+    let uid = getId(req)
+    let option = []
     if(!uid){
       res.send({
         code: 301,
@@ -368,19 +369,31 @@ let contentData = {
       })
       return 
    }
+   if(status == 9) { // 全部
+      option = ['%%', '%%', uid]
+   }else if(status == 0) { // 待审核
+      option = [1, 0, uid]
+   }else if(status == 1) { // 审核通过
+      option = [1, 1, uid]
+   }else if(status == 2) { // 审核不通过
+      option = [1, 2, uid]
+   }else if(status == 3) { // 不公开
+     option = [0, 3, uid]
+  }
     pool.getConnection((err, connection) => {
-      connection.query(content.getcontentByUid, uid, (err, result) => {
+      connection.query(content.getcontentByUid, option, (err, result) => {
         if (err) {
           result = undefined;
           throw err;
         } else {
           let offset=parseInt(page || 1)
-          let limit=parseInt(per || 5)
+          let limit=parseInt(per || 1000)
           let newArry=result.slice((offset-1)*limit, offset*limit)
           let _newArry = [];
           newArry.forEach(item => {
-             _newArry.push({
-               img: item.img.split(','),
+            if(item.status != 2) {
+              _newArry.push({
+               img: item.img ? item.img.split(',') : item.img,
                id: item.id,
                tid: item.tid,
                context: item.context, 
@@ -394,11 +407,12 @@ let contentData = {
                audio: item.audio,
                uid: item.uid
              })
+            }
           })   
           let hasmore=offset+limit > result.length ? false : true
           const _result = {
               hasmore,
-              count: result.length,
+              count: _newArry.length,
               list: _newArry,
               code: 200
           }

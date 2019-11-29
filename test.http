@@ -58,7 +58,7 @@ get {{url}}/user/getInfo
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.MTA.ZlWTaouJ8-kpAjtWMXCDK7alaCpkWtEAjvtgyBRnJl8
 
 ### 用户登录
-post {{url}}/user/login?phone=13986147522&password=123456
+post {{url}}/user/login?phone=15188211507&password=123456
 
 ### 修改密码
 put {{url}}/user/updatePwd?oldPassword=12345678&newPassword=123456
@@ -106,8 +106,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.MTQ.yFAAWaBeP7rq_XztWB2A4PHDG58SmQ4L2
 
 
 ### 用户获取所有发表内容
-get {{url}}/content/getContentByUid
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.MTU.dppZzUZLcDlW4rnAzW9MCeOu7KytUK3-oNLN90BNEio
+get {{url}}/content/getContentByUid?status=9
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.MTQ.yFAAWaBeP7rq_XztWB2A4PHDG58SmQ4L2Z9DLdh0d7Y
 
 ### 获取公开主题下的内容
 get {{url}}/content/getOpencontentByTid?tid=18
