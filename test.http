@@ -110,7 +110,7 @@ get {{url}}/content/getContentByUid?status=9
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.MTQ.yFAAWaBeP7rq_XztWB2A4PHDG58SmQ4L2Z9DLdh0d7Y
 
 ### 获取公开主题下的内容
-get {{url}}/content/getOpencontentByTid?tid=18
+get {{url}}/content/getOpencontentByTid?tid=17
 
 ### 获取所有公开内容
 get {{url}}/content/getAllContents
