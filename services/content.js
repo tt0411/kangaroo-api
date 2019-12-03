@@ -58,7 +58,7 @@ let contentData = {
         }
        else {
         let offset=parseInt(page || 1)
-        let limit=parseInt(per || 5)
+        let limit=parseInt(per || 10)
         let newArry=result.slice((offset-1)*limit, offset*limit)
         let _newArry = [];
         newArry.forEach(item => {
@@ -115,7 +115,7 @@ let contentData = {
         }
        else {
         let offset=parseInt(page || 1)
-        let limit=parseInt(per || 5)
+        let limit=parseInt(per || 10)
         let newArry=result.slice((offset-1)*limit, offset*limit)
         let _newArry = [];
         newArry.forEach(item => {
@@ -173,7 +173,7 @@ let contentData = {
         }
        else {
         let offset=parseInt(page || 1)
-        let limit=parseInt(per || 5)
+        let limit=parseInt(per || 10)
         let newArry=result.slice((offset-1)*limit, offset*limit)
         let _newArry = [];
         newArry.forEach(item => {
@@ -272,7 +272,7 @@ let contentData = {
           throw err;
         } else {
           let offset=parseInt(page || 1)
-          let limit=parseInt(per || 5)
+          let limit=parseInt(per || 10)
           let newArry=result.slice((offset-1)*limit, offset*limit)
           let _newArry = [];
           newArry.forEach(item => {
@@ -319,7 +319,7 @@ let contentData = {
           throw err;
         } else {
           let offset=parseInt(page || 1)
-          let limit=parseInt(per || 5)
+          let limit=parseInt(per || 10)
           let newArry=result.slice((offset-1)*limit, offset*limit)
           let _newArry = [];
           newArry.forEach(item => {

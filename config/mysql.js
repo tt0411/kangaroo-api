@@ -3,8 +3,8 @@
 const mysql = {
     host: '127.0.0.1',
     user: 'root',
-    password: 'root',
-    database: 'xiaoxiao-app',
+    password: '123456',
+    database: 'kangaroo',
     port: 3306
 };
 
