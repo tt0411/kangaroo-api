@@ -8,8 +8,7 @@ let pool = mysql.createPool(poolextend({}, mysqlconfig));
 const { getId } = require("../utils/utils");
 
 let markData = {
-  allMark: (req, res) => {
-    // 查询所有收藏 (管理员)
+  allMark: (req, res) => { // 查询所有收藏 (管理员)
     let { uid, context, status, per, page } = req.query;
     status = status || "%%";
     uid = uid || "%%";
@@ -45,8 +44,8 @@ let markData = {
       );
     });
   },
-  getMarkByCid: (req, res) => {
-    // 根据文章id获取所有点赞
+  getMarkByCid: (req, res) => { // 根据文章id获取所有点赞
+   
     let { id, per, page } = req.query;
     pool.getConnection((err, connection) => {
       connection.query(mark.getMarkByCid, id, (err, result) => {
@@ -178,17 +177,25 @@ let markData = {
           })
         })
     },
-    getMarkByUid : (req, res) => { //用户获得的点赞
-      let id = getId(req)
-      if(!id){
-        res.send({
-          code: 301,
-          msg: 'token无效',
-        })
-        return 
-      }
+  getMarkByUid : (req, res) => { //用户获得的点赞
+    let { uid } = req.query 
+    let tokenId = getId(req)
+    let id = null;
+    if(uid == 'undefined') {
+      id = tokenId
+    }else {
+       id = uid
+    }
+    if(!id){
+      res.send({
+        code: 301,
+        msg: '无效请求',
+        count: 0
+      })
+      return 
+   }
       pool.getConnection((err, connection) => {
-        connection.query(mark.getMarkByUid, id, (err, result) => {
+        connection.query(mark.getMarkByUid, +id, (err, result) => {
           if(err){
             res.send({
               code: 500,

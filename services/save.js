@@ -193,18 +193,26 @@ let saveData = {
             connection.release();
           })
         })
-    },
-    getSaveByUid : (req, res) => { // 获得的收藏
-        let id = getId(req)
-        if(!id){
-          res.send({
-            code: 301,
-            msg: 'token无效',
-          })
-          return 
-        }
+  },
+  getSaveByUid : (req, res) => { // 获得的收藏
+    let { uid } = req.query 
+    let tokenId = getId(req)
+    let id = null;
+    if(uid == 'undefined') {
+      id = tokenId
+    }else {
+       id = uid
+    }
+    if(!tokenId && uid == 'undefined'){
+      res.send({
+        code: 301,
+        msg: '无效请求',
+        count: 0
+      })
+      return 
+   }
         pool.getConnection((err, connection) => {
-          connection.query(save.getSaveByUid, id, (err, result) => {
+          connection.query(save.getSaveByUid, +id, (err, result) => {
             if(err){
               res.send({
                 code: 500,

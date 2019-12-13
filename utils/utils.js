@@ -13,7 +13,7 @@ const encodeToken = (token, secretOrPrivateKey = Key) => {
 
 const getId =(req) => {
     let raw = String(req.headers.authorization).split(' ').pop(); 
-    if(raw === 'null') {
+    if(raw === 'null' || raw === 'undefined') {
         return null
     }else{
         return  encodeToken(raw,secretOrPrivateKey = Key) 

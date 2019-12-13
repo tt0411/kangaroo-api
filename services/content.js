@@ -97,12 +97,18 @@ let contentData = {
     })
   },
   getMyMarkContent: (req, res) => { // 获取用户喜欢(点赞)内容
-    let {per, page } = req.query 
-    const id = getId(req);
+    let { per, page, uid } = req.query 
+    let tokenId = getId(req)
+    let id = null;
+    if(uid == 'undefined') {
+      id = tokenId
+    }else {
+       id = uid
+    }
     if(!id){
       res.send({
         code: 301,
-        msg: 'token无效',
+        msg: '无效请求',
         data: []
       })
       return 
@@ -155,12 +161,18 @@ let contentData = {
     })
   },
   getMySaveContent: (req, res) => { // 获取用户收藏内容
-    let {per, page } = req.query 
-    const id = getId(req);
+    let { per, page, uid } = req.query 
+    let tokenId = getId(req)
+    let id = null;
+    if(uid == 'undefined') {
+      id = tokenId
+    }else {
+       id = uid
+    }
     if(!id){
       res.send({
         code: 301,
-        msg: 'token无效',
+        msg: '无效请求',
         data: []
       })
       return 
@@ -423,17 +435,24 @@ let contentData = {
     })
   },
   getcontentCountByUid: (req, res) => { // 用户获取发表内容数量
-    const uid = getId(req)
-    if(!uid){
+    let { uid } = req.query 
+    let tokenId = getId(req)
+    let id = null;
+    if(uid == 'undefined') {
+      id = tokenId
+    }else {
+       id = uid
+    }
+    if(!id){
       res.send({
         code: 301,
-        msg: 'token无效',
+        msg: '无效请求',
         data: []
       })
       return 
    }
     pool.getConnection((err, connection) => {
-      connection.query(content.getcontentCountByUid, uid, (err, result) => {
+      connection.query(content.getcontentCountByUid, +id, (err, result) => {
         if (err) {
           result = undefined;
           throw err;

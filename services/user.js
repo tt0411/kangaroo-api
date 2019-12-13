@@ -43,6 +43,7 @@ let userData = {
                     code: 200,
                     msg: '登录成功,活跃度 +'+ACTIVE.LOGIN_ACTIVE,
                     flag,
+                    id,
                     token: createToken(id)
                   })
                 }
@@ -324,8 +325,8 @@ let userData = {
         connection.release();
       })
     })
-},
-updateUserPwd: (req, res) => { // 用户修改密码
+  },
+  updateUserPwd: (req, res) => { // 用户修改密码
        const id = getId(req);
        if(!id){
         res.send({
@@ -369,8 +370,8 @@ updateUserPwd: (req, res) => { // 用户修改密码
            }
          })
        }) 
-},
-totalUser: (req, res) => {  // 获取所有用户(管理员)
+  },
+  totalUser: (req, res) => {  // 获取所有用户(管理员)
   let {per, page, nickName, flag, status, gender, phone, type} = req.query;
   //  nickName === undefined ? '%%' : `%${nickName}%`
   if(nickName === undefined){nickName = '%%'} else{nickName = `%${nickName}%`}
@@ -402,7 +403,7 @@ totalUser: (req, res) => {  // 获取所有用户(管理员)
       connection.release();
     })
   })
-},
+  },
   todayAddUser: (req, res) => { // 获取今日增加用户(管理员)
     const {per, page } = req.query
     const date = moment(Date.now()).format('YYYY-MM-DD')
@@ -431,17 +432,24 @@ totalUser: (req, res) => {  // 获取所有用户(管理员)
     })
   },
   getInfo: (req, res) => { // 用户获取个人信息
-    const id = getId(req);
+    let { uid } = req.query 
+    let tokenId = getId(req)
+    let id = null;
+    if(uid == 'undefined') {
+      id = tokenId
+    }else {
+       id = uid
+    }
     if(!id){
       res.send({
         code: 301,
-        msg: 'token无效',
+        msg: '无效请求',
         data: []
       })
       return 
    }
     pool.getConnection((err, connection) => {
-      connection.query(user.getUserInfo, id, (err, result) => {
+      connection.query(user.getUserInfo, +id, (err, result) => {
         if (err) {
           result = undefined;
         } else {

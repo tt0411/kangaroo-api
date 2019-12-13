@@ -52,18 +52,24 @@ let themeData = {
     })
   },
   getThemeByUid: (req, res) => { // 用户获取自己创建的主题
-    let uid = getId(req);
-    if(!uid){
-        res.send({
-          code: 301,
-          msg: 'token无效',
-          data: []
-        })
-        return 
+    let { per, page, uid } = req.query 
+    let tokenId = getId(req)
+    let id = null;
+    if(uid == 'undefined') {
+      id = tokenId
+    }else {
+       id = uid
     }
-    let { per, page } = req.query
+    if(!id){
+      res.send({
+        code: 301,
+        msg: '无效请求',
+        data: []
+      })
+      return 
+   }
     pool.getConnection((err, connection) => {
-      connection.query(theme.getthemeByUid, uid, (err, result) => {
+      connection.query(theme.getthemeByUid, +id, (err, result) => {
         if (err) {
           res.send({
             code: 101,
@@ -73,7 +79,7 @@ let themeData = {
         } else {
           if (result) {
             let offset=parseInt(page || 1)
-            let limit=parseInt(per || 6)
+            let limit=parseInt(per || 100)
             let newArray=result.slice((offset-1)*limit, offset*limit)
             let hasmore=offset+limit > result.length ? false : true
             let _newArray = []

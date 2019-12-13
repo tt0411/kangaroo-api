@@ -54,7 +54,7 @@ put {{url}}/user/updateUserPwd?phone=111
 
 
 ### 用户获取个人信息
-get {{url}}/user/getInfo
+get {{url}}/user/getInfo?uid=undefined
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.MTA.ZlWTaouJ8-kpAjtWMXCDK7alaCpkWtEAjvtgyBRnJl8
 
 ### 用户登录
@@ -107,6 +107,10 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.MTQ.yFAAWaBeP7rq_XztWB2A4PHDG58SmQ4L2
 
 ### 用户获取所有发表内容
 get {{url}}/content/getContentByUid?status=9
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.MTQ.yFAAWaBeP7rq_XztWB2A4PHDG58SmQ4L2Z9DLdh0d7Y
+
+### 用户获取收藏内容
+get {{url}}/content/getMySaveContent
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.MTQ.yFAAWaBeP7rq_XztWB2A4PHDG58SmQ4L2Z9DLdh0d7Y
 
 ### 获取公开主题下的内容
