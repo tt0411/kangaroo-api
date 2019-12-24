@@ -244,27 +244,25 @@ let themeData = {
       })
     })
   },
-  isdeleteTheme: (req, res) => { // 用户删除(恢复)主题
-    let { id, status } = req.query
+  isdeleteTheme: (req, res) => { // 审核主题 (管理员)
+    let { id, flag, remark } = req.query
     pool.getConnection((err, connection) => {
-      connection.query(theme.isdeletetheme, [status, id], (err, result) => {
+      connection.query(theme.checktheme, [flag, remark, id], (err, result) => {
          if(err){
           result = undefined;
           json(res, result);
         }else{
-        if(result){
-          connection.query(content.isStopContentByTid,[status, id], (err, result) => {
-            if(result){
-              res.send({
-                code: 200,
-                msg: status === '0' ? '主题删除成功' : '主题恢复成功'
-              })
-            }
-        })
-        }else{
-          result = undefined;
-          json(res, result);
-        }
+          if(result) {
+            res.send({
+              code: 200,
+              msg: '操作成功'
+            })
+          }else {
+            res.send({
+              code: 301,
+              msg: '操作失败'
+            })
+          }
        } 
         connection.release();
      })

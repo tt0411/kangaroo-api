@@ -42,13 +42,13 @@ router.put('/updateUserPhone',async (req, res) => {
 router.post('/logout',async (req, res) => {
    await userData.logout(req, res);
 })
-router.post('/addTestUser',async (req, res) => {
+router.get('/addTestUser',async (req, res) => {
    await userData.addTestUser(req, res);
 })
 router.post('/rootRegister',async (req, res) => {
    await userData.rootRegister(req, res);
 })
-router.post('/rootLogin',async (req, res) => {
+router.get('/rootLogin',async (req, res) => {
    await userData.rootLogin(req, res);
 })
 router.get('/resetActive',async (req, res) => {

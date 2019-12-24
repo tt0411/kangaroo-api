@@ -21,7 +21,7 @@ router.get('/getThemeList', async (req, res) => {
 router.post('/updateTheme', async (req, res) => {
     await ThemeData.updateTheme(req, res);
 })
-router.get('/isdeleteTheme', async (req, res) => {
+router.get('/checkTheme', async (req, res) => {
     await ThemeData.isdeleteTheme(req, res);
 })
 router.get('/allTheme', async (req, res) => {

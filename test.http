@@ -1,4 +1,4 @@
-@url= http://localhost:3001
+@url= http://localhost:3002
 
 ### 定时任务(清空活跃度)
 ### get {{url}}/user/resetActive
@@ -43,7 +43,13 @@ get {{url}}/content/isStopContent?id=2&flag=2
 get {{url}}/user/userExcel
 
 ### 管理员登录
-post {{url}}/user/rootLogin?phone=123456&password=123456
+get {{url}}/user/rootLogin?phone=123456&password=123456
+# Content-Type: application/json
+
+# {
+#     "phone": "123456",
+#     "password": "123456"
+# }
 
 
 ### 管理员注册
@@ -143,5 +149,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.MTU.dppZzUZLcDlW4rnAzW9MCeOu7KytUK3-o
 
 ### 重置密码
 get {{url}}/user/resetPwd?phone=123456
+
+get https://newoagate.test.jianbaolife.com/jbdoctor/admin-api/doctors/qualification/download?doctor_ids=23
+Authorization: Bearer 87310f27-1069-4522-ace3-f0bba353b74a
 
 

@@ -523,7 +523,7 @@ let userData = {
     })
   },
   addTestUser: (req, res) => { // 添加测试账号(管理员)
-    const { phone, password, imgUrl, age, gender, nickName } = req.body
+    const { phone, password, imgUrl, age, gender, nickName } = req.query
     const type = 2;
     pool.getConnection((err, connection) => {
       connection.query(user.login, phone, (err, result) => {

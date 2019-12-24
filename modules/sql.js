@@ -72,7 +72,7 @@ const theme = {
   updatetheme: "UPDATE content_type SET name = ? WHERE id = ?",
   getThemeList:
     "SELECT a.id, a.name, a.status FROM content_type a, user b WHERE a.uid = ? AND a.uid = b.id AND a.status != 2 AND a.flag != 2",
-  isdeletetheme: "UPDATE content_type SET status = ? WHERE id = ?",
+  checktheme: "UPDATE content_type SET flag = ? , remark = ? WHERE id = ?",
   todayAddtheme: `SELECT  (SELECT count(*) FROM content_type WHERE create_time >= ? ) 
     AS count, (SELECT count(*) FROM content_type) AS allCount, (SELECT count(*) FROM content_type WHERE create_time >= ? )/(SELECT count(*) from 
     content_type) AS rate `
@@ -106,7 +106,7 @@ const content = {
     WHERE 
     a.tid = b.id AND b.uid = c.id AND a.flag =1  AND a.status =1  LIMIT ?
   `,
-  getAllContentsRoot: `SELECT a.*,b.name,c.nickName,c.imgUrl, c.id AS uid from content a, content_type b, user c WHERE a.tid = b.id AND b.uid = c.id AND a.mood LIKE ? AND a.flag LIKE ? AND a.status LIKE ? AND a.context LIKE ? AND c.nickName LIKE ? AND a.id LIKE ?`,
+  getAllContentsRoot: `SELECT a.*,b.name,c.nickName,c.imgUrl, c.id AS uid from content a, content_type b, user c WHERE a.tid = b.id AND b.uid = c.id AND a.flag LIKE ? AND a.status LIKE ? AND a.context LIKE ? AND c.nickName LIKE ? AND a.id LIKE ?`,
   getcontentByUid:
     "SELECT a.*, b.name, c.imgUrl, c.id as uid, c.nickName from content a, content_type b, user c WHERE a.tid = b.id AND b.uid = c.id AND a.status like ? AND a.flag like ? AND c.id = ?",
   getcontentCountByUid: 'SELECT a.id from content a, content_type b, user c WHERE a.tid = b.id AND b.uid = c.id  AND a.status !=2 AND c.id = ?',
@@ -137,11 +137,11 @@ const content = {
     a.tid = b.id AND b.uid = c.id AND a.status != 2 AND save.cid = a.id AND save.status = 1 AND save.uid = ?
   `,
   isDelContent: 'UPDATE content SET status = ? WHERE id = ?',
-  isStopContent: "UPDATE content SET flag = ? WHERE id = ?",
+  isStopContent: "UPDATE content SET flag = ? , remark = ? WHERE id = ?",
   isStopContentByTid: "UPDATE content SET flag = ? WHERE tid = ? ",
   todayAddContent: "SELECT * from content WHERE create_time >= ?",
   todayAddContentRate: `SELECT  (SELECT count(*) FROM content WHERE create_time >= ?) AS count,
-    (SELECT count(*) FROM content WHERE create_time >= ? )/(SELECT count(*) from content) AS rate `
+    (SELECT count(*) FROM content WHERE create_time >= ? )/(SELECT count(*) from content) AS rate `,
 };
 
 const comment = {

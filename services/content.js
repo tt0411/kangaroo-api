@@ -225,15 +225,14 @@ let contentData = {
     })
   },
   getAllContentsRoot: (req, res) => { // 管理员查看所有内容(包含不公开，以及违规内容)
-    let {per, page, mood, flag, status, name, nickName, id} = req.query
-    mood = mood || '%%'
+    let {per, page,  flag, status, name, nickName, id} = req.query
     flag = flag || '%%'
     status = status || '%%'
     id = id || '%%'
     if(name === undefined){name = '%%'} else{name = `%${name}%`}
     if(nickName === undefined){nickName = '%%'} else{nickName = `%${nickName}%`}
     pool.getConnection((err, connection) => {
-      connection.query(content.getAllContentsRoot,[mood, flag, status, name, nickName, id], (err, result) => {
+      connection.query(content.getAllContentsRoot,[ flag, status, name, nickName, id], (err, result) => {
         if (err) {
           result = undefined; 
           json(res, result);
@@ -245,11 +244,10 @@ let contentData = {
         let _newArry = [];
         newArry.forEach(item => {
            _newArry.push({
-             img: item.img.split(','),
+             img:item.img ? item.img.split(',') : '',
              id: item.id,
              tid: item.tid,
              context: item.context, 
-             mood: item.mood,
              flag: item.flag,
              status: item.status,
              create_time: moment(item.create_time).format('YYYY-MM-DD HH:mm:ss'),
@@ -532,10 +530,10 @@ let contentData = {
       })
     })
   },
-  isStopContent: (req, res) => { // 封禁，解禁内容(管理员)
-    const { id, flag } = req.query;
+  isStopContent: (req, res) => { // 审核内容(管理员)
+    const { id, remark, flag } = req.query;
     pool.getConnection((err, connection) => {
-      connection.query(content.isStopContent, [flag, id], (err, result) => {
+      connection.query(content.isStopContent, [flag, remark, id], (err, result) => {
         if(err){
           result = undefined;
           json(res, result);
