@@ -4,7 +4,8 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon app.js"
   },
   "author": "",
   "license": "ISC",
@@ -16,9 +17,11 @@
     "excel-export": "^0.5.1",
     "express": "^4.17.1",
     "express-formidable": "^1.2.0",
+    "file-stream-rotator": "^0.5.5",
     "js-export-excel": "^1.1.2",
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.24.0",
+    "morgan": "^1.9.1",
     "multiparty": "^4.2.1",
     "mysql": "^2.17.1",
     "node-excel-export": "^1.4.4",

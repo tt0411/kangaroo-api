@@ -30,5 +30,8 @@ router.get('/allTheme', async (req, res) => {
 router.get('/todayTheme', async (req, res) => {
     await ThemeData.todayTheme(req, res);
 })
+router.get('/waitThemeRoots', async (req, res) => {
+    await ThemeData.waitThemeRoots(req, res);
+})
 
 module.exports = router;

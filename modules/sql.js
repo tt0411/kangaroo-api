@@ -24,7 +24,7 @@ const user = {
   resetActive: "UPDATE user SET active = 0 ",
   resetPwd: "UPDATE user SET password = ? WHERE phone = ?",
   changeActive: "UPDATE user SET active = active + ? WHERE id = ?",
-  getActiveUser: "SELECT * FROM user ORDER BY active DESC LIMIT 10",
+  getActiveUser: "SELECT * FROM user ORDER BY active DESC LIMIT 1000",
   getGenderRate: `select COUNT(case when user.gender = '1' then gender end  ) AS maleCount,
      COUNT(case when user.gender = '2' then gender end  ) AS femaleCount, COUNT(case when 
      user.gender IN('1','2') then gender end) AS allCount, COUNT(case when user.gender = '1' 
@@ -75,7 +75,8 @@ const theme = {
   checktheme: "UPDATE content_type SET flag = ? , remark = ? WHERE id = ?",
   todayAddtheme: `SELECT  (SELECT count(*) FROM content_type WHERE create_time >= ? ) 
     AS count, (SELECT count(*) FROM content_type) AS allCount, (SELECT count(*) FROM content_type WHERE create_time >= ? )/(SELECT count(*) from 
-    content_type) AS rate `
+    content_type) AS rate `,
+    waitThemeRoots: `SELECT a.*, b.nickName, b.imgUrl FROM content_type a, user b WHERE a.uid = b.id AND a.status = 1 AND a.flag = 0 ORDER BY a.create_time DESC`,
 };
 
 const content = {
@@ -87,28 +88,32 @@ const content = {
     content a, content_type b, user c
     WHERE 
     a.tid = b.id AND b.uid = c.id AND a.flag !=2 AND a.flag !=0 AND a.status !=2   AND a.tid = ?
-    `,
+    ORDER BY a.create_time DESC
+`,
   getMycontentByTid:
    `  SELECT 
    a.*, b.name, c.imgUrl, c.id as uid, c.nickName, (SELECT count(*) FROM comment d WHERE d.cid = a.id AND d.status = 1 ) as commentCount, (SELECT count(*) FROM  mark  WHERE mark.mark_id = a.id AND mark.status = 1) as markCount,
   (SELECT count(*) FROM save e WHERE e.cid = a.id AND e.status = 1) as saveCount
  from
   content a, content_type b, user c
-   WHERE a.tid = b.id AND b.uid = c.id AND a.flag !=2 AND a.flag !=0 AND a.status !=2 AND a.tid = ?`,
+   WHERE a.tid = b.id AND b.uid = c.id AND a.flag !=2 AND a.flag !=0 AND a.status !=2 AND a.tid = ? ORDER BY a.create_time DESC
+`,
   createContent:
     "INSERT INTO content (context, img, video, audio, address,flag, status, is_comment, tid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
   getAllContents: `
   SELECT 
     a.*, b.name, c.imgUrl, c.id as uid, c.nickName, (SELECT count(*) FROM comment d WHERE d.cid = a.id) as commentCount, (SELECT count(*) FROM  mark  WHERE mark.mark_id = a.id) as markCount,
-    (SELECT count(*) FROM save e WHERE e.cid = a.id) as saveCount
+   (SELECT count(*) FROM save e WHERE e.cid = a.id) as saveCount
     from
     content a, content_type b, user c
     WHERE 
-    a.tid = b.id AND b.uid = c.id AND a.flag =1  AND a.status =1  LIMIT ?
+    a.tid = b.id AND b.uid = c.id AND a.flag =1  AND a.status =1  ORDER BY a.create_time DESC LIMIT ?
+
   `,
-  getAllContentsRoot: `SELECT a.*,b.name,c.nickName,c.imgUrl, c.id AS uid from content a, content_type b, user c WHERE a.tid = b.id AND b.uid = c.id AND a.flag LIKE ? AND a.status LIKE ? AND a.context LIKE ? AND c.nickName LIKE ? AND a.id LIKE ?`,
-  getcontentByUid:
-    "SELECT a.*, b.name, c.imgUrl, c.id as uid, c.nickName from content a, content_type b, user c WHERE a.tid = b.id AND b.uid = c.id AND a.status like ? AND a.flag like ? AND c.id = ?",
+  getAllContentsRoot: `SELECT a.*,b.name,c.nickName,c.imgUrl, c.id AS uid from content a, content_type b, user c WHERE a.tid = b.id AND b.uid = c.id AND a.flag LIKE ? AND a.status LIKE ? AND a.context LIKE ? AND c.nickName LIKE ? AND a.id LIKE ? ORDER BY a.create_time DESC
+`,
+getcontentByUid:
+    "SELECT a.*, b.name, c.imgUrl, c.id as uid, c.nickName from content a, content_type b, user c WHERE a.tid = b.id AND b.uid = c.id AND a.status like ? AND a.flag like ? AND c.id = ? ORDER BY a.create_time DESC ",
   getcontentCountByUid: 'SELECT a.id from content a, content_type b, user c WHERE a.tid = b.id AND b.uid = c.id  AND a.status !=2 AND c.id = ?',
   getcontentById: `
   SELECT 
@@ -125,7 +130,7 @@ const content = {
     from
     content a, content_type b, user c, mark 
     WHERE 
-    a.tid = b.id AND b.uid = c.id AND a.status != 2 AND mark.mark_id = a.id AND mark.status = 1 AND mark.uid = ?
+    a.tid = b.id AND b.uid = c.id AND a.status != 2 AND mark.mark_id = a.id AND mark.status = 1 AND mark.uid = ? ORDER BY a.create_time DESC
   `,
   getMySaveContent: `
   SELECT 
@@ -134,7 +139,7 @@ const content = {
     from
     content a, content_type b, user c, save 
     WHERE 
-    a.tid = b.id AND b.uid = c.id AND a.status != 2 AND save.cid = a.id AND save.status = 1 AND save.uid = ?
+    a.tid = b.id AND b.uid = c.id AND a.status != 2 AND save.cid = a.id AND save.status = 1 AND save.uid = ? ORDER BY a.create_time DESC
   `,
   isDelContent: 'UPDATE content SET status = ? WHERE id = ?',
   isStopContent: "UPDATE content SET flag = ? , remark = ? WHERE id = ?",
@@ -142,6 +147,7 @@ const content = {
   todayAddContent: "SELECT * from content WHERE create_time >= ?",
   todayAddContentRate: `SELECT  (SELECT count(*) FROM content WHERE create_time >= ?) AS count,
     (SELECT count(*) FROM content WHERE create_time >= ? )/(SELECT count(*) from content) AS rate `,
+  waitContentRoots: `SELECT a.*,b.name,c.nickName,c.imgUrl, c.id AS uid from content a, content_type b, user c WHERE a.tid = b.id AND b.uid = c.id AND a.flag = 0 AND a.status = 1  ORDER BY a.create_time DESC`,
 };
 
 const comment = {

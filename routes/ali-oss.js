@@ -13,29 +13,27 @@ router.post('/uploadOss', async (req, res) => {
         var fileName = ''
         if(req.fields.type === 'video'){
              fileName =`${req.fields.type}/`+ Date.now() + '.mp4';
-        }else if(req.fields.type === 'img'){
-            fileName =`${req.fields.type}/`+ Date.now() + '.png';
-        }else if(req.fields.type === 'avater'){
+        }else if(req.fields.type === 'img' || req.fields.type === 'avater'){
             fileName =`${req.fields.type}/`+ Date.now() + '.png';
         }else if(req.fields.type === 'mp3'){
             fileName =`${req.fields.type}/`+ Date.now() + '.mp3';
         }
         let result = await client.put(fileName, req.files.file.path)
         if(result){
-        res.send({
-            code: 200,
-            msg: '上传成功',
-            data: result.url
-        })   
-    }else{
-        res.send({
-            code: 101,
-            msg: '上传失败'
-        })
-    }
-	} catch (err) {
-        console.log(err)
-	}
+            res.send({
+                code: 200,
+                msg: '上传成功',
+                data: result.url
+            })   
+        }else{
+            res.send({
+                code: 101,
+                msg: '上传失败'
+            })
+        }
+        } catch (err) {
+            console.log(err)
+        }
      
 })
 
