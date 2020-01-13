@@ -1,4 +1,5 @@
 @url= http://localhost:3002
+//@url= http://175.24.36.114:3002
 
 ### 定时任务(清空活跃度)
 ### get {{url}}/user/resetActive
@@ -53,13 +54,14 @@ get {{url}}/user/rootLogin?phone=123456&password=123456
 
 
 ### 管理员注册
-post {{url}}/user/rootRegister
+# get {{url}}/user/rootRegister?phone=15188211507&password=mengtaowang1030&name=梦涛(管理员)
+
 
 ### 用户重置密码
 put {{url}}/user/updateUserPwd?phone=111
 
 
-### 用户获取个人信息
+### 用户获取个人信息 
 get {{url}}/user/getInfo?uid=undefined
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.MTA.ZlWTaouJ8-kpAjtWMXCDK7alaCpkWtEAjvtgyBRnJl8
 
@@ -150,7 +152,10 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.MTU.dppZzUZLcDlW4rnAzW9MCeOu7KytUK3-o
 ### 重置密码
 get {{url}}/user/resetPwd?phone=123456
 
-get https://newoagate.test.jianbaolife.com/jbdoctor/admin-api/doctors/qualification/download?doctor_ids=23
-Authorization: Bearer 87310f27-1069-4522-ace3-f0bba353b74a
+### 待审核内容
+get {{url}}/content/waitContentRoots
+
+### 待审核主题
+get {{url}}/theme/waitThemeRoots
 
 

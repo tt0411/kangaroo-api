@@ -45,6 +45,9 @@ router.get('/todayContent', async (req, res) => {
 router.get('/todayContentRate', async (req, res) => {
     await contentData.todayAddContentRate(req, res);
 })
+router.get('/waitContentRoots', async (req, res) => {
+    await contentData.waitContentRoots(req, res);
+})
 
 
 module.exports = router;

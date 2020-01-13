@@ -41,7 +41,7 @@ let userData = {
                 }else{
                   res.send({
                     code: 200,
-                    msg: '登录成功,活跃度 +'+ACTIVE.LOGIN_ACTIVE,
+                    msg: '登录成功',
                     flag,
                     id,
                     token: createToken(id)
@@ -122,7 +122,7 @@ let userData = {
                 code: 200,
                 msg: '登录成功',
                 name: result[0].name,
-                id: result[0].id
+                id: result[0].id,
               })
           } else {
             res.send({
@@ -141,7 +141,7 @@ let userData = {
     });
   },
   rootRegister: (req, res) => { // 管理员注册
-    const { phone, password, name } = req.body;
+    const { phone, password, name } = req.query;
     pool.getConnection((err, connection) => {
        connection.query(user.rootLogin, phone, (err, result) => {
         if(err){
@@ -273,15 +273,6 @@ let userData = {
   },
   updateAvater: (req, res) => { // 用户修改头像
       const { imgUrl } = req.query
-      const id = getId(req);
-      if(!id){
-        res.send({
-          code: 301,
-          msg: 'token无效',
-          data: []
-        })
-        return 
-    }
       pool.getConnection((err, connection) => {
         connection.query(user.changeAvater,[ imgUrl,id ], (err, result) =>{
           if(err){
@@ -511,7 +502,7 @@ let userData = {
             res.send({
               code: 200,
               msg: '操作成功'
-            })
+            })  
           }else{
             result = undefined;
             json(res, result);

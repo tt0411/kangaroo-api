@@ -45,7 +45,7 @@ router.post('/logout',async (req, res) => {
 router.get('/addTestUser',async (req, res) => {
    await userData.addTestUser(req, res);
 })
-router.post('/rootRegister',async (req, res) => {
+router.get('/rootRegister',async (req, res) => {
    await userData.rootRegister(req, res);
 })
 router.get('/rootLogin',async (req, res) => {

@@ -319,6 +319,30 @@ let themeData = {
         connection.release();
       })
     })
+  },
+  waitThemeRoots: (req, res) => {
+    let { per, page} = req.query;
+    pool.getConnection((err, connection) => {
+      connection.query(theme.waitThemeRoots, (err, result) => {
+        if (err) {
+          result = undefined;
+           json(res, result);
+        } else {
+          let offset=parseInt(page || 1)
+          let limit=parseInt(per || 1000)
+          let newArry=result.slice((offset-1)*limit, offset*limit)
+          let hasmore=offset+limit > result.length ? false : true
+          const _result = {
+              hasmore,
+              list: newArry,
+              count: result.length,
+              code: 200
+          }
+          json(res, _result);
+        }
+      connection.release();
+      })
+    })
   }
 }
 

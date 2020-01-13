@@ -282,7 +282,7 @@ let contentData = {
           throw err;
         } else {
           let offset=parseInt(page || 1)
-          let limit=parseInt(per || 10)
+          let limit=parseInt(per || 1000)
           let newArry=result.slice((offset-1)*limit, offset*limit)
           let _newArry = [];
           newArry.forEach(item => {
@@ -565,7 +565,7 @@ let contentData = {
         }
        else {
         let offset=parseInt(page || 1)
-        let limit=parseInt(per || 10)
+        let limit=parseInt(per || 1000)
         let newArry=result.slice((offset-1)*limit, offset*limit)
         let hasmore=offset+limit > result.length ? false : true
         const _result = {
@@ -605,6 +605,51 @@ let contentData = {
       })
     })
   },
+  waitContentRoots: (req, res) => { // 待审核内容(管理员移动端)
+    let {per, page} = req.query;
+    pool.getConnection((err, connection) => {
+      connection.query(content.waitContentRoots, (err, result) => {
+        if (err) {
+          result = undefined; 
+          json(res, result);
+        }
+       else {
+        let offset=parseInt(page || 1)
+        let limit=parseInt(per || 1000)
+        let newArry=result.slice((offset-1)*limit, offset*limit)
+        let _newArry = [];
+        newArry.forEach(item => {
+           _newArry.push({
+             img:item.img ? item.img.split(',') : '',
+             id: item.id,
+             tid: item.tid,
+             context: item.context, 
+             flag: item.flag,
+             status: item.status,
+             create_time: moment(item.create_time).format('YYYY-MM-DD HH:mm:ss'),
+             name: item.name,
+             nickName: item.nickName,
+             imgUrl: item.imgUrl,
+             video: item.video,
+             audio: item.audio,
+             uid: item.uid
+           })
+        })   
+        let hasmore=offset+limit > result.length ? false : true
+        const _result = {
+            hasmore,
+            count: result.length,
+            list: _newArry,
+            code: 200
+        }
+        json(res, _result);
+       }
+      
+       connection.release();
+      })
+    })
+
+  }
 }
 
 module.exports =  contentData 
