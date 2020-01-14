@@ -123,6 +123,7 @@ let userData = {
                 msg: '登录成功',
                 name: result[0].name,
                 id: result[0].id,
+                img: result[0].img,
               })
           } else {
             res.send({

@@ -158,4 +158,7 @@ get {{url}}/content/waitContentRoots
 ### 待审核主题
 get {{url}}/theme/waitThemeRoots
 
+### 待审核内容，主题数量
+get {{url}}/content/waitDealCount
+
 
