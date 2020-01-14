@@ -23,7 +23,7 @@ let commentData = {
            json(res, result);
         } else {
           let offset=parseInt(page || 1)
-          let limit=parseInt(per || 8)
+          let limit=parseInt(per || 10)
           let newArry=result.slice((offset-1)*limit, offset*limit)
           let hasmore=offset+limit > result.length ? false : true
           const _result = {
@@ -121,7 +121,7 @@ let commentData = {
        }else{
           res.send({
             code: 200,
-            msg: `评论成功，活跃度+${ACTIVE.COMMENT_ACTIVE}`
+            msg: `评论成功`
           })
        }
        connection.release();

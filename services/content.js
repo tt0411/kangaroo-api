@@ -416,7 +416,8 @@ let contentData = {
                avatar: item.imgUrl,
                video: item.video,
                audio: item.audio,
-               uid: item.uid
+               uid: item.uid,
+               remark: item.remark,
              })
             }
           })   
