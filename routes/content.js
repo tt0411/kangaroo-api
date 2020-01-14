@@ -48,6 +48,9 @@ router.get('/todayContentRate', async (req, res) => {
 router.get('/waitContentRoots', async (req, res) => {
     await contentData.waitContentRoots(req, res);
 })
+router.get('/waitDealCount', async (req, res) => {
+    await contentData.waitDealCount(req, res);
+})
 
 
 module.exports = router;

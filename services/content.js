@@ -256,7 +256,8 @@ let contentData = {
              imgUrl: item.imgUrl,
              video: item.video,
              audio: item.audio,
-             uid: item.uid
+             uid: item.uid,
+             remark: item.remark,
            })
         })   
         let hasmore=offset+limit > result.length ? false : true
@@ -646,6 +647,29 @@ let contentData = {
        }
       
        connection.release();
+      })
+    })
+
+  },
+  waitDealCount: (req, res) => { // 待审核内容和主题数量(管理员移动端)
+    pool.getConnection((err, connection) => {
+      connection.query(content.waitCount,(err, result) => {
+        if (err) {
+          result = undefined;
+          json(res, result)
+          throw err;
+        }
+       else {
+          if(result){
+            res.send({
+              code: 200,
+              themeCount: result[0].themeCount,
+              contentCount: result[0].contentCount,
+              allCount: result[0].themeCount + result[0].contentCount,
+            })
+          }
+       }
+        connection.release();
       })
     })
 

@@ -148,6 +148,8 @@ getcontentByUid:
   todayAddContentRate: `SELECT  (SELECT count(*) FROM content WHERE create_time >= ?) AS count,
     (SELECT count(*) FROM content WHERE create_time >= ? )/(SELECT count(*) from content) AS rate `,
   waitContentRoots: `SELECT a.*,b.name,c.nickName,c.imgUrl, c.id AS uid from content a, content_type b, user c WHERE a.tid = b.id AND b.uid = c.id AND a.flag = 0 AND a.status = 1  ORDER BY a.create_time DESC`,
+  waitCount: `SELECT  (SELECT count(*) FROM content_type WHERE flag = 0 AND status = 1 ) 
+  AS themeCount, (SELECT count(*) FROM content WHERE flag = 0 AND status = 1 ) AS contentCount`,
 };
 
 const comment = {
