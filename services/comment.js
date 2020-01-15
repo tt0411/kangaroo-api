@@ -87,7 +87,7 @@ let commentData = {
               imgUrl: item.imgUrl,
             })
           })
-          let hasmore=offset+limit > result.length ? false : true
+          let hasmore = offset+limit > result.length ? false : true
           res.send({
             code: 200,
             count: result.length,
