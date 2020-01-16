@@ -14,7 +14,16 @@ router.post('/uploadOss', async (req, res) => {
         if(req.fields.type === 'video'){
              fileName =`${req.fields.type}/`+ Date.now() + '.mp4';
         }else if(req.fields.type === 'img' || req.fields.type === 'avater'){
-            fileName =`${req.fields.type}/`+ Date.now() + '.png';
+            if(req.files.file.type === 'image/jpeg') {
+                fileName =`${req.fields.type}/`+ Date.now() + '.jpg';
+            }else if(req.files.file.type === 'image/png') {
+                fileName =`${req.fields.type}/`+ Date.now() + '.png';
+            }else if(req.files.file.type === 'image/gif') {
+                fileName =`${req.fields.type}/`+ Date.now() + '.gif';
+            }else {
+                fileName =`${req.fields.type}/`+ Date.now() + '.png';
+            }
+            
         }else if(req.fields.type === 'mp3'){
             fileName =`${req.fields.type}/`+ Date.now() + '.mp3';
         }

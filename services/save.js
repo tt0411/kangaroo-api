@@ -22,7 +22,7 @@ let saveData = {
            throw err;
         } else {
           let offset=parseInt(page || 1)
-          let limit=parseInt(per || 8)
+          let limit=parseInt(per || 10)
           let newArry=result.slice((offset-1)*limit, offset*limit)
           let hasmore=offset+limit > result.length ? false : true
           const _result = {
@@ -47,7 +47,7 @@ let saveData = {
           throw err;
         }else{
           let offset=parseInt(page || 1)
-          let limit=parseInt(per || 100)
+          let limit=parseInt(per || 1000)
           let newArry=result.slice((offset-1)*limit, offset*limit)
           let _newArry = [];
           newArry.forEach(item => {
@@ -83,7 +83,7 @@ let saveData = {
           throw err;
         }else{
           let offset=parseInt(page || 1)
-          let limit=parseInt(per || 10)
+          let limit=parseInt(per || 1000)
           let newArry=result.slice((offset-1)*limit, offset*limit)
           let hasmore=offset+limit > result.length ? false : true
           const _result = {

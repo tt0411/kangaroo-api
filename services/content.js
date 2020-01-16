@@ -481,7 +481,6 @@ let contentData = {
               id: result[0].id,
               tid: result[0].tid,
               context: result[0].context, 
-              mood: result[0].mood,
               flag: result[0].flag,
               status: result[0].status,
               create_time: moment(result[0].create_time).format('YYYY-MM-DD HH:mm:ss'),

@@ -165,7 +165,7 @@ const comment = {
 const save = {
   getAllSavesRoot: `SELECT a.*,b.context,c.nickName as saver_name,c.imgUrl from save a, content b, user c 
     WHERE a.cid = b.id AND a.uid = c.id AND b.context LIKE ? AND a.uid LIKE ? AND a.status LIKE ?`,
-  getSaveByCid: `SELECT a.*,d.nickName,d.imgUrl FROM save a, content b, content_type c, user d WHERE a.uid = d.id AND b.tid = c.id AND a.cid = b.id  AND a.status = 1 AND a.cid = ?`,
+  getSaveByCid: 'SELECT a.*,d.nickName,d.imgUrl FROM save a, content b, content_type c, user d WHERE a.uid = d.id AND b.tid = c.id AND a.cid = b.id  AND a.status = 1 AND a.cid = ?',
   firstSaveContent: 'INSERT INTO save(uid, cid, status) VALUES (?, ?, ?)',
   isSaveContent: 'UPDATE save SET status = ? WHERE uid = ? AND cid = ?',
   isFirstSave: 'SELECT * FROM save WHERE uid = ? AND cid = ?',
