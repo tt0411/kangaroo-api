@@ -59,7 +59,7 @@ const options  = {
 //       (()=>{
 //         //每天的凌晨1点1分1秒触发
 //         schedule.scheduleJob('1 1 1 * * *', ()=>{
-//          axios.get('http://localhost:3002/user/resetActive').then(data=>{
+//          axios.get('https://localhost:3002/user/resetActive').then(data=>{
 //              console.log(data.data)
 //          })
 //         })  
@@ -73,7 +73,7 @@ https.createServer(options, app).listen(3002,  () =>{
         (()=>{
           //每天的凌晨1点1分1秒触发
           schedule.scheduleJob('1 1 1 * * *', ()=>{
-           axios.get('http://localhost:3002/user/resetActive').then(data=>{
+           axios.get('https://localhost:3002/user/resetActive').then(data=>{
                console.log(data.data)
            })
           })  

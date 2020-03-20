@@ -1,5 +1,5 @@
-@url= https://localhost:3002
-// @url= https://175.24.36.114:3002
+@url= http://localhost:3002
+ // @url= https://175.24.36.114:3002
 
 ### 定时任务(清空活跃度)
 ### get {{url}}/user/resetActive
@@ -44,7 +44,7 @@ get {{url}}/content/isStopContent?id=2&flag=2
 get {{url}}/user/userExcel
 
 ### 管理员登录
-get {{url}}/user/rootLogin?phone=123456&password=123456
+get {{url}}/user/rootLogin?phone=15188211507&password=!123456.
 # Content-Type: application/json
 
 # {

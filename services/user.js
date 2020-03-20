@@ -674,7 +674,7 @@ let userData = {
       })
     })
   },
-  resetPwd: (req, res) => { // 用户重置密码
+  resetPwd: (req, res) => { // 重置用户密码
     const {phone} = req.query;
     const password = '123456';
     const pwd = bcrypt.hashSync(password,salt)

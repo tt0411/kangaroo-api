@@ -24,7 +24,7 @@ const user = {
   resetActive: "UPDATE user SET active = 0 ",
   resetPwd: "UPDATE user SET password = ? WHERE phone = ?",
   changeActive: "UPDATE user SET active = active + ? WHERE id = ?",
-  getActiveUser: "SELECT * FROM user ORDER BY active DESC LIMIT 1000",
+  getActiveUser: "SELECT * FROM user WHERE type = 1 ORDER BY active DESC LIMIT 1000",
   getGenderRate: `select COUNT(case when user.gender = '1' then gender end  ) AS maleCount,
      COUNT(case when user.gender = '2' then gender end  ) AS femaleCount, COUNT(case when 
      user.gender IN('1','2') then gender end) AS allCount, COUNT(case when user.gender = '1' 
