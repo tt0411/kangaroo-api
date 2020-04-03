@@ -365,7 +365,6 @@ let userData = {
   },
   totalUser: (req, res) => {  // 获取所有用户(管理员)
   let {per, page, nickName, flag, status, gender, phone, type} = req.query;
-  //  nickName === undefined ? '%%' : `%${nickName}%`
   if(nickName === undefined){nickName = '%%'} else{nickName = `%${nickName}%`}
    flag = flag || '%%'
    status = status || '%%'

@@ -8,7 +8,7 @@ let pool = mysql.createPool(poolextend({}, mysqlconfig));
 const { getId } = require("../utils/utils");
 
 let markData = {
-  allMark: (req, res) => { // 查询所有收藏 (管理员)
+  allMark: (req, res) => { // 查询所有点赞 (管理员)
     let { uid, context, status, per, page } = req.query;
     status = status || "%%";
     uid = uid || "%%";

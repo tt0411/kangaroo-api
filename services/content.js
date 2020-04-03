@@ -35,7 +35,7 @@ let contentData = {
                 }else{
                   res.send({
                     code: 200,
-                    msg: '内容发表成功,活跃度 +'+ACTIVE.CONTEXT_ACTIVE,
+                    msg: '内容发表成功',
                   })
                 }
 

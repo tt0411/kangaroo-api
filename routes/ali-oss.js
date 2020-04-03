@@ -3,8 +3,8 @@ let router = express.Router();
 let OSS = require('ali-oss')
 let client = new OSS({
 	region: 'oss-cn-hangzhou',//阿里云对象存储地域名
-	accessKeyId: 'LTAI4FeDftBXQdzfFPrLnSdy',//api接口id
-	accessKeySecret: 'oq9bbUCSP7jumbsqk2WOxTTsHwghDJ ',//api接口密码
+	accessKeyId: '******',//api接口id
+	accessKeySecret: '******',//api接口密码
 })
 client.useBucket('kangaroo-app')//使用的存储桶名
 
