@@ -1,4 +1,5 @@
-@url= http://localhost:3001
+  @url= http://localhost:3003
+ // @url= http://175.24.36.114:3003
 
 ### 定时任务(清空活跃度)
 ### get {{url}}/user/resetActive
@@ -43,115 +44,88 @@ get {{url}}/content/isStopContent?id=2&flag=2
 get {{url}}/user/userExcel
 
 ### 管理员登录
-post {{url}}/user/rootLogin?phone=123456&password=123456
+get {{url}}/user/rootLogin?phone=15188211507&password=!123456.
+# Content-Type: application/json
+
+# {
+#     "phone": "123456",
+#     "password": "123456"
+# }
 
 
 ### 管理员注册
-post {{url}}/user/rootRegister
-Content-Type: application/json
-
-{
-   "phone": "123456",
-   "password": "123456",  
-   "name": "我是管理员"
-}
+#get {{url}}/user/rootRegister?phone=15188211507&password=!123456.&name=梦涛(管理员)
 
 
 ### 用户重置密码
 put {{url}}/user/updateUserPwd?phone=111
 
 
-### 用户获取个人信息
-get {{url}}/user/getInfo
+### 用户获取个人信息 
+get {{url}}/user/getInfo?uid=undefined
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.MTA.ZlWTaouJ8-kpAjtWMXCDK7alaCpkWtEAjvtgyBRnJl8
 
 ### 用户登录
-post {{url}}/user/login?phone=15927011382&password=123456
+post {{url}}/user/login?phone=15188211507&password=123456
 
+### 修改密码
+put {{url}}/user/updatePwd?oldPassword=12345678&newPassword=123456
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.MTQ.yFAAWaBeP7rq_XztWB2A4PHDG58SmQ4L2Z9DLdh0d7Y
 
 ### 用户注册
 post {{url}}/user/register
-Content-Type: application/json
-
-{
-   "phone": "15927011382",
-   "password": "123456"
-}
-
-
-### 补全(更新)信息
-put {{url}}/user/updateUserInfo
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.MTY.BBV8qBuDkZitBAwzbN8HObU2qWC0qN-AZnKMG7Cl94k
-
-{
-  "nickName": "老四",
-  "gender": "1",
-  "age": 47,
-  "imgUrl": "https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=1897589137,2261370756&fm=26&gp=0.jpg"
-}
 
 
 ### 创建主题
-post {{url}}/contentType/createContentType
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.MTU.dppZzUZLcDlW4rnAzW9MCeOu7KytUK3-oNLN90BNEio
+post {{url}}/theme/createTheme?name=那年我十八&status=0
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.MTQ.yFAAWaBeP7rq_XztWB2A4PHDG58SmQ4L2Z9DLdh0d7Y
 
-{
-    "name": "老王的空间",
-    "bgcolor": "#12ew34",
-    "icon": "Icon-my"
-}
+
+### 用户获取创建主题
+get {{url}}/theme/getThemeByUid
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.MTQ.yFAAWaBeP7rq_XztWB2A4PHDG58SmQ4L2Z9DLdh0d7Y
+
+### 获取所有公开主题
+get {{url}}/theme/getOpenTheme
+
+### 获取某个主题
+get {{url}}/theme/getThemeById?id=11
+
+### 获取主题列表
+get {{url}}/theme/getThemeList
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.MTQ.yFAAWaBeP7rq_XztWB2A4PHDG58SmQ4L2Z9DLdh0d7Y
 
 ### 管理员获取所有主题
 ### get {{url}}/contentType/allContentType
-get {{url}}/contentType/allContentType?status=1&nickName=李
+// get {{url}}/contentType/allContentType?status=1&nickName=李
 
-### 用户获取创建主题
-get {{url}}/contentType/getContentTypeByUid
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.MTA.ZlWTaouJ8-kpAjtWMXCDK7alaCpkWtEAjvtgyBRnJl8
 
 ### 修改某一主题
-post {{url}}/contentType/updateContentType?id=1
-Content-Type: application/json
+# post {{url}}/contentType/updateContentType?id=1
 
-{
-   "name": "测试name1",
-   "bgcolor": "red",
-   "icon": "type名称"
-}
+
 
 ### 删除(恢复)主题 status 0(删除) 1(恢复) 2(名称违规 管理员封禁)
-get {{url}}/contentType/isdeleteContentType?id=2&status=0
+# get {{url}}/contentType/isdeleteContentType?id=2&status=0
 
 ### 创建内容
-post {{url}}/content/createContent
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.MTU.dppZzUZLcDlW4rnAzW9MCeOu7KytUK3-oNLN90BNEio
+post {{url}}/content/createContent?context=这是一个跨界打劫你，你却无力反击的时代&img=https://kangaroo-app.oss-cn-hangzhou.aliyuncs.com/1571905601259.png&status=0&flag=3&is_comment=1&tid=11&address=杭州市下城区跨贸小镇
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.MTQ.yFAAWaBeP7rq_XztWB2A4PHDG58SmQ4L2Z9DLdh0d7Y
 
-{
-   "tid": "10",
-   "context": "天气晴朗，微风轻拂，心情刚好。。。",
-   "mood": "2",
-   "img": "http://pyku15h15.bkt.clouddn.com/1571732562056.png,http://pyku15h15.bkt.clouddn.com/157173256208.png",
-   "status": "0"
-}
-
-
-
-### 用户获取某一主题所有内容
-get {{url}}/content/getContentByTid?tid=1
 
 ### 用户获取所有发表内容
-get {{url}}/content/getContentByUid
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.MTU.dppZzUZLcDlW4rnAzW9MCeOu7KytUK3-oNLN90BNEio
+get {{url}}/content/getContentByUid?status=9
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.MTQ.yFAAWaBeP7rq_XztWB2A4PHDG58SmQ4L2Z9DLdh0d7Y
 
-### 获取某条内容
-get {{url}}/content/getContentById?id=1
+### 用户获取收藏内容
+get {{url}}/content/getMySaveContent
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.MTQ.yFAAWaBeP7rq_XztWB2A4PHDG58SmQ4L2Z9DLdh0d7Y
+
+### 获取公开主题下的内容
+get {{url}}/content/getOpencontentByTid?tid=17
 
 ### 获取所有公开内容
 get {{url}}/content/getAllContents
-
 
 ### 获取所有评论 (管理员)
 get {{url}}/comment/allComment
@@ -163,22 +137,35 @@ get {{url}}/save/allSave
 get {{url}}/mark/allMark
 
 ### 获取文章评论
-get {{url}}/comment/commentByCid?id=1
+get {{url}}/comment/commentByCid?id=3
 
-### 获取文章收藏数
-get {{url}}/save/saveCountByCid?id=1
+### 获取某一内容收藏数
+get {{url}}/save/saveCountByCid?id=3
 
-### 获取文章点赞数
-get {{url}}/mark/markCountByCid?id=2
+### 获取某一内容点赞数
+get {{url}}/mark/markCountByCid?id=3
+
+### 用户获取某一内容是否点赞
+get {{url}}/mark/markSign?cid=6
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.MTU.dppZzUZLcDlW4rnAzW9MCeOu7KytUK3-oNLN90BNEio
 
 ### 重置密码
 get {{url}}/user/resetPwd?phone=123456
 
-### 用户获取个人收藏内容
-get {{url}}/save/saveByUid
+### 待审核内容
+get {{url}}/content/waitContentRoots
 
-### 获取七牛云上传token
-get {{url}}/qiniu/uploadToken
+### 待审核主题
+get {{url}}/theme/waitThemeRoots
 
-### 上传阿里云oss
-post {{url}}/alioss/uploadOss
+### 待审核内容，主题数量
+get {{url}}/content/waitDealCount
+
+### 发送短信测试
+post  {{url}}/alisms/sendSmsCode?phone=15188211507
+
+### 用户忘记密码
+
+put {{url}}/user/userResetPwd
+
+

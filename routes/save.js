@@ -11,5 +11,14 @@ router.get('/saveCountByCid', async (req, res) => {
 router.get('/saveByUid', async (req, res) => {
     await saveData.toSaveByUid(req, res)
 })
+router.post('/isSaveContent', async (req, res) => {
+    await saveData.isSaveContent(req, res);
+})
+router.get('/saveSign', async (req, res) => {
+    await saveData.saveSign(req, res);
+})
+router.get('/getSaveByUid', async (req, res) => {
+    await saveData.getSaveByUid(req, res)
+})
 
 module.exports = router;

@@ -11,5 +11,8 @@ router.get('/isStopcomment', async (req, res) => {
 router.get('/commentByCid', async (req, res) => {
     await commentData.getCommentByCid(req, res);
 })
+router.post('/addComment', async (req, res) => {
+    await commentData.addComment(req, res);
+})
 
 module.exports = router;

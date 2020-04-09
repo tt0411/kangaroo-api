@@ -1,18 +1,7 @@
 const Key = 'mimashi123'
 const jwt = require('jsonwebtoken')
-// const qiniu = require('qiniu')
+const CryptoJS = require("crypto-js");
 
-// // 创建上传凭证
-// const accessKey = 'piACJtqgo0Zo93L3xYaN4IbKKiAabDsGxHZqg2kG'    //accessKey 
-// const secretKey = '37fEzwLy6uFqbS5iB3EgpK4BP1eWbjtnj48WBUss'    //secretKey 
-// const mac = new qiniu.auth.digest.Mac(accessKey, secretKey)
-// const options = {
-//     scope: 'xiaoxiao-app',         //对象存储空间名字
-//     expires: 7200
-// }
-// const putPolicy = new qiniu.rs.PutPolicy(options)
-// const uploadToken = putPolicy.uploadToken(mac)
- 
 const createToken = (id, secretOrPrivateKey = Key) =>{
    const token = jwt.sign(id, secretOrPrivateKey);
    return token;
@@ -23,11 +12,28 @@ const encodeToken = (token, secretOrPrivateKey = Key) => {
     return encodedToken
 }
 
-const getId =(req)=>{
+const getId =(req) => {
     let raw = String(req.headers.authorization).split(' ').pop(); 
-    return  encodeToken(raw,secretOrPrivateKey = Key) 
+    if(raw === 'null' || raw === 'undefined') {
+        return null
+    }else{
+        return  encodeToken(raw,secretOrPrivateKey = Key) 
+    }
 }
 
+const encryptCode = (code, secretKey = 'smsCodemimashi123') => {
+    return CryptoJS.DES.encrypt(code, CryptoJS.enc.Utf8.parse(secretKey), {
+    mode: CryptoJS.mode.ECB,
+    padding: CryptoJS.pad.Pkcs7
+ }).toString()
+
+} 
+const decryptCode = (afterEncrypt, secretKey = 'smsCodemimashi123') => {
+    return CryptoJS.DES.decrypt(afterEncrypt, CryptoJS.enc.Utf8.parse(secretKey), {
+      mode: CryptoJS.mode.ECB,
+      padding: CryptoJS.pad.Pkcs7
+    }).toString(CryptoJS.enc.Utf8);
+  }
 const ACTIVE = {
     LOGIN_ACTIVE: 5, 
     CREATETYPE_ACTIVE: 10,
@@ -36,4 +42,4 @@ const ACTIVE = {
     CONTEXT_ACTIVE: 10 
 }
 
-module.exports = { createToken, getId, ACTIVE }
+module.exports = { createToken, getId, ACTIVE, encryptCode, decryptCode }

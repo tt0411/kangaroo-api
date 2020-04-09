@@ -41,8 +41,9 @@ let userData = {
                 }else{
                   res.send({
                     code: 200,
-                    msg: '登录成功,活跃度 +'+ACTIVE.LOGIN_ACTIVE,
+                    msg: '登录成功',
                     flag,
+                    id,
                     token: createToken(id)
                   })
                 }
@@ -121,7 +122,8 @@ let userData = {
                 code: 200,
                 msg: '登录成功',
                 name: result[0].name,
-                id: result[0].id
+                id: result[0].id,
+                img: result[0].img,
               })
           } else {
             res.send({
@@ -140,7 +142,7 @@ let userData = {
     });
   },
   rootRegister: (req, res) => { // 管理员注册
-    const { phone, password, name } = req.body;
+    const { phone, password, name } = req.query;
     pool.getConnection((err, connection) => {
        connection.query(user.rootLogin, phone, (err, result) => {
         if(err){
@@ -177,13 +179,21 @@ let userData = {
        connection.release();
     })     
   },
-  updateUserInfo: (req, res) => { // 用户修改个人信息
-    let param = req.body;
+  updateNickname: (req, res) => { // 用户修改昵称
+    let {nickName} = req.query;
     const uid = getId(req);
+    if(!uid){
+      res.send({
+        code: 301,
+        msg: 'token无效',
+        data: []
+      })
+      return 
+  }
     pool.getConnection((err, connection) => {
       connection.query(
-        user.updateUserInfo,
-        [param.nickName, param.imgUrl, param.age, param.gender, +uid],
+        user.updateUserNickname,
+        [nickName, +uid],
         (err, result) => {
           if (err) {
             result = undefined;
@@ -200,11 +210,72 @@ let userData = {
       );
     });
   },
-  updateUserAvter: (req, res) => { // 用户修改头像
-      const { imgUrl } = req.body
-      const id = getId(req);
+  updateGender: (req, res) => { // 用户修改性别
+    let {gender} = req.query;
+    const uid = getId(req);
+    if(!uid){
+      res.send({
+        code: 301,
+        msg: 'token无效',
+        data: []
+      })
+      return 
+  }
+    pool.getConnection((err, connection) => {
+      connection.query(
+        user.updateUserGender,
+        [gender, +uid],
+        (err, result) => {
+          if (err) {
+            result = undefined;
+          } else {
+            if (result.affectedRows > 0) {
+              result = "update";
+            } else {
+              result = undefined;
+            }
+          }
+          json(res, result);
+          connection.release();
+        }
+      );
+    });
+  },
+  updateAge: (req, res) => { // 用户修改年龄
+    let { age } = req.query;
+    const uid = getId(req);
+    if(!uid){
+      res.send({
+        code: 301,
+        msg: 'token无效',
+        data: []
+      })
+      return 
+  }
+    pool.getConnection((err, connection) => {
+      connection.query(
+        user.updateUserAge,
+        [age, +uid],
+        (err, result) => {
+          if (err) {
+            result = undefined;
+          } else {
+            if (result.affectedRows > 0) {
+              result = "update";
+            } else {
+              result = undefined;
+            }
+          }
+          json(res, result);
+          connection.release();
+        }
+      );
+    });
+  },
+  updateAvater: (req, res) => { // 用户修改头像
+      const { imgUrl } = req.query
       pool.getConnection((err, connection) => {
-        connection.query(user.changeAvter,[ imgUrl,id ], (err, result) =>{
+        connection.query(user.changeAvater,[ imgUrl,id ], (err, result) =>{
           if(err){
             result = undefined;
           }else{
@@ -222,6 +293,14 @@ let userData = {
   updateUserPhone: (req, res) => { // 用户修改手机(登录账号)
     const { phone } = req.body
     const id = getId(req);
+    if(!id){
+      res.send({
+        code: 301,
+        msg: 'token无效',
+        data: []
+      })
+      return 
+  }
     pool.getConnection((err, connection) => {
       connection.query(user.changePhone,[ phone, id ], (err, result) =>{
         if(err){
@@ -238,10 +317,73 @@ let userData = {
         connection.release();
       })
     })
+  },
+  updateUserPwd: (req, res) => { // 用户修改密码
+       const id = getId(req);
+       if(!id){
+        res.send({
+          code: 301,
+          msg: 'token无效',
+          data: []
+        })
+        return 
+    }
+       let { oldPassword, newPassword } = req.query
+       pool.getConnection((err, connection) => {
+         connection.query(user.getPwd, id, (err, result) => {
+           if(err){
+            res.send({ 
+              code: 101,
+              msg: '操作失败'
+            })
+             throw err;
+           }else{
+             if(result.length > 0 && bcrypt.compareSync(oldPassword,result[0].password)){
+               const newPwd = bcrypt.hashSync(newPassword,salt)
+                connection.query(user.changePwd,[newPwd, id], (err, result) => {
+                  if(result.affectedRows > 0){
+                    res.send({ 
+                      code: 200,
+                      msg: '密码修改成功'
+                    })
+                  }else{
+                    res.send({ 
+                      code: 101,
+                      msg: '操作失败'
+                    })
+                  }
+                })
+             }else{
+              res.send({ 
+                code: 102,
+                msg: '旧密码错误'
+              })
+             }
+           }
+         })
+       }) 
+  },
+  userResetPwd: (req, res) => { // 用户忘记密码重置密码
+    let { newPassword, phone } = req.query
+    pool.getConnection((err, connection) => {
+    const newPwd = bcrypt.hashSync(newPassword,salt)
+      connection.query(user.userResetPwd,[newPwd, phone], (err, result) => {
+        if(result){
+          res.send({ 
+            code: 200,
+            msg: '密码修改成功'
+          })
+        }else{
+          res.send({ 
+            code: 101,
+            msg: '操作失败'
+          })
+        }
+      })
+    })
 },
-totalUser: (req, res) => {  // 获取所有用户(管理员)
+  totalUser: (req, res) => {  // 获取所有用户(管理员)
   let {per, page, nickName, flag, status, gender, phone, type} = req.query;
-  //  nickName === undefined ? '%%' : `%${nickName}%`
   if(nickName === undefined){nickName = '%%'} else{nickName = `%${nickName}%`}
    flag = flag || '%%'
    status = status || '%%'
@@ -271,7 +413,7 @@ totalUser: (req, res) => {  // 获取所有用户(管理员)
       connection.release();
     })
   })
-},
+  },
   todayAddUser: (req, res) => { // 获取今日增加用户(管理员)
     const {per, page } = req.query
     const date = moment(Date.now()).format('YYYY-MM-DD')
@@ -300,9 +442,24 @@ totalUser: (req, res) => {  // 获取所有用户(管理员)
     })
   },
   getInfo: (req, res) => { // 用户获取个人信息
-    const id = getId(req);
+    let { uid } = req.query 
+    let tokenId = getId(req)
+    let id = null;
+    if(uid == 'undefined') {
+      id = tokenId
+    }else {
+       id = uid
+    }
+    if(!id){
+      res.send({
+        code: 301,
+        msg: '无效请求',
+        data: []
+      })
+      return 
+   }
     pool.getConnection((err, connection) => {
-      connection.query(user.getUserInfo, id, (err, result) => {
+      connection.query(user.getUserInfo, +id, (err, result) => {
         if (err) {
           result = undefined;
         } else {
@@ -325,6 +482,13 @@ totalUser: (req, res) => {  // 获取所有用户(管理员)
   },
   logout: (req, res) => { // 用户退出登录
     const id = getId(req);
+    if(!id){
+      res.send({
+        code: 301,
+        msg: 'token无效',
+      })
+      return 
+  }
     pool.getConnection((err, connection) => {
       connection.query(user.changeUserStatus, [0, id], (err, result) => {
         if(err){
@@ -357,7 +521,7 @@ totalUser: (req, res) => {  // 获取所有用户(管理员)
             res.send({
               code: 200,
               msg: '操作成功'
-            })
+            })  
           }else{
             result = undefined;
             json(res, result);
@@ -369,7 +533,7 @@ totalUser: (req, res) => {  // 获取所有用户(管理员)
     })
   },
   addTestUser: (req, res) => { // 添加测试账号(管理员)
-    const { phone, password, imgUrl, age, gender, nickName } = req.body
+    const { phone, password, imgUrl, age, gender, nickName } = req.query
     const type = 2;
     pool.getConnection((err, connection) => {
       connection.query(user.login, phone, (err, result) => {
@@ -528,7 +692,7 @@ totalUser: (req, res) => {  // 获取所有用户(管理员)
       })
     })
   },
-  resetPwd: (req, res) => { // 用户重置密码
+  resetPwd: (req, res) => { // 重置用户密码
     const {phone} = req.query;
     const password = '123456';
     const pwd = bcrypt.hashSync(password,salt)

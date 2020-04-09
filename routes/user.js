@@ -9,8 +9,20 @@ router.post('/login',async (req, res) => {
 router.post('/register',async (req, res) => {
    await userData.register(req, res);
 })
-router.put('/updateUserInfo',async (req, res) => {
-   await userData.updateUserInfo(req, res);
+router.put('/updateNickname',async (req, res) => {
+   await userData.updateNickname(req, res);
+})
+router.put('/updateGender',async (req, res) => {
+   await userData.updateGender(req, res);
+})
+router.put('/updateAge',async (req, res) => {
+   await userData.updateAge(req, res);
+})
+router.put('/updateAvater', async (req, res) => {
+   await userData.updateAvater(req, res);
+})
+router.put('/updatePwd', async (req, res) => {
+   await userData.updateUserPwd(req, res)
 })
 router.get('/getInfo',async (req, res)=> {
    await userData.getInfo(req,res);
@@ -30,13 +42,13 @@ router.put('/updateUserPhone',async (req, res) => {
 router.post('/logout',async (req, res) => {
    await userData.logout(req, res);
 })
-router.post('/addTestUser',async (req, res) => {
+router.get('/addTestUser',async (req, res) => {
    await userData.addTestUser(req, res);
 })
-router.post('/rootRegister',async (req, res) => {
+router.get('/rootRegister',async (req, res) => {
    await userData.rootRegister(req, res);
 })
-router.post('/rootLogin',async (req, res) => {
+router.get('/rootLogin',async (req, res) => {
    await userData.rootLogin(req, res);
 })
 router.get('/resetActive',async (req, res) => {
@@ -68,6 +80,9 @@ router.get('/userExcel',async (req, res) => {
 })
 router.put('/resetPwd', async (req, res) => {
    await userData.resetPwd(req, res);
+})
+router.put('/userResetPwd', async (req, res) => {
+   await userData.userResetPwd(req, res);
 })
 
 module.exports = router;
