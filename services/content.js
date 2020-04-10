@@ -652,7 +652,6 @@ let contentData = {
 
   },
   waitDealCount: (req, res) => { // 待审核内容和主题数量(管理员移动端)
-    console.log(req.session.code)
     pool.getConnection((err, connection) => {
       connection.query(content.waitCount,(err, result) => {
         if (err) {
