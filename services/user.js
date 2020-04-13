@@ -274,6 +274,15 @@ let userData = {
   },
   updateAvater: (req, res) => { // 用户修改头像
       const { imgUrl } = req.query
+      const id = getId(req);
+        if(!id){
+          res.send({
+            code: 301,
+            msg: 'token无效',
+            data: []
+          })
+          return 
+      }
       pool.getConnection((err, connection) => {
         connection.query(user.changeAvater,[ imgUrl,id ], (err, result) =>{
           if(err){
