@@ -5,7 +5,7 @@ let { content, user } = require("../modules/sql");
 let json = require("../modules/json");
 let pool = mysql.createPool(poolextend({}, mysqlconfig));
 let moment = require("moment");
-const { getId, ACTIVE } = require("../utils/utils");
+const { getId, ACTIVE, formatTime } = require("../utils/utils");
 
 let contentData = {
   createContent: (req, res) => { // 用户发布内容
@@ -69,7 +69,7 @@ let contentData = {
              context: item.context, 
              flag: item.flag,
              status: item.status,
-             create_time: moment(item.create_time).format('YYYY-MM-DD HH:mm:ss'),
+             create_time: formatTime(moment(item.create_time).format('YYYY-MM-DD HH:mm:ss')),
              name: item.name,
              address: item.address,
              nickName: item.nickName,
@@ -132,7 +132,7 @@ let contentData = {
              context: item.context, 
              flag: item.flag,
              status: item.status,
-             create_time: moment(item.create_time).format('YYYY-MM-DD HH:mm:ss'),
+             create_time: formatTime(moment(item.create_time).format('YYYY-MM-DD HH:mm:ss')),
              name: item.name,
              address: item.address,
              nickName: item.nickName,
@@ -196,7 +196,7 @@ let contentData = {
              context: item.context, 
              flag: item.flag,
              status: item.status,
-             create_time: moment(item.create_time).format('YYYY-MM-DD HH:mm:ss'),
+             create_time: formatTime(moment(item.create_time).format('YYYY-MM-DD HH:mm:ss')),
              name: item.name,
              address: item.address,
              nickName: item.nickName,
@@ -294,7 +294,7 @@ let contentData = {
                context: item.context, 
                flag: item.flag,
                status: item.status,
-               create_time: moment(item.create_time).format('YYYY-MM-DD HH:mm:ss'),
+               create_time: formatTime(moment(item.create_time).format('YYYY-MM-DD HH:mm:ss')),
                name: item.name,
                nickName: item.nickName,
                avatar: item.imgUrl,
@@ -330,7 +330,7 @@ let contentData = {
           throw err;
         } else {
           let offset=parseInt(page || 1)
-          let limit=parseInt(per || 10)
+          let limit=parseInt(per || 100)
           let newArry=result.slice((offset-1)*limit, offset*limit)
           let _newArry = [];
           newArry.forEach(item => {
@@ -341,7 +341,7 @@ let contentData = {
                context: item.context, 
                flag: item.flag,
                status: item.status,
-               create_time: moment(item.create_time).format('YYYY-MM-DD HH:mm:ss'),
+               create_time: formatTime(moment(item.create_time).format('YYYY-MM-DD HH:mm:ss')),
                name: item.name,
                nickName: item.nickName,
                avatar: item.imgUrl,
@@ -410,7 +410,7 @@ let contentData = {
                context: item.context, 
                flag: item.flag,
                status: item.status,
-               create_time: moment(item.create_time).format('YYYY-MM-DD HH:mm:ss'),
+               create_time: formatTime(moment(item.create_time).format('YYYY-MM-DD HH:mm:ss')),
                name: item.name,
                nickName: item.nickName,
                avatar: item.imgUrl,
@@ -483,7 +483,7 @@ let contentData = {
               context: result[0].context, 
               flag: result[0].flag,
               status: result[0].status,
-              create_time: moment(result[0].create_time).format('YYYY-MM-DD HH:mm:ss'),
+              create_time: formatTime(moment(result[0].create_time).format('YYYY-MM-DD HH:mm:ss')),
               name: result[0].name,
               nickName: result[0].nickName,
               imgUrl: result[0].imgUrl,
@@ -627,7 +627,7 @@ let contentData = {
              context: item.context, 
              flag: item.flag,
              status: item.status,
-             create_time: moment(item.create_time).format('YYYY-MM-DD HH:mm:ss'),
+             create_time: formatTime(moment(item.create_time).format('YYYY-MM-DD HH:mm:ss')),
              name: item.name,
              nickName: item.nickName,
              imgUrl: item.imgUrl,

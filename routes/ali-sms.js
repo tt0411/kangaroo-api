@@ -7,8 +7,8 @@ router.post('/sendSmsCode', async function (req, res) {
     const { phone } = req.query
     const CODE = Math.random().toString().slice(-6)
     var client = new Core({
-      accessKeyId: '******', 
-      accessKeySecret: '******', 
+      accessKeyId: '', 
+      accessKeySecret: '', 
       endpoint: 'https://dysmsapi.aliyuncs.com',
       apiVersion: '2017-05-25'
     })

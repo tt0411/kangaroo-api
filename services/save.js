@@ -5,7 +5,7 @@ let moment = require("moment");
 let { save } = require("../modules/sql");
 let json = require("../modules/json");
 let pool = mysql.createPool(poolextend({}, mysqlconfig));
-const { getId } = require("../utils/utils");
+const { getId, formatTime } = require("../utils/utils");
 
 let saveData = {
 
@@ -55,7 +55,7 @@ let saveData = {
               id: item.id,
               cid: item.cid,
               uid: item.uid,
-              create_time: moment(item.create_time).format('YYYY-MM-DD HH:mm:ss'),
+              create_time: formatTime(moment(item.create_time).format('YYYY-MM-DD HH:mm:ss')),
               status: item.status,
               nickName: item.nickName,
               imgUrl: item.imgUrl,

@@ -5,7 +5,7 @@ let moment = require("moment");
 let { theme, content, user } = require("../modules/sql");
 let json = require("../modules/json");
 let pool = mysql.createPool(poolextend({}, mysqlconfig));
-const { getId, ACTIVE } = require("../utils/utils");
+const { getId, ACTIVE, formatTime } = require("../utils/utils");
 
 let themeData = {
   createTheme: (req, res) => { //用户创建主题
@@ -36,7 +36,7 @@ let themeData = {
                 }else{
                   res.send({
                     code: 200,
-                    msg: '主题创建成功,活跃度 +'+ACTIVE.CREATETYPE_ACTIVE,
+                    msg: '主题创建成功,活跃度',
                   })
                 }
               })  
@@ -88,7 +88,7 @@ let themeData = {
                  id: item.id,
                  uid: item.uid,
                  name: item.name, 
-                 create_time: moment(item.create_time).format('YYYY-MM-DD HH:mm:ss'),
+                 create_time: formatTime(moment(item.create_time).format('YYYY-MM-DD HH:mm:ss')),
                  update_time: moment(item.update_time).format('YYYY-MM-DD HH:mm:ss'),
                  flag: item.flag,
                  status: item.status,
@@ -129,7 +129,7 @@ let themeData = {
              let _result = {
               id: result[0].id,
               name: result[0].name,
-              create_time: moment(result[0].create_time).format('YYYY-MM-DD HH:mm:ss') ,
+              create_time: formatTime(moment(item.create_time).format('YYYY-MM-DD HH:mm:ss')) ,
               nickName: result[0].nickName,
               imgUrl: result[0].imgUrl,
               }
@@ -196,7 +196,7 @@ let themeData = {
                  id: item.id,
                  uid: item.uid,
                  name: item.name, 
-                 create_time: moment(item.create_time).format('YYYY-MM-DD HH:mm:ss'),
+                 create_time: formatTime(moment(item.create_time).format('YYYY-MM-DD HH:mm:ss')),
                  update_time: moment(item.update_time).format('YYYY-MM-DD HH:mm:ss'),
                  flag: item.flag,
                  status: item.status,
