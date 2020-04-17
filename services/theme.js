@@ -129,7 +129,7 @@ let themeData = {
              let _result = {
               id: result[0].id,
               name: result[0].name,
-              create_time: formatTime(moment(item.create_time).format('YYYY-MM-DD HH:mm:ss')) ,
+              create_time: formatTime(moment(result[0].create_time).format('YYYY-MM-DD HH:mm:ss')) ,
               nickName: result[0].nickName,
               imgUrl: result[0].imgUrl,
               }
@@ -295,7 +295,8 @@ let themeData = {
     })
   },
   todayTheme: (req, res) => { // 今日新增主题 (管理员)
-    const date = moment(Date.now()).format('YYYY-MM-DD')
+     const date = moment(Date.now()).format('YYYY-MM-DD')
+    // const yesterday = moment().subtract(1, 'days').format('YYYY-MM-DD');
     pool.getConnection((err, connection) => {
       connection.query(theme.todayAddtheme, [date, date],(err, result) => {
         if (err) {

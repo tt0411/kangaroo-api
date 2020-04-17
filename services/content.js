@@ -297,7 +297,7 @@ let contentData = {
                create_time: formatTime(moment(item.create_time).format('YYYY-MM-DD HH:mm:ss')),
                name: item.name,
                nickName: item.nickName,
-               avatar: item.imgUrl,
+               imgUrl: item.imgUrl,
                video: item.video,
                audio: item.audio,
                address: item.address,
@@ -344,7 +344,7 @@ let contentData = {
                create_time: formatTime(moment(item.create_time).format('YYYY-MM-DD HH:mm:ss')),
                name: item.name,
                nickName: item.nickName,
-               avatar: item.imgUrl,
+               imgUrl: item.imgUrl,
                video: item.video,
                audio: item.audio,
                address: item.address,
@@ -554,9 +554,10 @@ let contentData = {
       })
     })
   },
-  todayAddContent: (req, res) => { // 获取今日增加内容(管理员)
+  todayAddContent: (req, res) => { // 获取昨日增加内容(管理员)
     const {per, page } = req.query;
     const date = moment(Date.now()).format('YYYY-MM-DD')
+    // const yesterday = moment().subtract(1, 'days').format('YYYY-MM-DD');
     pool.getConnection((err, connection) => {
       connection.query(content.todayAddContent, date,(err, result) => {
         if (err) {
@@ -581,8 +582,9 @@ let contentData = {
       })
     })
   },
-  todayAddContentRate: (req, res) => { // 获取今日增加内容比例(管理员)
+  todayAddContentRate: (req, res) => { // 获取昨日增加内容比例(管理员)
     const date = moment(Date.now()).format('YYYY-MM-DD')
+    // const yesterday = moment().subtract(1, 'days').format('YYYY-MM-DD');
     pool.getConnection((err, connection) => {
       connection.query(content.todayAddContentRate, [date, date],(err, result) => {
         if (err) {

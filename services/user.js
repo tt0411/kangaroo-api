@@ -423,9 +423,10 @@ let userData = {
     })
   })
   },
-  todayAddUser: (req, res) => { // 获取今日增加用户(管理员)
+  todayAddUser: (req, res) => { // 获取昨日增加用户(管理员)
     const {per, page } = req.query
     const date = moment(Date.now()).format('YYYY-MM-DD')
+    // const yesterday = moment().subtract(1, 'days').format('YYYY-MM-DD');
     pool.getConnection((err, connection) => {
       connection.query(user.todayAddUser, date,(err, result) => {
         if (err) {
