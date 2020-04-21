@@ -1,5 +1,5 @@
-  //@url= http://localhost:3003
- @url= http://175.24.36.114:3003
+@url= http://localhost:3003
+ //@url= http://175.24.36.114:3003
 
 ### 定时任务(清空活跃度)
 ### get {{url}}/user/resetActive
@@ -126,6 +126,14 @@ get {{url}}/content/getOpencontentByTid?tid=17
 
 ### 获取所有公开内容
 get {{url}}/content/getAllContents
+
+
+### 开启关闭评论
+get {{url}}/content/isCommentContent?id=4&is_comment=1
+
+
+### 是否公开内容
+post {{url}}/content/isDelContent?id=4&flag=1&status=1
 
 ### 获取所有评论 (管理员)
 get {{url}}/comment/allComment

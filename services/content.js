@@ -509,10 +509,9 @@ let contentData = {
     })
   },
   isDelContent: (req, res) => { // 用户删除内容
-    let { id, status } = req.query;
-    status = status || 2
+    let { id, status, flag } = req.query; 
     pool.getConnection((err, connection) => {
-      connection.query(content.isDelContent, [status, id], (err, result) => {
+      connection.query(content.isDelContent, [status, flag,  id], (err, result) => {
         if(err){
           result = undefined;
           json(res, result);
@@ -532,6 +531,30 @@ let contentData = {
       })
     })
   },
+  isCommentContent: (req, res) => { // 用户开启关闭评论
+    let { id, is_comment } = req.query;
+    pool.getConnection((err, connection) => {
+      connection.query(content.isCommentContent, [is_comment, id], (err, result) => {
+        if(err){
+          result = undefined;
+          json(res, result);
+          throw err;
+        }else{
+          if(result){
+            res.send({
+              code: 200,
+              msg: '操作成功'
+            })
+          }else{
+            result = undefined; 
+            json(res, result);
+          }
+        }
+        connection.release();
+      })
+    })
+  },
+  
   isStopContent: (req, res) => { // 审核内容(管理员)
     const { id, remark, flag } = req.query;
     pool.getConnection((err, connection) => {
