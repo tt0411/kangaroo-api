@@ -39,6 +39,9 @@ router.post('/isDelContent', async (req, res) => {
 router.get('/isStopContent', async (req, res) => {
     await contentData.isStopContent(req, res);
 })
+router.get('/isCommentContent', async (req, res) => {
+    await contentData.isCommentContent(req, res);
+})
 router.get('/todayContent', async (req, res) => {
     await contentData.todayAddContent(req, res);
 })

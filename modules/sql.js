@@ -14,6 +14,7 @@ const user = {
   changePhone: "UPDATE user SET phone = ? WHERE id = ?",
   getPwd: "SELECT password from user WHERE id = ?",
   changePwd: "UPDATE user SET password = ? WHERE id = ?",
+  userResetPwd: 'UPDATE user SET password = ? WHERE phone = ?',
   isStopUser: "UPDATE user SET flag = ? WHERE id = ?",
   changeUserStatus: "UPDATE user SET status = ? WHERE id = ?",
   totalUser:
@@ -82,7 +83,11 @@ const theme = {
 const content = {
   getOpencontentByTid: `
     SELECT 
+<<<<<<< HEAD
+    a.*, b.name, c.imgUrl, c.id as uid, c.nickName,(SELECT count(*) FROM comment d WHERE d.cid = a.id AND d.status = 1 AND a.is_comment = 1) as commentCount, (SELECT count(*) FROM  mark  WHERE mark.mark_id = a.id AND mark.status = 1) as markCount,
+=======
     a.*, b.name, c.imgUrl, c.id as uid, c.nickName,(SELECT count(*) FROM comment d WHERE d.cid = a.id AND d.status = 1 ) as commentCount, (SELECT count(*) FROM  mark  WHERE mark.mark_id = a.id AND mark.status = 1) as markCount,
+>>>>>>> master
     (SELECT count(*) FROM save e WHERE e.cid = a.id AND e.status = 1) as saveCount
     from
     content a, content_type b, user c
@@ -92,7 +97,7 @@ const content = {
 `,
   getMycontentByTid:
    `  SELECT 
-   a.*, b.name, c.imgUrl, c.id as uid, c.nickName, (SELECT count(*) FROM comment d WHERE d.cid = a.id AND d.status = 1 ) as commentCount, (SELECT count(*) FROM  mark  WHERE mark.mark_id = a.id AND mark.status = 1) as markCount,
+   a.*, b.name, c.imgUrl, c.id as uid, c.nickName, (SELECT count(*) FROM comment d WHERE d.cid = a.id AND d.status = 1 AND a.is_comment = 1) as commentCount, (SELECT count(*) FROM  mark  WHERE mark.mark_id = a.id AND mark.status = 1) as markCount,
   (SELECT count(*) FROM save e WHERE e.cid = a.id AND e.status = 1) as saveCount
  from
   content a, content_type b, user c
@@ -102,7 +107,7 @@ const content = {
     "INSERT INTO content (context, img, video, audio, address,flag, status, is_comment, tid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
   getAllContents: `
   SELECT 
-    a.*, b.name, c.imgUrl, c.id as uid, c.nickName, (SELECT count(*) FROM comment d WHERE d.cid = a.id) as commentCount, (SELECT count(*) FROM  mark  WHERE mark.mark_id = a.id) as markCount,
+    a.*, b.name, c.imgUrl, c.id as uid, c.nickName, (SELECT count(*) FROM comment d WHERE d.cid = a.id AND a.is_comment = 1) as commentCount, (SELECT count(*) FROM  mark  WHERE mark.mark_id = a.id) as markCount,
    (SELECT count(*) FROM save e WHERE e.cid = a.id) as saveCount
     from
     content a, content_type b, user c
@@ -113,7 +118,7 @@ const content = {
   getAllContentsRoot: `SELECT a.*,b.name,c.nickName,c.imgUrl, c.id AS uid from content a, content_type b, user c WHERE a.tid = b.id AND b.uid = c.id AND a.flag LIKE ? AND a.status LIKE ? AND a.context LIKE ? AND c.nickName LIKE ? AND a.id LIKE ? ORDER BY a.create_time DESC
 `,
 getcontentByUid:
-    "SELECT a.*, b.name, c.imgUrl, c.id as uid, c.nickName from content a, content_type b, user c WHERE a.tid = b.id AND b.uid = c.id AND a.status like ? AND a.flag like ? AND c.id = ? ORDER BY a.create_time DESC ",
+    "SELECT a.*, b.name, c.imgUrl, c.id as uid, c.nickName from content a, content_type b, user c WHERE a.tid = b.id AND b.uid = c.id AND a.status !=2 AND a.status like ? AND a.flag like ? AND c.id = ? ORDER BY a.create_time DESC ",
   getcontentCountByUid: 'SELECT a.id from content a, content_type b, user c WHERE a.tid = b.id AND b.uid = c.id  AND a.status !=2 AND c.id = ?',
   getcontentById: `
   SELECT 
@@ -124,8 +129,8 @@ getcontentByUid:
     a.tid = b.id AND b.uid = c.id AND a.flag !=2 AND a.status !=2 AND  a.id = ?
   `,
   getMyMarkContent: `
-  SELECT 
-   a.*, b.name, c.imgUrl, c.id as uid, c.nickName,(SELECT count(*) FROM comment d WHERE d.cid = a.id AND d.status = 1 ) as commentCount, (SELECT count(*) FROM  mark  WHERE mark.mark_id = a.id AND mark.status = 1) as markCount,
+  SELECT  
+   a.*, b.name, c.imgUrl, c.id as uid, c.nickName,(SELECT count(*) FROM comment d WHERE d.cid = a.id AND d.status = 1 AND a.is_comment = 1 ) as commentCount, (SELECT count(*) FROM  mark  WHERE mark.mark_id = a.id AND mark.status = 1) as markCount,
    (SELECT count(*) FROM save e WHERE e.cid = a.id AND e.status = 1) as saveCount
     from
     content a, content_type b, user c, mark 
@@ -134,15 +139,16 @@ getcontentByUid:
   `,
   getMySaveContent: `
   SELECT 
-  a.*, b.name, c.imgUrl, c.id as uid, c.nickName,(SELECT count(*) FROM comment d WHERE d.cid = a.id AND d.status = 1 ) as commentCount, (SELECT count(*) FROM  mark  WHERE mark.mark_id = a.id AND mark.status = 1) as markCount,
+  a.*, b.name, c.imgUrl, c.id as uid, c.nickName,(SELECT count(*) FROM comment d WHERE d.cid = a.id AND d.status = 1 AND a.is_comment = 1 ) as commentCount, (SELECT count(*) FROM  mark  WHERE mark.mark_id = a.id AND mark.status = 1) as markCount,
   (SELECT count(*) FROM save e WHERE e.cid = a.id AND e.status = 1) as saveCount
     from
     content a, content_type b, user c, save 
     WHERE 
     a.tid = b.id AND b.uid = c.id AND a.status != 2 AND save.cid = a.id AND save.status = 1 AND save.uid = ? ORDER BY a.create_time DESC
   `,
-  isDelContent: 'UPDATE content SET status = ? WHERE id = ?',
+  isDelContent: 'UPDATE content SET status = ? ,flag = ? WHERE id = ?',
   isStopContent: "UPDATE content SET flag = ? , remark = ? WHERE id = ?",
+  isCommentContent: 'UPDATE content SET is_comment = ? WHERE id = ?',
   isStopContentByTid: "UPDATE content SET flag = ? WHERE tid = ? ",
   todayAddContent: "SELECT * from content WHERE create_time >= ?",
   todayAddContentRate: `SELECT  (SELECT count(*) FROM content WHERE create_time >= ?) AS count,
@@ -159,7 +165,7 @@ const comment = {
   addComment: `INSERT INTO comment(cid, from_uid, content) VALUES (?, ?, ?)`,  
   isStopComment: "UPDATE comment SET status = ? WHERE id = ?",
   getCommentByCid: `SELECT a.*,d.nickName,d.imgUrl FROM comment a, content b, content_type c, user d WHERE a.from_uid = d.id 
-  AND b.tid = c.id AND a.cid = b.id  AND a.status = 1 AND a.cid = ? ORDER BY a.create_time DESC`
+  AND b.tid = c.id AND a.cid = b.id  AND a.status = 1 AND a.cid = ? AND b.is_comment = 1 ORDER BY a.create_time DESC`
 };
 
 const save = {

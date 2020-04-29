@@ -274,6 +274,15 @@ let userData = {
   },
   updateAvater: (req, res) => { // 用户修改头像
       const { imgUrl } = req.query
+      const id = getId(req);
+        if(!id){
+          res.send({
+            code: 301,
+            msg: 'token无效',
+            data: []
+          })
+          return 
+      }
       pool.getConnection((err, connection) => {
         connection.query(user.changeAvater,[ imgUrl,id ], (err, result) =>{
           if(err){
@@ -363,6 +372,25 @@ let userData = {
          })
        }) 
   },
+  userResetPwd: (req, res) => { // 用户忘记密码重置密码
+    let { newPassword, phone } = req.query
+    pool.getConnection((err, connection) => {
+    const newPwd = bcrypt.hashSync(newPassword,salt)
+      connection.query(user.userResetPwd,[newPwd, phone], (err, result) => {
+        if(result){
+          res.send({ 
+            code: 200,
+            msg: '密码修改成功'
+          })
+        }else{
+          res.send({ 
+            code: 101,
+            msg: '操作失败'
+          })
+        }
+      })
+    })
+},
   totalUser: (req, res) => {  // 获取所有用户(管理员)
   let {per, page, nickName, flag, status, gender, phone, type} = req.query;
   if(nickName === undefined){nickName = '%%'} else{nickName = `%${nickName}%`}
@@ -381,7 +409,7 @@ let userData = {
       let offset=parseInt(page || 1)
       let limit=parseInt(per || 10)
       let newArry=result.slice((offset-1)*limit, offset*limit)
-      let hasmore=offset+limit > result.length ? false : true
+      let hasmore=offset*limit > result.length ? false : true
       const _result = {
           hasmore,
           list: newArry,
@@ -395,9 +423,10 @@ let userData = {
     })
   })
   },
-  todayAddUser: (req, res) => { // 获取今日增加用户(管理员)
+  todayAddUser: (req, res) => { // 获取昨日增加用户(管理员)
     const {per, page } = req.query
     const date = moment(Date.now()).format('YYYY-MM-DD')
+    // const yesterday = moment().subtract(1, 'days').format('YYYY-MM-DD');
     pool.getConnection((err, connection) => {
       connection.query(user.todayAddUser, date,(err, result) => {
         if (err) {
@@ -408,7 +437,7 @@ let userData = {
         let offset=parseInt(page || 1)
         let limit=parseInt(per || 10)
         let newArry=result.slice((offset-1)*limit, offset*limit)
-        let hasmore=offset+limit > result.length ? false : true
+        let hasmore=offset*limit > result.length ? false : true
         const _result = {
             hasmore,
             list: newArry,

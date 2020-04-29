@@ -5,7 +5,7 @@ let moment = require("moment");
 let { theme, content, user } = require("../modules/sql");
 let json = require("../modules/json");
 let pool = mysql.createPool(poolextend({}, mysqlconfig));
-const { getId, ACTIVE } = require("../utils/utils");
+const { getId, ACTIVE, formatTime } = require("../utils/utils");
 
 let themeData = {
   createTheme: (req, res) => { //用户创建主题
@@ -36,7 +36,7 @@ let themeData = {
                 }else{
                   res.send({
                     code: 200,
-                    msg: '主题创建成功,活跃度 +'+ACTIVE.CREATETYPE_ACTIVE,
+                    msg: '主题创建成功,活跃度',
                   })
                 }
               })  
@@ -81,14 +81,14 @@ let themeData = {
             let offset=parseInt(page || 1)
             let limit=parseInt(per || 100)
             let newArray=result.slice((offset-1)*limit, offset*limit)
-            let hasmore=offset+limit > result.length ? false : true
+            let hasmore=offset*limit > result.length ? false : true
             let _newArray = []
              newArray.forEach(item => {
               _newArray.push({
                  id: item.id,
                  uid: item.uid,
                  name: item.name, 
-                 create_time: moment(item.create_time).format('YYYY-MM-DD HH:mm:ss'),
+                 create_time: formatTime(moment(item.create_time).format('YYYY-MM-DD HH:mm:ss')),
                  update_time: moment(item.update_time).format('YYYY-MM-DD HH:mm:ss'),
                  flag: item.flag,
                  status: item.status,
@@ -129,7 +129,7 @@ let themeData = {
              let _result = {
               id: result[0].id,
               name: result[0].name,
-              create_time: moment(result[0].create_time).format('YYYY-MM-DD HH:mm:ss') ,
+              create_time: formatTime(moment(result[0].create_time).format('YYYY-MM-DD HH:mm:ss')) ,
               nickName: result[0].nickName,
               imgUrl: result[0].imgUrl,
               }
@@ -189,14 +189,14 @@ let themeData = {
             let offset=parseInt(page || 1)
             let limit=parseInt(per || 6)
             let newArray=result.slice((offset-1)*limit, offset*limit)
-            let hasmore=offset+limit > result.length ? false : true
+            let hasmore=offset*limit > result.length ? false : true
             let _newArray = []
              newArray.forEach(item => {
               _newArray.push({
                  id: item.id,
                  uid: item.uid,
                  name: item.name, 
-                 create_time: moment(item.create_time).format('YYYY-MM-DD HH:mm:ss'),
+                 create_time: formatTime(moment(item.create_time).format('YYYY-MM-DD HH:mm:ss')),
                  update_time: moment(item.update_time).format('YYYY-MM-DD HH:mm:ss'),
                  flag: item.flag,
                  status: item.status,
@@ -281,7 +281,7 @@ let themeData = {
           let offset=parseInt(page || 1)
           let limit=parseInt(per || 8)
           let newArry=result.slice((offset-1)*limit, offset*limit)
-          let hasmore=offset+limit > result.length ? false : true
+          let hasmore=offset*limit > result.length ? false : true
           const _result = {
               hasmore,
               list: newArry,
@@ -295,7 +295,8 @@ let themeData = {
     })
   },
   todayTheme: (req, res) => { // 今日新增主题 (管理员)
-    const date = moment(Date.now()).format('YYYY-MM-DD')
+     const date = moment(Date.now()).format('YYYY-MM-DD')
+    // const yesterday = moment().subtract(1, 'days').format('YYYY-MM-DD');
     pool.getConnection((err, connection) => {
       connection.query(theme.todayAddtheme, [date, date],(err, result) => {
         if (err) {
@@ -331,7 +332,7 @@ let themeData = {
           let offset=parseInt(page || 1)
           let limit=parseInt(per || 1000)
           let newArry=result.slice((offset-1)*limit, offset*limit)
-          let hasmore=offset+limit > result.length ? false : true
+          let hasmore=offset*limit > result.length ? false : true
           const _result = {
               hasmore,
               list: newArry,

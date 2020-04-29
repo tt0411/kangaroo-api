@@ -5,7 +5,7 @@ let moment = require("moment");
 let { save } = require("../modules/sql");
 let json = require("../modules/json");
 let pool = mysql.createPool(poolextend({}, mysqlconfig));
-const { getId } = require("../utils/utils");
+const { getId, formatTime } = require("../utils/utils");
 
 let saveData = {
 
@@ -24,7 +24,7 @@ let saveData = {
           let offset=parseInt(page || 1)
           let limit=parseInt(per || 10)
           let newArry=result.slice((offset-1)*limit, offset*limit)
-          let hasmore=offset+limit > result.length ? false : true
+          let hasmore=offset*limit > result.length ? false : true
           const _result = {
               hasmore,
               list: newArry,
@@ -55,13 +55,13 @@ let saveData = {
               id: item.id,
               cid: item.cid,
               uid: item.uid,
-              create_time: moment(item.create_time).format('YYYY-MM-DD HH:mm:ss'),
+              create_time: formatTime(moment(item.create_time).format('YYYY-MM-DD HH:mm:ss')),
               status: item.status,
               nickName: item.nickName,
               imgUrl: item.imgUrl,
             })
           })
-          let hasmore=offset+limit > result.length ? false : true
+          let hasmore=offset*limit > result.length ? false : true
           res.send({
             code: 200,
             count: result.length,
@@ -85,7 +85,7 @@ let saveData = {
           let offset=parseInt(page || 1)
           let limit=parseInt(per || 1000)
           let newArry=result.slice((offset-1)*limit, offset*limit)
-          let hasmore=offset+limit > result.length ? false : true
+          let hasmore=offset*limit > result.length ? false : true
           const _result = {
               hasmore,
               list: newArry,

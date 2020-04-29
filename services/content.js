@@ -5,7 +5,7 @@ let { content, user } = require("../modules/sql");
 let json = require("../modules/json");
 let pool = mysql.createPool(poolextend({}, mysqlconfig));
 let moment = require("moment");
-const { getId, ACTIVE } = require("../utils/utils");
+const { getId, ACTIVE, formatTime } = require("../utils/utils");
 
 let contentData = {
   createContent: (req, res) => { // 用户发布内容
@@ -69,7 +69,7 @@ let contentData = {
              context: item.context, 
              flag: item.flag,
              status: item.status,
-             create_time: moment(item.create_time).format('YYYY-MM-DD HH:mm:ss'),
+             create_time: formatTime(moment(item.create_time).format('YYYY-MM-DD HH:mm:ss')),
              name: item.name,
              address: item.address,
              nickName: item.nickName,
@@ -83,7 +83,7 @@ let contentData = {
              save: item.saveCount
            })
         })   
-        let hasmore=offset+limit > result.length ? false : true
+        let hasmore=offset*limit >= result.length ? false : true
         const _result = {
             hasmore,
             count: result.length,
@@ -132,7 +132,7 @@ let contentData = {
              context: item.context, 
              flag: item.flag,
              status: item.status,
-             create_time: moment(item.create_time).format('YYYY-MM-DD HH:mm:ss'),
+             create_time: formatTime(moment(item.create_time).format('YYYY-MM-DD HH:mm:ss')),
              name: item.name,
              address: item.address,
              nickName: item.nickName,
@@ -146,7 +146,7 @@ let contentData = {
              save: item.saveCount
            })
         })   
-        let hasmore=offset+limit > result.length ? false : true
+        let hasmore=offset*limit >= result.length ? false : true
         const _result = {
             hasmore,
             count: result.length,
@@ -196,7 +196,7 @@ let contentData = {
              context: item.context, 
              flag: item.flag,
              status: item.status,
-             create_time: moment(item.create_time).format('YYYY-MM-DD HH:mm:ss'),
+             create_time: formatTime(moment(item.create_time).format('YYYY-MM-DD HH:mm:ss')),
              name: item.name,
              address: item.address,
              nickName: item.nickName,
@@ -210,7 +210,7 @@ let contentData = {
              save: item.saveCount
            })
         })   
-        let hasmore=offset+limit > result.length ? false : true
+        let hasmore=offset*limit >= result.length ? false : true
         const _result = {
             hasmore,
             count: result.length,
@@ -260,7 +260,7 @@ let contentData = {
              remark: item.remark,
            })
         })   
-        let hasmore=offset+limit > result.length ? false : true
+        let hasmore=offset*limit >= result.length ? false : true
         const _result = {
             hasmore,
             count: result.length,
@@ -294,10 +294,10 @@ let contentData = {
                context: item.context, 
                flag: item.flag,
                status: item.status,
-               create_time: moment(item.create_time).format('YYYY-MM-DD HH:mm:ss'),
+               create_time: formatTime(moment(item.create_time).format('YYYY-MM-DD HH:mm:ss')),
                name: item.name,
                nickName: item.nickName,
-               avatar: item.imgUrl,
+               imgUrl: item.imgUrl,
                video: item.video,
                audio: item.audio,
                address: item.address,
@@ -308,7 +308,7 @@ let contentData = {
                save: item.saveCount
              })
           })   
-          let hasmore=offset+limit > result.length ? false : true
+          let hasmore=offset*limit >= result.length ? false : true
           const _result = {
               hasmore,
               count: result.length,
@@ -330,7 +330,7 @@ let contentData = {
           throw err;
         } else {
           let offset=parseInt(page || 1)
-          let limit=parseInt(per || 10)
+          let limit=parseInt(per || 100)
           let newArry=result.slice((offset-1)*limit, offset*limit)
           let _newArry = [];
           newArry.forEach(item => {
@@ -341,7 +341,7 @@ let contentData = {
                context: item.context, 
                flag: item.flag,
                status: item.status,
-               create_time: moment(item.create_time).format('YYYY-MM-DD HH:mm:ss'),
+               create_time: formatTime(moment(item.create_time).format('YYYY-MM-DD HH:mm:ss')),
                name: item.name,
                nickName: item.nickName,
                avatar: item.imgUrl,
@@ -355,7 +355,7 @@ let contentData = {
                save: item.saveCount
              })
           })   
-          let hasmore=offset+limit > result.length ? false : true
+          let hasmore=offset*limit >= result.length ? false : true
           const _result = {
               hasmore,
               count: result.length,
@@ -410,21 +410,22 @@ let contentData = {
                context: item.context, 
                flag: item.flag,
                status: item.status,
-               create_time: moment(item.create_time).format('YYYY-MM-DD HH:mm:ss'),
+               create_time: formatTime(moment(item.create_time).format('YYYY-MM-DD HH:mm:ss')),
                name: item.name,
                nickName: item.nickName,
                avatar: item.imgUrl,
                video: item.video,
                audio: item.audio,
+               is_comment: item.is_comment,
                uid: item.uid,
                remark: item.remark,
              })
             }
           })   
-          let hasmore=offset+limit > result.length ? false : true
+          let hasmore=offset*limit >= result.length ? false : true
           const _result = {
               hasmore,
-              count: _newArry.length,
+              count: result.length,
               list: _newArry,
               code: 200
           }
@@ -483,7 +484,7 @@ let contentData = {
               context: result[0].context, 
               flag: result[0].flag,
               status: result[0].status,
-              create_time: moment(result[0].create_time).format('YYYY-MM-DD HH:mm:ss'),
+              create_time: formatTime(moment(result[0].create_time).format('YYYY-MM-DD HH:mm:ss')),
               name: result[0].name,
               nickName: result[0].nickName,
               imgUrl: result[0].imgUrl,
@@ -508,10 +509,9 @@ let contentData = {
     })
   },
   isDelContent: (req, res) => { // 用户删除内容
-    let { id, status } = req.query;
-    status = status || 2
+    let { id, status, flag } = req.query; 
     pool.getConnection((err, connection) => {
-      connection.query(content.isDelContent, [status, id], (err, result) => {
+      connection.query(content.isDelContent, [status, flag,  id], (err, result) => {
         if(err){
           result = undefined;
           json(res, result);
@@ -531,6 +531,30 @@ let contentData = {
       })
     })
   },
+  isCommentContent: (req, res) => { // 用户开启关闭评论
+    let { id, is_comment } = req.query;
+    pool.getConnection((err, connection) => {
+      connection.query(content.isCommentContent, [is_comment, id], (err, result) => {
+        if(err){
+          result = undefined;
+          json(res, result);
+          throw err;
+        }else{
+          if(result){
+            res.send({
+              code: 200,
+              msg: '操作成功'
+            })
+          }else{
+            result = undefined; 
+            json(res, result);
+          }
+        }
+        connection.release();
+      })
+    })
+  },
+  
   isStopContent: (req, res) => { // 审核内容(管理员)
     const { id, remark, flag } = req.query;
     pool.getConnection((err, connection) => {
@@ -554,9 +578,10 @@ let contentData = {
       })
     })
   },
-  todayAddContent: (req, res) => { // 获取今日增加内容(管理员)
+  todayAddContent: (req, res) => { // 获取昨日增加内容(管理员)
     const {per, page } = req.query;
     const date = moment(Date.now()).format('YYYY-MM-DD')
+    // const yesterday = moment().subtract(1, 'days').format('YYYY-MM-DD');
     pool.getConnection((err, connection) => {
       connection.query(content.todayAddContent, date,(err, result) => {
         if (err) {
@@ -568,7 +593,7 @@ let contentData = {
         let offset=parseInt(page || 1)
         let limit=parseInt(per || 1000)
         let newArry=result.slice((offset-1)*limit, offset*limit)
-        let hasmore=offset+limit > result.length ? false : true
+        let hasmore=offset*limit >= result.length ? false : true
         const _result = {
             hasmore,
             list: newArry,
@@ -581,8 +606,9 @@ let contentData = {
       })
     })
   },
-  todayAddContentRate: (req, res) => { // 获取今日增加内容比例(管理员)
+  todayAddContentRate: (req, res) => { // 获取昨日增加内容比例(管理员)
     const date = moment(Date.now()).format('YYYY-MM-DD')
+    // const yesterday = moment().subtract(1, 'days').format('YYYY-MM-DD');
     pool.getConnection((err, connection) => {
       connection.query(content.todayAddContentRate, [date, date],(err, result) => {
         if (err) {
@@ -627,7 +653,7 @@ let contentData = {
              context: item.context, 
              flag: item.flag,
              status: item.status,
-             create_time: moment(item.create_time).format('YYYY-MM-DD HH:mm:ss'),
+             create_time: formatTime(moment(item.create_time).format('YYYY-MM-DD HH:mm:ss')),
              name: item.name,
              nickName: item.nickName,
              imgUrl: item.imgUrl,
@@ -636,7 +662,7 @@ let contentData = {
              uid: item.uid
            })
         })   
-        let hasmore=offset+limit > result.length ? false : true
+        let hasmore=offset*limit >= result.length ? false : true
         const _result = {
             hasmore,
             count: result.length,

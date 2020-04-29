@@ -81,5 +81,8 @@ router.get('/userExcel',async (req, res) => {
 router.put('/resetPwd', async (req, res) => {
    await userData.resetPwd(req, res);
 })
+router.put('/userResetPwd', async (req, res) => {
+   await userData.userResetPwd(req, res);
+})
 
 module.exports = router;
