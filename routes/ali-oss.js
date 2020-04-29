@@ -4,8 +4,8 @@ let multiparty = require('multiparty')
 let OSS = require('ali-oss')
 let client = new OSS({
 	region: 'oss-cn-hangzhou',//阿里云对象存储地域名
-	accessKeyId: '',//api接口id
-	accessKeySecret: '',//api接口密码
+	accessKeyId: '***',//api接口id
+	accessKeySecret: '***',//api接口密码
 })
 client.useBucket('kangaroo-app')//使用的存储桶名
 

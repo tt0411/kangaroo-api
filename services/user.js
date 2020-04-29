@@ -190,7 +190,6 @@ let userData = {
       })
       return 
   }
-<<<<<<< HEAD
     pool.getConnection((err, connection) => {
       connection.query(
         user.updateUserNickname,
@@ -211,87 +210,6 @@ let userData = {
       );
     });
   },
-  updateGender: (req, res) => { // 用户修改性别
-    let {gender} = req.query;
-    const uid = getId(req);
-    if(!uid){
-      res.send({
-        code: 301,
-        msg: 'token无效',
-        data: []
-      })
-      return 
-  }
-    pool.getConnection((err, connection) => {
-      connection.query(
-        user.updateUserGender,
-        [gender, +uid],
-        (err, result) => {
-          if (err) {
-            result = undefined;
-          } else {
-            if (result.affectedRows > 0) {
-              result = "update";
-            } else {
-              result = undefined;
-            }
-          }
-          json(res, result);
-          connection.release();
-        }
-      );
-    });
-  },
-  updateAge: (req, res) => { // 用户修改年龄
-    let { age } = req.query;
-    const uid = getId(req);
-    if(!uid){
-      res.send({
-        code: 301,
-        msg: 'token无效',
-        data: []
-      })
-      return 
-  }
-    pool.getConnection((err, connection) => {
-      connection.query(
-        user.updateUserAge,
-        [age, +uid],
-=======
-    pool.getConnection((err, connection) => {
-      connection.query(
-        user.updateUserNickname,
-        [nickName, +uid],
->>>>>>> master
-        (err, result) => {
-          if (err) {
-            result = undefined;
-          } else {
-            if (result.affectedRows > 0) {
-              result = "update";
-            } else {
-              result = undefined;
-            }
-          }
-          json(res, result);
-          connection.release();
-        }
-      );
-    });
-  },
-<<<<<<< HEAD
-  updateAvater: (req, res) => { // 用户修改头像
-      const { imgUrl } = req.query
-      const id = getId(req);
-        if(!id){
-          res.send({
-            code: 301,
-            msg: 'token无效',
-            data: []
-          })
-          return 
-      }
-=======
   updateGender: (req, res) => { // 用户修改性别
     let {gender} = req.query;
     const uid = getId(req);
@@ -356,7 +274,15 @@ let userData = {
   },
   updateAvater: (req, res) => { // 用户修改头像
       const { imgUrl } = req.query
->>>>>>> master
+      const id = getId(req);
+        if(!id){
+          res.send({
+            code: 301,
+            msg: 'token无效',
+            data: []
+          })
+          return 
+      }
       pool.getConnection((err, connection) => {
         connection.query(user.changeAvater,[ imgUrl,id ], (err, result) =>{
           if(err){
@@ -446,7 +372,6 @@ let userData = {
          })
        }) 
   },
-<<<<<<< HEAD
   userResetPwd: (req, res) => { // 用户忘记密码重置密码
     let { newPassword, phone } = req.query
     pool.getConnection((err, connection) => {
@@ -466,8 +391,6 @@ let userData = {
       })
     })
 },
-=======
->>>>>>> master
   totalUser: (req, res) => {  // 获取所有用户(管理员)
   let {per, page, nickName, flag, status, gender, phone, type} = req.query;
   if(nickName === undefined){nickName = '%%'} else{nickName = `%${nickName}%`}
@@ -486,7 +409,7 @@ let userData = {
       let offset=parseInt(page || 1)
       let limit=parseInt(per || 10)
       let newArry=result.slice((offset-1)*limit, offset*limit)
-      let hasmore=offset+limit > result.length ? false : true
+      let hasmore=offset*limit > result.length ? false : true
       const _result = {
           hasmore,
           list: newArry,
@@ -500,11 +423,7 @@ let userData = {
     })
   })
   },
-<<<<<<< HEAD
   todayAddUser: (req, res) => { // 获取昨日增加用户(管理员)
-=======
-  todayAddUser: (req, res) => { // 获取今日增加用户(管理员)
->>>>>>> master
     const {per, page } = req.query
     const date = moment(Date.now()).format('YYYY-MM-DD')
     // const yesterday = moment().subtract(1, 'days').format('YYYY-MM-DD');
@@ -518,7 +437,7 @@ let userData = {
         let offset=parseInt(page || 1)
         let limit=parseInt(per || 10)
         let newArry=result.slice((offset-1)*limit, offset*limit)
-        let hasmore=offset+limit > result.length ? false : true
+        let hasmore=offset*limit > result.length ? false : true
         const _result = {
             hasmore,
             list: newArry,
