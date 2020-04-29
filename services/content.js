@@ -83,7 +83,7 @@ let contentData = {
              save: item.saveCount
            })
         })   
-        let hasmore=offset+limit > result.length ? false : true
+        let hasmore=offset*limit >= result.length ? false : true
         const _result = {
             hasmore,
             count: result.length,
@@ -146,7 +146,7 @@ let contentData = {
              save: item.saveCount
            })
         })   
-        let hasmore=offset+limit > result.length ? false : true
+        let hasmore=offset*limit >= result.length ? false : true
         const _result = {
             hasmore,
             count: result.length,
@@ -210,7 +210,7 @@ let contentData = {
              save: item.saveCount
            })
         })   
-        let hasmore=offset+limit > result.length ? false : true
+        let hasmore=offset*limit >= result.length ? false : true
         const _result = {
             hasmore,
             count: result.length,
@@ -260,7 +260,7 @@ let contentData = {
              remark: item.remark,
            })
         })   
-        let hasmore=offset+limit > result.length ? false : true
+        let hasmore=offset*limit >= result.length ? false : true
         const _result = {
             hasmore,
             count: result.length,
@@ -308,7 +308,7 @@ let contentData = {
                save: item.saveCount
              })
           })   
-          let hasmore=offset+limit > result.length ? false : true
+          let hasmore=offset*limit >= result.length ? false : true
           const _result = {
               hasmore,
               count: result.length,
@@ -355,7 +355,7 @@ let contentData = {
                save: item.saveCount
              })
           })   
-          let hasmore=offset+limit > result.length ? false : true
+          let hasmore=offset*limit >= result.length ? false : true
           const _result = {
               hasmore,
               count: result.length,
@@ -422,10 +422,10 @@ let contentData = {
              })
             }
           })   
-          let hasmore=offset+limit > result.length ? false : true
+          let hasmore=offset*limit >= result.length ? false : true
           const _result = {
               hasmore,
-              count: _newArry.length,
+              count: result.length,
               list: _newArry,
               code: 200
           }
@@ -593,7 +593,7 @@ let contentData = {
         let offset=parseInt(page || 1)
         let limit=parseInt(per || 1000)
         let newArry=result.slice((offset-1)*limit, offset*limit)
-        let hasmore=offset+limit > result.length ? false : true
+        let hasmore=offset*limit >= result.length ? false : true
         const _result = {
             hasmore,
             list: newArry,
@@ -662,7 +662,7 @@ let contentData = {
              uid: item.uid
            })
         })   
-        let hasmore=offset+limit > result.length ? false : true
+        let hasmore=offset*limit >= result.length ? false : true
         const _result = {
             hasmore,
             count: result.length,

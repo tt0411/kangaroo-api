@@ -114,7 +114,7 @@ const content = {
   getAllContentsRoot: `SELECT a.*,b.name,c.nickName,c.imgUrl, c.id AS uid from content a, content_type b, user c WHERE a.tid = b.id AND b.uid = c.id AND a.flag LIKE ? AND a.status LIKE ? AND a.context LIKE ? AND c.nickName LIKE ? AND a.id LIKE ? ORDER BY a.create_time DESC
 `,
 getcontentByUid:
-    "SELECT a.*, b.name, c.imgUrl, c.id as uid, c.nickName from content a, content_type b, user c WHERE a.tid = b.id AND b.uid = c.id AND a.status like ? AND a.flag like ? AND c.id = ? ORDER BY a.create_time DESC ",
+    "SELECT a.*, b.name, c.imgUrl, c.id as uid, c.nickName from content a, content_type b, user c WHERE a.tid = b.id AND b.uid = c.id AND a.status !=2 AND a.status like ? AND a.flag like ? AND c.id = ? ORDER BY a.create_time DESC ",
   getcontentCountByUid: 'SELECT a.id from content a, content_type b, user c WHERE a.tid = b.id AND b.uid = c.id  AND a.status !=2 AND c.id = ?',
   getcontentById: `
   SELECT 
@@ -125,7 +125,7 @@ getcontentByUid:
     a.tid = b.id AND b.uid = c.id AND a.flag !=2 AND a.status !=2 AND  a.id = ?
   `,
   getMyMarkContent: `
-  SELECT 
+  SELECT  
    a.*, b.name, c.imgUrl, c.id as uid, c.nickName,(SELECT count(*) FROM comment d WHERE d.cid = a.id AND d.status = 1 AND a.is_comment = 1 ) as commentCount, (SELECT count(*) FROM  mark  WHERE mark.mark_id = a.id AND mark.status = 1) as markCount,
    (SELECT count(*) FROM save e WHERE e.cid = a.id AND e.status = 1) as saveCount
     from
