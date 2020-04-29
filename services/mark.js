@@ -5,7 +5,11 @@ let moment = require("moment")
 let { mark } = require("../modules/sql");
 let json = require("../modules/json");
 let pool = mysql.createPool(poolextend({}, mysqlconfig));
+<<<<<<< HEAD
 const { getId, formatTime } = require("../utils/utils");
+=======
+const { getId } = require("../utils/utils");
+>>>>>>> master
 
 let markData = {
   allMark: (req, res) => { // 查询所有点赞 (管理员)
@@ -63,7 +67,11 @@ let markData = {
               id: item.id,
               cid: item.mark_id,
               uid: item.uid,
+<<<<<<< HEAD
               create_time: formatTime(moment(item.updatetime).format('YYYY-MM-DD HH:mm:ss')),
+=======
+              create_time: moment(item.updatetime).format('YYYY-MM-DD HH:mm:ss'),
+>>>>>>> master
               status: item.status,
               nickName: item.nickName,
               imgUrl: item.imgUrl,

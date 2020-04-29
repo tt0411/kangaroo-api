@@ -1,6 +1,9 @@
 const Key = 'mimashi123'
 const jwt = require('jsonwebtoken')
+<<<<<<< HEAD
 const CryptoJS = require("crypto-js");
+=======
+>>>>>>> master
 
 const createToken = (id, secretOrPrivateKey = Key) =>{
    const token = jwt.sign(id, secretOrPrivateKey);

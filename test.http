@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 @url= http://localhost:3003
  //@url= http://175.24.36.114:3003
+=======
+@url= http://localhost:3002
+ // @url= https://175.24.36.114:3002
+>>>>>>> master
 
 ### 定时任务(清空活跃度)
 ### get {{url}}/user/resetActive
@@ -127,6 +132,7 @@ get {{url}}/content/getOpencontentByTid?tid=17
 ### 获取所有公开内容
 get {{url}}/content/getAllContents
 
+<<<<<<< HEAD
 
 ### 开启关闭评论
 get {{url}}/content/isCommentContent?id=4&is_comment=1
@@ -135,6 +141,8 @@ get {{url}}/content/isCommentContent?id=4&is_comment=1
 ### 是否公开内容
 post {{url}}/content/isDelContent?id=4&flag=1&status=1
 
+=======
+>>>>>>> master
 ### 获取所有评论 (管理员)
 get {{url}}/comment/allComment
 
@@ -168,6 +176,7 @@ get {{url}}/theme/waitThemeRoots
 
 ### 待审核内容，主题数量
 get {{url}}/content/waitDealCount
+<<<<<<< HEAD
 
 ### 发送短信测试
 post  {{url}}/alisms/sendSmsCode?phone=15188211507
@@ -175,5 +184,7 @@ post  {{url}}/alisms/sendSmsCode?phone=15188211507
 ### 用户忘记密码
 
 put {{url}}/user/userResetPwd
+=======
+>>>>>>> master
 
 

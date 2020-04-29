@@ -5,7 +5,11 @@ let moment = require("moment");
 let { comment } = require("../modules/sql");
 let json = require("../modules/json");
 let pool = mysql.createPool(poolextend({}, mysqlconfig));
+<<<<<<< HEAD
 const { getId, ACTIVE, formatTime } = require("../utils/utils");
+=======
+const { getId, ACTIVE } = require("../utils/utils");
+>>>>>>> master
 
 let commentData = {
 
@@ -80,7 +84,11 @@ let commentData = {
               id: item.id,
               cid: item.cid,
               uid: item.from_uid,
+<<<<<<< HEAD
               create_time: formatTime(moment(item.create_time).format('YYYY-MM-DD HH:mm:ss')),
+=======
+              create_time: moment(item.create_time).format('YYYY-MM-DD HH:mm:ss'),
+>>>>>>> master
               comment: item.content,
               status: item.status,
               nickName: item.nickName,

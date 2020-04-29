@@ -344,7 +344,7 @@ let contentData = {
                create_time: formatTime(moment(item.create_time).format('YYYY-MM-DD HH:mm:ss')),
                name: item.name,
                nickName: item.nickName,
-               imgUrl: item.imgUrl,
+               avatar: item.imgUrl,
                video: item.video,
                audio: item.audio,
                address: item.address,

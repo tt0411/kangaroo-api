@@ -19,7 +19,10 @@
     "excel-export": "^0.5.1",
     "express": "^4.17.1",
     "express-formidable": "^1.2.0",
+<<<<<<< HEAD
     "express-session": "^1.17.0",
+=======
+>>>>>>> master
     "file-stream-rotator": "^0.5.5",
     "js-export-excel": "^1.1.2",
     "jsonwebtoken": "^8.5.1",

@@ -55,7 +55,11 @@ let saveData = {
               id: item.id,
               cid: item.cid,
               uid: item.uid,
+<<<<<<< HEAD
               create_time: formatTime(moment(item.create_time).format('YYYY-MM-DD HH:mm:ss')),
+=======
+              create_time: moment(item.create_time).format('YYYY-MM-DD HH:mm:ss'),
+>>>>>>> master
               status: item.status,
               nickName: item.nickName,
               imgUrl: item.imgUrl,
